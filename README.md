@@ -114,84 +114,94 @@ I am a passionate **Data Scientist** and **AI/ML Engineer** with a strong founda
 
 <div align="center">
 
-### 📈 Customer Churn Prediction System
+### 🛒 Demand Forecasting MLOps Pipeline
 <p>
-  <a href="https://github.com/souravjr0/churn-prediction">
+  <a href="https://github.com/Souravjr0/demand-forecasting-mlops">
     <img src="https://img.shields.io/badge/View%20Project-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
 
-Built an **end-to-end machine learning pipeline** using Python, Pandas, Scikit-learn, and XGBoost to predict customer churn for a telecom dataset. Achieved **92% accuracy** and deployed the model as a web app using Flask and Streamlit.
+Built a **production-ready forecasting pipeline** with data generation, feature engineering, training, evaluation, and an inference API. Includes reproducible scripts and model artifacts for quick deployment.
 
 **Tech Stack:**
 <p>
   <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
   <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
-  <img src="https://img.shields.io/badge/XGBoost-337AB7?style=flat-square&logo=xgboost&logoColor=white" />
-  <img src="https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white" />
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" />
+  <img src="https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
+  <img src="https://img.shields.io/badge/Joblib-4285F4?style=flat-square&logo=python&logoColor=white" />
+</p>
+
+---
+
+### 📰 Multilingual News Topic Classifier
+<p>
+  <a href="https://github.com/Souravjr0/news-topic-classifier">
+    <img src="https://img.shields.io/badge/View%20Project-181717?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p>
+
+Created an **NLP pipeline** with TF-IDF and Linear SVM to classify news topics. Ships with a Streamlit demo, evaluation script, and reusable prediction module.
+
+**Tech Stack:**
+<p>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
   <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
+  <img src="https://img.shields.io/badge/NLTK-154f5b?style=flat-square&logo=python&logoColor=white" />
 </p>
 
 ---
 
-### 🖼️ Image Classification with CNNs
+### 🏭 Industrial Defect Detection (Computer Vision)
 <p>
-  <a href="https://github.com/souravjr0/image-classification-cnn">
+  <a href="https://github.com/Souravjr0/defect-detection-cv">
     <img src="https://img.shields.io/badge/View%20Project-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
 
-Developed a **deep learning model** using TensorFlow/Keras to classify handwritten digits and custom image datasets (CIFAR-10). Implemented transfer learning with ResNet50 and achieved **95%+ accuracy**.
+Implemented a **CV baseline** with synthetic data generation, edge-based features, and SVM classification for fast defect screening. Includes dataset generator and evaluation scripts.
 
 **Tech Stack:**
 <p>
-  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" />
-  <img src="https://img.shields.io/badge/Keras-D00000?style=flat-square&logo=keras&logoColor=white" />
-  <img src="https://img.shields.io/badge/ResNet50-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" />
-  <img src="https://img.shields.io/badge/Computer%20Vision-00599C?style=flat-square&logo=opencv&logoColor=white" />
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white" />
+  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
+  <img src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white" />
 </p>
 
 ---
 
-### �� Sentiment Analysis on Social Media Data
+### 👥 Customer Segmentation & Insights Dashboard
 <p>
-  <a href="https://github.com/souravjr0/twitter-sentiment-analysis">
+  <a href="https://github.com/Souravjr0/customer-segmentation-dashboard">
     <img src="https://img.shields.io/badge/View%20Project-181717?style=for-the-badge&logo=github&logoColor=white" />
   </a>
 </p>
 
-Created an **NLP pipeline** using Hugging Face Transformers (BERT-based model) to perform real-time sentiment analysis on Twitter/X data. Integrated data collection via API, preprocessing, and visualization with Plotly dashboards.
+Built a **clustering workflow** with K-Means and an interactive Streamlit dashboard to explore segments and behavioral metrics. Includes model training and reusable data generator.
 
 **Tech Stack:**
 <p>
-  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" />
-  <img src="https://img.shields.io/badge/BERT-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" />
-  <img src="https://img.shields.io/badge/NLP-3776AB?style=flat-square&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+  <img src="https://img.shields.io/badge/Scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" />
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" />
   <img src="https://img.shields.io/badge/Plotly-3F4F75?style=flat-square&logo=plotly&logoColor=white" />
-</p>
-
----
-
-### 📊 Sales Forecasting Dashboard
-<p>
-  <a href="https://github.com/souravjr0/sales-forecasting-dashboard">
-    <img src="https://img.shields.io/badge/View%20Project-181717?style=for-the-badge&logo=github&logoColor=white" />
-  </a>
-</p>
-
-Designed a **time-series forecasting model** using Prophet and LSTM to predict retail sales. Built an interactive dashboard with Dash for business stakeholders to explore forecasts and trends.
-
-**Tech Stack:**
-<p>
-  <img src="https://img.shields.io/badge/Prophet-4285F4?style=flat-square&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/LSTM-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" />
-  <img src="https://img.shields.io/badge/Dash-008DE4?style=flat-square&logo=plotly&logoColor=white" />
-  <img src="https://img.shields.io/badge/Time%20Series-3776AB?style=flat-square&logo=python&logoColor=white" />
 </p>
 
 </div>
 
 ---
+
+## 🧭 Project Navigation
+
+<div align="center">
+
+[![Demand Forecasting](https://img.shields.io/badge/Demand%20Forecasting%20MLOps-Open%20Folder-181717?style=for-the-badge&logo=github)](demand-forecasting-mlops/)
+[![News Topic Classifier](https://img.shields.io/badge/News%20Topic%20Classifier-Open%20Folder-181717?style=for-the-badge&logo=github)](news-topic-classifier/)
+[![Defect Detection CV](https://img.shields.io/badge/Defect%20Detection%20CV-Open%20Folder-181717?style=for-the-badge&logo=github)](defect-detection-cv/)
+[![Customer Segmentation](https://img.shields.io/badge/Customer%20Segmentation%20Dashboard-Open%20Folder-181717?style=for-the-badge&logo=github)](customer-segmentation-dashboard/)
+
+</div>
 
 ## 📊 GitHub Statistics
 
