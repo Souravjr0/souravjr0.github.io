@@ -1,8 +1,60 @@
-# GitHub Pages configuration
+# GitHub Pages Configuration
+# This configuration file tells GitHub Pages how to serve your website
+
 title: Sourav Biswas — Data Scientist & AI/ML Engineer
-description: Portfolio of Sourav Biswas, Data Scientist and AI/ML Engineer
+description: Portfolio and professional profile of Sourav Biswas, Data Scientist and AI/ML Engineer specializing in Machine Learning, Deep Learning, and AI solutions.
+
+# Website URL
 url: "https://souravjr0.github.io"
 baseurl: ""
 
-# Disable Jekyll's default Markdown processing so index.html is served as-is
+# Author information
+author:
+  name: Sourav Biswas
+  email: biswasmail631@gmail.com
+  twitter: Souravjr0
+  linkedin: sourav-biswas-260b08201
+
+# Site language
+lang: en
+
+# Timezone
+timezone: UTC
+
+# GitHub Pages settings
+# Show building messages
+verbose: false
+
+# Disable Jekyll's default Markdown processing so index.html is served as-is (pure static hosting)
 plugins: []
+
+# Exclude files from being processed
+exclude:
+  - .git
+  - .gitignore
+  - node_modules
+  - Gemfile
+  - Gemfile.lock
+  - project_templates
+
+# Include hidden files (like .nojekyll)
+include:
+  - .nojekyll
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Safe mode (required for GitHub Pages)
+safe: true
+
+# Search engine optimization
+twitter:
+  username: Souravjr0
+social:
+  name: Sourav Biswas
+  links:
+    - https://github.com/Souravjr0
+    - https://twitter.com/Souravjr0
+    - https://www.linkedin.com/in/sourav-biswas-260b08201
+    - https://souravbiswas.dev
