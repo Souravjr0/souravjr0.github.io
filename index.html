@@ -14,11 +14,24 @@
   <!-- ===== HEADER ===== -->
   <header class="hero">
     <div class="hero-bg"></div>
+    <div class="hero-graphics" aria-hidden="true">
+      <div class="energy-ring ring-a"></div>
+      <div class="energy-ring ring-b"></div>
+      <div class="energy-ring ring-c"></div>
+      <div class="blade-slash slash-a"></div>
+      <div class="blade-slash slash-b"></div>
+      <div class="glow-orb orb-a"></div>
+      <div class="glow-orb orb-b"></div>
+      <div class="hero-3d-card" id="heroCard">
+        <div class="card-face card-front"></div>
+        <div class="card-face card-back"></div>
+      </div>
+    </div>
     <div class="hero-content">
       <div class="avatar-ring">
         <img
           class="avatar"
-          src="https://avatars.githubusercontent.com/Souravjr0?v=4"
+          src="assets/profile-photo.jpg"
           onerror="this.src='https://ui-avatars.com/api/?name=Sourav+Biswas&size=120&background=6AD3F7&color=0d1117&bold=true&font-size=0.4'"
           alt="Sourav Biswas"
         />
@@ -670,10 +683,42 @@
     // ===== PARALLAX EFFECT =====
     window.addEventListener('scroll', () => {
       const hero = document.querySelector('.hero-bg');
+      const graphics = document.querySelector('.hero-graphics');
       if (hero) {
         hero.style.transform = `translateY(${window.scrollY * 0.5}px)`;
       }
+      if (graphics) {
+        graphics.style.transform = `translateY(${window.scrollY * 0.22}px)`;
+      }
     });
+
+    // ===== HERO 3D INTERACTION =====
+    const heroSection = document.querySelector('.hero');
+    const heroCard = document.getElementById('heroCard');
+    const ringA = document.querySelector('.ring-a');
+    const ringB = document.querySelector('.ring-b');
+
+    if (heroSection && heroCard) {
+      heroSection.addEventListener('mousemove', (event) => {
+        const rect = heroSection.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+
+        const rotateY = (x - 0.5) * 18;
+        const rotateX = (0.5 - y) * 16;
+
+        heroCard.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateZ(8px)`;
+
+        if (ringA) ringA.style.filter = `blur(${Math.abs(rotateY) * 0.08 + 0.2}px)`;
+        if (ringB) ringB.style.filter = `blur(${Math.abs(rotateX) * 0.08 + 0.2}px)`;
+      });
+
+      heroSection.addEventListener('mouseleave', () => {
+        heroCard.style.transform = 'rotateY(-14deg) rotateX(8deg)';
+        if (ringA) ringA.style.filter = '';
+        if (ringB) ringB.style.filter = '';
+      });
+    }
 
     // ===== FLOATING ANIMATION ON AVATAR =====
     const avatar = document.querySelector('.avatar-ring');
