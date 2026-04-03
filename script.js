@@ -1,6 +1,9 @@
 ﻿// Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isDesktop = window.innerWidth > 768;
+
 // 1. Lenis Smooth Scroll Setup
 const lenis = new Lenis({
   duration: 1.2,
@@ -13,13 +16,7 @@ const lenis = new Lenis({
   touchMultiplier: 2,
 });
 
-function raf(time) {
-  lenis.raf(time);
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-// Update GSAP ScrollTrigger to use Lenis
+// Keep ScrollTrigger in sync with Lenis without a second RAF loop.
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => {
   lenis.raf(time * 1000);
@@ -32,7 +29,46 @@ const cursorDot = document.querySelector('.cursor-dot');
 const cursorGlow = document.querySelector('.cursor-glow');
 const magnetics = document.querySelectorAll('.magnetic');
 
-if (window.innerWidth > 768) {
+function setCursorHoverState(active) {
+  if (!cursorDot || !cursorGlow) return;
+  cursorDot.classList.toggle('hover', active);
+  cursorGlow.classList.toggle('hover', active);
+}
+
+function bindHoverTargets(elements) {
+  elements.forEach((el) => {
+    if (el.dataset.hoverBound === 'true') return;
+    el.dataset.hoverBound = 'true';
+
+    el.addEventListener('mouseenter', () => setCursorHoverState(true));
+    el.addEventListener('mouseleave', () => setCursorHoverState(false));
+  });
+}
+
+function bindMagneticMotion(elements) {
+  if (!isDesktop || prefersReducedMotion) return;
+
+  elements.forEach((elem) => {
+    if (elem.dataset.magneticBound === 'true') return;
+    elem.dataset.magneticBound = 'true';
+
+    elem.addEventListener('mousemove', (e) => {
+      const rect = elem.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
+      setCursorHoverState(true);
+    });
+
+    elem.addEventListener('mouseleave', () => {
+      gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+      setCursorHoverState(false);
+    });
+  });
+}
+
+if (isDesktop && !prefersReducedMotion) {
   // Move cursor
   window.addEventListener('mousemove', (e) => {
     if(cursorDot) gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
@@ -40,40 +76,10 @@ if (window.innerWidth > 768) {
   });
 
   // Magnetic hover effects
-  if (magnetics) {
-    magnetics.forEach((elem) => {
-      elem.addEventListener('mousemove', (e) => {
-        const rect = elem.getBoundingClientRect();
-        const h = rect.width / 2;
-        const x = e.clientX - rect.left - h;
-        const y = e.clientY - rect.top - rect.height / 2;
-        
-        gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: "power2.out" });
-        if(cursorDot) cursorDot.classList.add('hover');
-        if(cursorGlow) cursorGlow.classList.add('hover');
-      });
-
-      elem.addEventListener('mouseleave', () => {
-        gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.3)" });
-        if(cursorDot) cursorDot.classList.remove('hover');
-        if(cursorGlow) cursorGlow.classList.remove('hover');
-      });
-    });
-  }
+  bindMagneticMotion(magnetics);
 
   // General hover for a/button
-  document.querySelectorAll('a, button, .gh-card, input, textarea').forEach(el => {
-    if(!el.classList.contains('magnetic')) {
-      el.addEventListener('mouseenter', () => {
-        if(cursorDot) cursorDot.classList.add('hover');
-        if(cursorGlow) cursorGlow.classList.add('hover');
-      });
-      el.addEventListener('mouseleave', () => {
-        if(cursorDot) cursorDot.classList.remove('hover');
-        if(cursorGlow) cursorGlow.classList.remove('hover');
-      });
-    }
-  });
+  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, input, textarea'));
 }
 
 
@@ -84,7 +90,7 @@ if (canvas) {
     scene.fog = new THREE.FogExp2(0x030305, 0.001);
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.z = 500;
+  camera.position.z = isDesktop ? 500 : 650;
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -92,7 +98,7 @@ if (canvas) {
 
     // Create Particles
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = 2000;
+    const particlesCount = prefersReducedMotion ? 500 : (isDesktop ? 1800 : 900);
     const posArray = new Float32Array(particlesCount * 3);
     const colorsArray = new Float32Array(particlesCount * 3);
 
@@ -119,10 +125,10 @@ if (canvas) {
     geometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
 
     const material = new THREE.PointsMaterial({
-        size: 2,
+      size: prefersReducedMotion ? 1.4 : (isDesktop ? 2 : 1.5),
         vertexColors: true,
         transparent: true,
-        opacity: 0.8,
+      opacity: prefersReducedMotion ? 0.65 : 0.8,
         blending: THREE.AdditiveBlending
     });
 
@@ -132,22 +138,26 @@ if (canvas) {
     // Mouse interaction for ThreeJS
     let mouseX = 0;
     let mouseY = 0;
-    window.addEventListener('mousemove', (event) => {
+    if (!prefersReducedMotion) {
+      window.addEventListener('mousemove', (event) => {
         mouseX = (event.clientX / window.innerWidth) - 0.5;
         mouseY = (event.clientY / window.innerHeight) - 0.5;
-    });
+      });
+    }
 
     const clock = new THREE.Clock();
     function animateThree() {
         const elapsedTime = clock.getElapsedTime();
         
         // Slow rotation
-        particlesMesh.rotation.y = elapsedTime * 0.05;
-        particlesMesh.rotation.x = elapsedTime * 0.02;
+        particlesMesh.rotation.y = elapsedTime * (prefersReducedMotion ? 0.015 : 0.05);
+        particlesMesh.rotation.x = elapsedTime * (prefersReducedMotion ? 0.008 : 0.02);
 
         // Mouse parallax
-        camera.position.x += (mouseX * 200 - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY * 200 - camera.position.y) * 0.05;
+        if (!prefersReducedMotion) {
+          camera.position.x += (mouseX * 200 - camera.position.x) * 0.05;
+          camera.position.y += (-mouseY * 200 - camera.position.y) * 0.05;
+        }
         camera.lookAt(scene.position);
 
         renderer.render(scene, camera);
@@ -167,7 +177,7 @@ window.addEventListener('load', () => {
   const tl = gsap.timeline();
   
   // Progress bar animation mock
-  tl.to('.loader-progress::after', {
+  tl.to('.loader-fill', {
     width: '100%',
     duration: 1.5,
     ease: "power3.inOut"
@@ -213,24 +223,6 @@ gsap.utils.toArray('.reveal-up').forEach(el => {
   });
 });
 
-// Parallax for skill items
-if (window.innerWidth > 768) {
-  gsap.utils.toArray('.skill-item').forEach((item, i) => {
-    gsap.to(item, {
-      yPercent: -50,
-      rotation: Math.random() * 20 - 10,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".skills-section",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-  });
-}
-
-// Word splitting effect workaround
 const splitTexts = document.querySelectorAll('.split-text');
 splitTexts.forEach(st => {
   gsap.from(st, {
@@ -238,6 +230,51 @@ splitTexts.forEach(st => {
     opacity: 0, x: -50, duration: 1, ease: "power3.out"
   });
 });
+
+gsap.utils.toArray('.skill-row').forEach((row) => {
+  const fill = row.querySelector('.skill-fill');
+  if (!fill) return;
+
+  const targetLevel = Number(row.dataset.level || 0);
+  gsap.fromTo(fill, {
+    width: '0%'
+  }, {
+    width: `${targetLevel}%`,
+    duration: 1.2,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: row,
+      start: 'top 85%'
+    }
+  });
+});
+
+function attachTiltInteractions(selector) {
+  if (!isDesktop || prefersReducedMotion) return;
+
+  document.querySelectorAll(selector).forEach((card) => {
+    if (card.dataset.tiltBound === 'true') return;
+    card.dataset.tiltBound = 'true';
+
+    card.addEventListener('mousemove', (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -8;
+      const rotateY = ((x - centerX) / centerX) * 8;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.01, 1.01, 1.01)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale3d(1, 1, 1)';
+    });
+  });
+}
+
+attachTiltInteractions('.project-card, .experiment-card');
 
 
 // 6. Fetch GitHub Projects Dynamically
@@ -248,23 +285,23 @@ async function fetchGithubProjects() {
   const projectProfiles = {
     'demand-forecasting-mlops': {
       title: 'Demand Forecasting MLOps Pipeline',
-      summary: 'Production-ready forecasting pipeline with synthetic data generation, time-series lag features, model training and evaluation, saved artifacts, and a FastAPI inference service.',
-      highlights: ['Forecasting', 'Feature Engineering', 'FastAPI']
+      summary: 'Production-ready forecasting pipeline with synthetic data generation, lag features, model training, evaluation, saved artifacts, and a FastAPI inference service.',
+      stack: ['Python', 'Pandas', 'Scikit-learn', 'FastAPI']
     },
     'news-topic-classifier': {
       title: 'Multilingual News Topic Classifier',
       summary: 'NLP pipeline built with TF-IDF and Linear SVM, paired with a Streamlit demo, evaluation utilities, and reusable prediction modules.',
-      highlights: ['NLP', 'TF-IDF', 'Streamlit']
+      stack: ['Python', 'NLP', 'Scikit-learn', 'Streamlit']
     },
     'defect-detection-cv': {
       title: 'Industrial Defect Detection',
       summary: 'Computer vision baseline for defect screening using synthetic images, edge-based features, and SVM classification.',
-      highlights: ['Computer Vision', 'Feature Extraction', 'SVM']
+      stack: ['OpenCV', 'NumPy', 'Scikit-learn', 'Python']
     },
     'customer-segmentation-dashboard': {
       title: 'Customer Segmentation Dashboard',
       summary: 'K-Means clustering workflow with an interactive Streamlit dashboard for segment exploration and behavioral metrics.',
-      highlights: ['Clustering', 'Dashboards', 'Insights']
+      stack: ['Python', 'Pandas', 'Plotly', 'Streamlit']
     }
   };
 
@@ -287,53 +324,38 @@ async function fetchGithubProjects() {
       const profile = projectProfiles[repo.name] || {
         title: formatRepoName(repo.name),
         summary: repo.description || 'A detailed project from my GitHub portfolio built to solve a real-world data or automation problem.',
-        highlights: repo.language ? [repo.language, 'GitHub'] : ['GitHub']
+        stack: repo.language ? [repo.language, 'GitHub'] : ['GitHub']
       };
       const tech = repo.language ? repo.language : 'Tech Stack';
       const stars = repo.stargazers_count;
-      const noDesc = "A visionary project bridging data and creativity. Explore the code architecture.";
-      const highlightsHTML = profile.highlights.map((item) => `<span class="magnetic">${item}</span>`).join('');
+      const updatedAt = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      const stackHTML = profile.stack.map((item) => `<span>${item}</span>`).join('');
       
       const cardHTML = `
-        <a href="${repo.html_url}" target="_blank" class="gh-card glass reveal-projects">
-          <div class="card-content">
+        <article class="project-card glass reveal-projects">
+          <div class="project-card-inner">
             <p class="repo-label">Selected GitHub System</p>
             <h3 class="repo-name">${profile.title}</h3>
-            <p class="repo-desc">${profile.summary || repo.description || noDesc}</p>
-            <div class="tags repo-highlights">${highlightsHTML}</div>
-            <div class="repo-meta">
-              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> ${tech}</span>
-              <span>★ ${stars}</span>
+            <p class="repo-desc">${profile.summary}</p>
+            <div class="project-tags">${stackHTML}</div>
+            <div class="project-meta-row">
+              <div class="repo-meta">
+                <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> ${tech}</span>
+                <span>★ ${stars}</span>
+                <span>${updatedAt}</span>
+              </div>
+              <a href="${repo.html_url}" target="_blank" rel="noreferrer" class="project-link magnetic">GitHub Link</a>
             </div>
           </div>
-        </a>
+        </article>
       `;
       container.insertAdjacentHTML('beforeend', cardHTML);
     });
 
     // Re-bind cursor triggers for new elements
-    const newCards = document.querySelectorAll('.gh-card');
-    if (window.innerWidth > 768) {
-      newCards.forEach(el => {
-        el.addEventListener('mouseenter', () => { if(cursorDot) cursorDot.classList.add('hover'); if(cursorGlow) cursorGlow.classList.add('hover'); });
-        el.addEventListener('mouseleave', () => { if(cursorDot) cursorDot.classList.remove('hover'); if(cursorGlow) cursorGlow.classList.remove('hover'); });
-        
-        // Card tilt effect
-        el.addEventListener('mousemove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -10;
-          const rotateY = ((x - centerX) / centerX) * 10;
-          el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        });
-        el.addEventListener('mouseleave', () => {
-          el.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        });
-      });
-    }
+    bindHoverTargets(container.querySelectorAll('.project-card, .project-link'));
+    bindMagneticMotion(container.querySelectorAll('.project-link.magnetic'));
+    attachTiltInteractions('.project-card');
 
     gsap.from('.reveal-projects', {
       scrollTrigger: { trigger: '#projects', start: "top 70%" },
