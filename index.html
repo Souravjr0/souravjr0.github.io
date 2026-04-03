@@ -14,6 +14,7 @@
   <!-- ===== HEADER ===== -->
   <header class="hero">
     <div class="hero-bg"></div>
+    <canvas class="particle-canvas" id="particleCanvas" aria-hidden="true"></canvas>
     <div class="hero-graphics" aria-hidden="true">
       <div class="energy-ring ring-a"></div>
       <div class="energy-ring ring-b"></div>
@@ -28,6 +29,7 @@
       </div>
     </div>
     <div class="hero-content">
+      <div class="hero-kicker">Motion-heavy portfolio inspired by cinematic studio sites</div>
       <div class="avatar-ring">
         <img
           class="avatar"
@@ -54,11 +56,62 @@
         <a href="#projects" class="btn btn-primary">View Projects</a>
         <a href="#connect" class="btn btn-outline">Connect With Me</a>
       </div>
+      <div class="hero-pills" aria-label="core strengths">
+        <span>3D motion</span>
+        <span>AI systems</span>
+        <span>Data storytelling</span>
+        <span>Interactive UI</span>
+      </div>
+    </div>
+    <div class="hero-marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>AI SYSTEMS</span>
+        <span>INTERACTIVE MOTION</span>
+        <span>DATA STORYTELLING</span>
+        <span>SCROLL-DRIVEN DEPTH</span>
+        <span>3D HERO GRAPHICS</span>
+        <span>AI SYSTEMS</span>
+        <span>INTERACTIVE MOTION</span>
+        <span>DATA STORYTELLING</span>
+        <span>SCROLL-DRIVEN DEPTH</span>
+        <span>3D HERO GRAPHICS</span>
+      </div>
     </div>
     <div class="hero-wave">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path fill="#0d1117" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/></svg>
     </div>
   </header>
+
+  <!-- ===== MOTION SHOWCASE ===== -->
+  <section id="motion" class="section motion-section section-alt">
+    <div class="container">
+      <div class="motion-header reveal-block">
+        <p class="section-kicker">Cinematic Motion System</p>
+        <h2 class="section-display">Immersive, layered, and built to feel alive.</h2>
+        <p class="section-subcopy">I added bold ambient motion, depth cues, and animated panels so the site feels more like a premium creative portfolio than a static profile.</p>
+      </div>
+
+      <div class="motion-grid">
+        <article class="motion-card reveal-block">
+          <div class="motion-card-index">01</div>
+          <h3>Atmospheric depth</h3>
+          <p>Animated rings, glows, and a floating 3D object create the sense of a living digital stage.</p>
+        </article>
+
+        <article class="motion-card reveal-block">
+          <div class="motion-card-index">02</div>
+          <h3>Interactive response</h3>
+          <p>The hero reacts to mouse movement, giving the page a tactile feel that changes with the viewer.</p>
+        </article>
+
+        <article class="motion-card reveal-block">
+          <div class="motion-card-index">03</div>
+          <h3>Premium storytelling</h3>
+          <p>Marquee text, animated sections, and cinematic pacing help the page feel more polished and memorable.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
   <!-- ===== ABOUT ===== -->
   <section id="about" class="section">
@@ -551,6 +604,7 @@
       <p class="footer-made">Made with <span style="color:#e25555">❤️</span> by Sourav Biswas</p>
       <nav class="footer-nav">
         <a href="#about">About</a>
+        <a href="#motion">Motion</a>
         <a href="#tech">Tech Stack</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
@@ -567,6 +621,7 @@
     <a href="#" class="nav-logo">SB</a>
     <div class="nav-links">
       <a href="#about">About</a>
+      <a href="#motion">Motion</a>
       <a href="#tech">Tech</a>
       <a href="#skills">Skills</a>
       <a href="#projects">Projects</a>
@@ -631,7 +686,7 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
-    document.querySelectorAll('.section, .project-card, .skill-card, .cert-card, .timeline-item, .stat-item').forEach(el => {
+    document.querySelectorAll('.section, .project-card, .skill-card, .cert-card, .timeline-item, .stat-item, .reveal-block').forEach(el => {
       el.classList.add('reveal');
       revealObserver.observe(el);
     });
@@ -717,6 +772,85 @@
         heroCard.style.transform = 'rotateY(-14deg) rotateX(8deg)';
         if (ringA) ringA.style.filter = '';
         if (ringB) ringB.style.filter = '';
+      });
+    }
+
+    // ===== PARTICLE CANVAS BACKDROP =====
+    const particleCanvas = document.getElementById('particleCanvas');
+    if (particleCanvas) {
+      const ctx = particleCanvas.getContext('2d');
+      const particles = [];
+      const particleCount = window.innerWidth < 700 ? 24 : 44;
+
+      function resizeCanvas() {
+        particleCanvas.width = window.innerWidth;
+        particleCanvas.height = heroSection ? heroSection.offsetHeight : window.innerHeight;
+      }
+
+      function createParticle() {
+        return {
+          x: Math.random() * particleCanvas.width,
+          y: Math.random() * particleCanvas.height,
+          radius: Math.random() * 1.9 + 0.8,
+          speedX: (Math.random() - 0.5) * 0.28,
+          speedY: (Math.random() - 0.5) * 0.28,
+          hue: Math.random() > 0.5 ? '106,211,247' : '167,139,250'
+        };
+      }
+
+      function initParticles() {
+        particles.length = 0;
+        for (let index = 0; index < particleCount; index += 1) {
+          particles.push(createParticle());
+        }
+      }
+
+      function drawParticles() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+
+        for (let index = 0; index < particles.length; index += 1) {
+          const particle = particles[index];
+          particle.x += particle.speedX;
+          particle.y += particle.speedY;
+
+          if (particle.x < 0 || particle.x > particleCanvas.width) particle.speedX *= -1;
+          if (particle.y < 0 || particle.y > particleCanvas.height) particle.speedY *= -1;
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(${particle.hue}, 0.72)`;
+          ctx.shadowColor = `rgba(${particle.hue}, 0.55)`;
+          ctx.shadowBlur = 18;
+          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        for (let first = 0; first < particles.length; first += 1) {
+          for (let second = first + 1; second < particles.length; second += 1) {
+            const deltaX = particles[first].x - particles[second].x;
+            const deltaY = particles[first].y - particles[second].y;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            if (distance < 130) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(106,211,247,${0.12 - distance / 1100})`;
+              ctx.lineWidth = 1;
+              ctx.moveTo(particles[first].x, particles[first].y);
+              ctx.lineTo(particles[second].x, particles[second].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        requestAnimationFrame(drawParticles);
+      }
+
+      resizeCanvas();
+      initParticles();
+      drawParticles();
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        initParticles();
       });
     }
 
