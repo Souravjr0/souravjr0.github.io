@@ -245,6 +245,36 @@ async function fetchGithubProjects() {
   const container = document.getElementById('github-projects');
   if(!container) return;
 
+  const projectProfiles = {
+    'demand-forecasting-mlops': {
+      title: 'Demand Forecasting MLOps Pipeline',
+      summary: 'Production-ready forecasting pipeline with synthetic data generation, time-series lag features, model training and evaluation, saved artifacts, and a FastAPI inference service.',
+      highlights: ['Forecasting', 'Feature Engineering', 'FastAPI']
+    },
+    'news-topic-classifier': {
+      title: 'Multilingual News Topic Classifier',
+      summary: 'NLP pipeline built with TF-IDF and Linear SVM, paired with a Streamlit demo, evaluation utilities, and reusable prediction modules.',
+      highlights: ['NLP', 'TF-IDF', 'Streamlit']
+    },
+    'defect-detection-cv': {
+      title: 'Industrial Defect Detection',
+      summary: 'Computer vision baseline for defect screening using synthetic images, edge-based features, and SVM classification.',
+      highlights: ['Computer Vision', 'Feature Extraction', 'SVM']
+    },
+    'customer-segmentation-dashboard': {
+      title: 'Customer Segmentation Dashboard',
+      summary: 'K-Means clustering workflow with an interactive Streamlit dashboard for segment exploration and behavioral metrics.',
+      highlights: ['Clustering', 'Dashboards', 'Insights']
+    }
+  };
+
+  function formatRepoName(name) {
+    return name
+      .split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+  }
+
   try {
     // Specifically grabbing the 6 latest repos
     const response = await fetch('https://api.github.com/users/Souravjr0/repos?sort=updated&per_page=6');
@@ -254,15 +284,23 @@ async function fetchGithubProjects() {
     container.innerHTML = '';
     
     repos.forEach((repo, i) => {
+      const profile = projectProfiles[repo.name] || {
+        title: formatRepoName(repo.name),
+        summary: repo.description || 'A detailed project from my GitHub portfolio built to solve a real-world data or automation problem.',
+        highlights: repo.language ? [repo.language, 'GitHub'] : ['GitHub']
+      };
       const tech = repo.language ? repo.language : 'Tech Stack';
       const stars = repo.stargazers_count;
       const noDesc = "A visionary project bridging data and creativity. Explore the code architecture.";
+      const highlightsHTML = profile.highlights.map((item) => `<span class="magnetic">${item}</span>`).join('');
       
       const cardHTML = `
         <a href="${repo.html_url}" target="_blank" class="gh-card glass reveal-projects">
           <div class="card-content">
-            <h3 class="repo-name">${repo.name}</h3>
-            <p class="repo-desc">${repo.description || noDesc}</p>
+            <p class="repo-label">Selected GitHub System</p>
+            <h3 class="repo-name">${profile.title}</h3>
+            <p class="repo-desc">${profile.summary || repo.description || noDesc}</p>
+            <div class="tags repo-highlights">${highlightsHTML}</div>
             <div class="repo-meta">
               <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> ${tech}</span>
               <span>★ ${stars}</span>
