@@ -285,22 +285,22 @@ async function fetchGithubProjects() {
   const projectProfiles = {
     'demand-forecasting-mlops': {
       title: 'Demand Forecasting MLOps Pipeline',
-      summary: 'Production-ready forecasting pipeline with synthetic data generation, lag features, model training, evaluation, saved artifacts, and a FastAPI inference service.',
+      summary: 'An end-to-end forecasting system that turns synthetic data into a usable pipeline with lag features, evaluation, artifacts, and a FastAPI face.',
       stack: ['Python', 'Pandas', 'Scikit-learn', 'FastAPI']
     },
     'news-topic-classifier': {
       title: 'Multilingual News Topic Classifier',
-      summary: 'NLP pipeline built with TF-IDF and Linear SVM, paired with a Streamlit demo, evaluation utilities, and reusable prediction modules.',
+      summary: 'A compact NLP build that classifies articles with TF-IDF and Linear SVM, wrapped in a Streamlit demo.',
       stack: ['Python', 'NLP', 'Scikit-learn', 'Streamlit']
     },
     'defect-detection-cv': {
       title: 'Industrial Defect Detection',
-      summary: 'Computer vision baseline for defect screening using synthetic images, edge-based features, and SVM classification.',
+      summary: 'A computer vision study using synthetic imagery, edge features, and SVM classification to detect defects quickly.',
       stack: ['OpenCV', 'NumPy', 'Scikit-learn', 'Python']
     },
     'customer-segmentation-dashboard': {
       title: 'Customer Segmentation Dashboard',
-      summary: 'K-Means clustering workflow with an interactive Streamlit dashboard for segment exploration and behavioral metrics.',
+      summary: 'A clustering dashboard that turns customer behavior into clear segments and interactive insight.',
       stack: ['Python', 'Pandas', 'Plotly', 'Streamlit']
     }
   };
@@ -323,7 +323,7 @@ async function fetchGithubProjects() {
     repos.forEach((repo, i) => {
       const profile = projectProfiles[repo.name] || {
         title: formatRepoName(repo.name),
-        summary: repo.description || 'A detailed project from my GitHub portfolio built to solve a real-world data or automation problem.',
+        summary: repo.description || 'A GitHub build from my portfolio, shaped to solve a concrete data, AI, or automation problem.',
         stack: repo.language ? [repo.language, 'GitHub'] : ['GitHub']
       };
       const tech = repo.language ? repo.language : 'Tech Stack';
@@ -334,7 +334,7 @@ async function fetchGithubProjects() {
       const cardHTML = `
         <article class="project-card glass reveal-projects">
           <div class="project-card-inner">
-            <p class="repo-label">Selected GitHub System</p>
+            <p class="repo-label">Selected Work</p>
             <h3 class="repo-name">${profile.title}</h3>
             <p class="repo-desc">${profile.summary}</p>
             <div class="project-tags">${stackHTML}</div>
@@ -344,7 +344,7 @@ async function fetchGithubProjects() {
                 <span>★ ${stars}</span>
                 <span>${updatedAt}</span>
               </div>
-              <a href="${repo.html_url}" target="_blank" rel="noreferrer" class="project-link magnetic">GitHub Link</a>
+              <a href="${repo.html_url}" target="_blank" rel="noreferrer" class="project-link magnetic">Open Work</a>
             </div>
           </div>
         </article>
