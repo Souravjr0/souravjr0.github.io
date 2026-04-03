@@ -79,7 +79,7 @@ if (isDesktop && !prefersReducedMotion) {
   bindMagneticMotion(magnetics);
 
   // General hover for a/button
-  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, input, textarea'));
+  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, .studio-note, input, textarea'));
 }
 
 
