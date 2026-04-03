@@ -2,26 +2,30 @@
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isDesktop = window.innerWidth > 768;
+const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
+const useEnhancedMotion = isDesktop && !prefersReducedMotion;
 
 // 1. Lenis Smooth Scroll Setup
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  direction: 'vertical',
-  gestureDirection: 'vertical',
-  smooth: true,
-  mouseMultiplier: 1,
-  smoothTouch: false,
-  touchMultiplier: 2,
-});
+let lenis = null;
+if (useEnhancedMotion) {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smooth: true,
+    mouseMultiplier: 1,
+    smoothTouch: false,
+    touchMultiplier: 2,
+  });
 
-// Keep ScrollTrigger in sync with Lenis without a second RAF loop.
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
-gsap.ticker.lagSmoothing(0);
+  // Keep ScrollTrigger in sync with Lenis without a second RAF loop.
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => {
+    lenis.raf(time * 1000);
+  });
+  gsap.ticker.lagSmoothing(0);
+}
 
 
 // 2. Custom Cursor Logic
@@ -46,7 +50,7 @@ function bindHoverTargets(elements) {
 }
 
 function bindMagneticMotion(elements) {
-  if (!isDesktop || prefersReducedMotion) return;
+  if (!useEnhancedMotion) return;
 
   elements.forEach((elem) => {
     if (elem.dataset.magneticBound === 'true') return;
@@ -68,7 +72,7 @@ function bindMagneticMotion(elements) {
   });
 }
 
-if (isDesktop && !prefersReducedMotion) {
+if (useEnhancedMotion) {
   // Move cursor
   window.addEventListener('mousemove', (e) => {
     if(cursorDot) gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
@@ -85,12 +89,12 @@ if (isDesktop && !prefersReducedMotion) {
 
 // 3. Three.js Background (Stars / abstract particles)
 const canvas = document.querySelector('#webgl-canvas');
-if (canvas) {
+if (canvas && useEnhancedMotion) {
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x030305, 0.001);
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-  camera.position.z = isDesktop ? 500 : 650;
+  camera.position.z = 500;
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -98,7 +102,7 @@ if (canvas) {
 
     // Create Particles
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = prefersReducedMotion ? 500 : (isDesktop ? 1800 : 900);
+    const particlesCount = 1200;
     const posArray = new Float32Array(particlesCount * 3);
     const colorsArray = new Float32Array(particlesCount * 3);
 
@@ -125,10 +129,10 @@ if (canvas) {
     geometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
 
     const material = new THREE.PointsMaterial({
-      size: prefersReducedMotion ? 1.4 : (isDesktop ? 2 : 1.5),
+      size: 1.8,
         vertexColors: true,
         transparent: true,
-      opacity: prefersReducedMotion ? 0.65 : 0.8,
+      opacity: 0.75,
         blending: THREE.AdditiveBlending
     });
 
@@ -138,26 +142,22 @@ if (canvas) {
     // Mouse interaction for ThreeJS
     let mouseX = 0;
     let mouseY = 0;
-    if (!prefersReducedMotion) {
-      window.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX / window.innerWidth) - 0.5;
-        mouseY = (event.clientY / window.innerHeight) - 0.5;
-      });
-    }
+    window.addEventListener('mousemove', (event) => {
+      mouseX = (event.clientX / window.innerWidth) - 0.5;
+      mouseY = (event.clientY / window.innerHeight) - 0.5;
+    });
 
     const clock = new THREE.Clock();
     function animateThree() {
         const elapsedTime = clock.getElapsedTime();
         
         // Slow rotation
-        particlesMesh.rotation.y = elapsedTime * (prefersReducedMotion ? 0.015 : 0.05);
-        particlesMesh.rotation.x = elapsedTime * (prefersReducedMotion ? 0.008 : 0.02);
+        particlesMesh.rotation.y = elapsedTime * 0.05;
+        particlesMesh.rotation.x = elapsedTime * 0.02;
 
         // Mouse parallax
-        if (!prefersReducedMotion) {
-          camera.position.x += (mouseX * 200 - camera.position.x) * 0.05;
-          camera.position.y += (-mouseY * 200 - camera.position.y) * 0.05;
-        }
+        camera.position.x += (mouseX * 200 - camera.position.x) * 0.05;
+        camera.position.y += (-mouseY * 200 - camera.position.y) * 0.05;
         camera.lookAt(scene.position);
 
         renderer.render(scene, camera);
@@ -250,7 +250,7 @@ gsap.utils.toArray('.skill-row').forEach((row) => {
 });
 
 function attachTiltInteractions(selector) {
-  if (!isDesktop || prefersReducedMotion) return;
+  if (!useEnhancedMotion) return;
 
   document.querySelectorAll(selector).forEach((card) => {
     if (card.dataset.tiltBound === 'true') return;

@@ -1085,6 +1085,44 @@ section[id] {
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.12);
 }
 
+/* Social Proof */
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.proof-card {
+  padding: 2rem;
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.proof-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 240, 255, 0.32);
+  box-shadow: 0 18px 36px rgba(0, 240, 255, 0.08);
+}
+
+.proof-card span {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: var(--accent-neon);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.72rem;
+}
+
+.proof-card h3 {
+  font-size: 1.45rem;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+
+.proof-card p {
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1538,6 +1576,121 @@ section[id] {
   .experiment-content,
   .about-card {
     padding: 1.8rem;
+  }
+
+  .cursor-dot,
+  .cursor-glow {
+    display: none;
+  }
+
+  * {
+    cursor: auto;
+  }
+}
+
+@media (max-width: 1024px), (hover: none), (pointer: coarse) {
+  #webgl-canvas {
+    display: none;
+  }
+
+  .nav-header {
+    mix-blend-mode: normal;
+    background: rgba(3, 3, 5, 0.72);
+    backdrop-filter: blur(14px);
+  }
+
+  .links {
+    display: none;
+  }
+
+  .hero {
+    min-height: 100svh;
+    height: auto;
+    padding: 7rem 5vw 4rem;
+    align-items: flex-start;
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 10vw, 5rem);
+  }
+
+  .scroll-indicator {
+    position: static;
+    margin-top: 2rem;
+  }
+
+  .section {
+    min-height: auto;
+    padding: 5.5rem 0;
+  }
+
+  .interlude {
+    min-height: auto;
+    padding: 3.5rem 0;
+  }
+
+  .studio-band {
+    padding: 1rem 0 3rem;
+  }
+
+  .studio-track {
+    animation: none;
+    white-space: normal;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.7rem 1rem;
+  }
+
+  .studio-track span {
+    padding-right: 0;
+  }
+
+  .studio-track span::after {
+    content: '';
+  }
+
+  .cases-grid,
+  .proof-grid,
+  .skills-grid,
+  .experiment-grid,
+  .story-grid,
+  .contact-grid,
+  .about-grid-large {
+    grid-template-columns: 1fr;
+  }
+
+  .case-points {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions,
+  .contact-links {
+    flex-direction: column;
+  }
+
+  .hero-button,
+  .contact-link,
+  .project-link,
+  .case-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .case-visual {
+    min-height: 180px;
+  }
+
+  .case-body,
+  .proof-card,
+  .studio-note,
+  .skill-card,
+  .project-card-inner,
+  .experiment-content,
+  .about-card,
+  .story-card,
+  .story-mini,
+  .contact-glass {
+    padding: 1.4rem;
   }
 
   .cursor-dot,
