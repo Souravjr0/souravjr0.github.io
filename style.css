@@ -892,6 +892,199 @@ section[id] {
   margin-top: 3rem;
 }
 
+/* Case Studies */
+.cases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.case-card {
+  padding: 0;
+  overflow: hidden;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.case-card:hover {
+  transform: translateY(-12px);
+  border-color: rgba(0, 240, 255, 0.28);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.42);
+}
+
+.case-visual {
+  min-height: 220px;
+  padding: 1.8rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.case-visual::before {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.18), transparent 35%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.case-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 45%, rgba(255, 255, 255, 0.03));
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.case-visual-a {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.18), rgba(138, 43, 226, 0.38)), radial-gradient(circle at top right, rgba(0, 240, 255, 0.28), transparent 40%);
+}
+
+.case-visual-b {
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.24), rgba(0, 240, 255, 0.16)), radial-gradient(circle at bottom left, rgba(138, 43, 226, 0.3), transparent 44%);
+}
+
+.case-visual-c {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 255, 255, 0.04)), radial-gradient(circle at 70% 30%, rgba(0, 240, 255, 0.3), transparent 40%);
+}
+
+.case-visual-head,
+.case-body,
+.case-description,
+.case-tags,
+.cases-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.case-visual-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.case-number {
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -2px;
+}
+
+.case-eyebrow {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.case-visual-title {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-weight: 700;
+  max-width: 240px;
+}
+
+.case-body {
+  padding: 2.2rem;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.case-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-neon);
+}
+
+.case-body h3 {
+  font-size: 1.7rem;
+  line-height: 1.1;
+}
+
+.case-description {
+  color: var(--text-dim);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.case-points {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.case-point {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.case-point span {
+  display: block;
+  color: var(--accent-neon);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 0.7rem;
+  margin-bottom: 0.4rem;
+}
+
+.case-point p {
+  color: var(--text-dim);
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.case-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
+}
+
+.case-tags span {
+  display: inline-flex;
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+}
+
+.cases-footer {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.case-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.case-cta:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-neon);
+  background: rgba(0, 240, 255, 0.08);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.12);
+}
+
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1315,6 +1508,18 @@ section[id] {
 
   .hero-actions {
     flex-direction: column;
+  }
+
+  .case-points {
+    grid-template-columns: 1fr;
+  }
+
+  .case-visual {
+    min-height: 180px;
+  }
+
+  .case-body {
+    padding: 1.8rem;
   }
 
   .studio-band {

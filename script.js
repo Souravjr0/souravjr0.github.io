@@ -79,7 +79,7 @@ if (isDesktop && !prefersReducedMotion) {
   bindMagneticMotion(magnetics);
 
   // General hover for a/button
-  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, .studio-note, input, textarea'));
+  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .case-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, .studio-note, input, textarea'));
 }
 
 
@@ -274,7 +274,7 @@ function attachTiltInteractions(selector) {
   });
 }
 
-attachTiltInteractions('.project-card, .experiment-card');
+attachTiltInteractions('.project-card, .case-card, .experiment-card');
 
 
 // 6. Fetch GitHub Projects Dynamically
@@ -355,7 +355,7 @@ async function fetchGithubProjects() {
     // Re-bind cursor triggers for new elements
     bindHoverTargets(container.querySelectorAll('.project-card, .project-link'));
     bindMagneticMotion(container.querySelectorAll('.project-link.magnetic'));
-    attachTiltInteractions('.project-card');
+    attachTiltInteractions('.project-card, .case-card');
 
     gsap.from('.reveal-projects', {
       scrollTrigger: { trigger: '#projects', start: "top 70%" },
