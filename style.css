@@ -619,3 +619,33 @@ h1, h2, h3, .logo, .stat-num, .skill-item, .massive-text {
   * { cursor: auto; }
 }
 
+
+/* Arsenal Additions */
+.arsenal-card {
+  padding: 2.5rem;
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+.arsenal-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--accent-neon);
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1);
+}
+.skill-tag {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  transition: all 0.3s ease;
+}
+.skill-tag:hover {
+  background: rgba(0, 240, 255, 0.1);
+  border-color: var(--accent-neon);
+  color: var(--text-main);
+  transform: scale(1.05);
+}
+@media (max-width: 768px) {
+  .arsenal-grid { grid-template-columns: 1fr !important; }
+}
