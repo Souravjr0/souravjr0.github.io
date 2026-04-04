@@ -5,6 +5,27 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
 const useEnhancedMotion = isDesktop && !prefersReducedMotion;
 
+let appHeightRaf = null;
+function updateAppHeight() {
+  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty('--app-height', `${viewportHeight * 0.01}px`);
+}
+
+function scheduleAppHeightUpdate() {
+  if (appHeightRaf) cancelAnimationFrame(appHeightRaf);
+  appHeightRaf = requestAnimationFrame(() => {
+    updateAppHeight();
+    appHeightRaf = null;
+  });
+}
+
+updateAppHeight();
+window.addEventListener('resize', scheduleAppHeightUpdate, { passive: true });
+window.addEventListener('orientationchange', scheduleAppHeightUpdate);
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', scheduleAppHeightUpdate, { passive: true });
+}
+
 // 1. Lenis Smooth Scroll Setup
 let lenis = null;
 if (useEnhancedMotion) {
@@ -102,7 +123,7 @@ if (canvas && useEnhancedMotion) {
 
     // Create Particles
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = 1200;
+    const particlesCount = 400;
     const posArray = new Float32Array(particlesCount * 3);
     const colorsArray = new Float32Array(particlesCount * 3);
 
@@ -175,7 +196,7 @@ if (canvas && useEnhancedMotion) {
 // 4. Initial Loader Animation
 window.addEventListener('load', () => {
   const tl = gsap.timeline();
-  
+
   // Progress bar animation mock
   tl.to('.loader-fill', {
     width: '100%',
@@ -189,8 +210,12 @@ window.addEventListener('load', () => {
   })
   .add(() => {
     document.body.classList.remove('loading');
+    setTimeout(() => {
+      const loader = document.querySelector('.loader');
+      if (loader) loader.remove();
+    }, 1000);
   }, "-=0.5")
-  
+
   // Hero reveals
   .from('.line', {
     y: 100,
@@ -210,44 +235,46 @@ window.addEventListener('load', () => {
 
 
 // 5. Scroll Animations
-gsap.utils.toArray('.reveal-up').forEach(el => {
-  gsap.from(el, {
-    scrollTrigger: {
-      trigger: el,
-      start: "top 85%",
-    },
-    y: 60,
-    opacity: 0,
-    duration: 1,
-    ease: "power3.out"
+if (useEnhancedMotion) {
+  gsap.utils.toArray('.reveal-up').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: "top 85%",
+      },
+      y: 60,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out"
+    });
   });
-});
 
-const splitTexts = document.querySelectorAll('.split-text');
-splitTexts.forEach(st => {
-  gsap.from(st, {
-    scrollTrigger: { trigger: st, start: "top 80%" },
-    opacity: 0, x: -50, duration: 1, ease: "power3.out"
+  const splitTexts = document.querySelectorAll('.split-text');
+  splitTexts.forEach(st => {
+    gsap.from(st, {
+      scrollTrigger: { trigger: st, start: "top 80%" },
+      opacity: 0, x: -50, duration: 1, ease: "power3.out"
+    });
   });
-});
 
-gsap.utils.toArray('.skill-row').forEach((row) => {
-  const fill = row.querySelector('.skill-fill');
-  if (!fill) return;
+  gsap.utils.toArray('.skill-row').forEach((row) => {
+    const fill = row.querySelector('.skill-fill');
+    if (!fill) return;
 
-  const targetLevel = Number(row.dataset.level || 0);
-  gsap.fromTo(fill, {
-    width: '0%'
-  }, {
-    width: `${targetLevel}%`,
-    duration: 1.2,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: row,
-      start: 'top 85%'
-    }
+    const targetLevel = Number(row.dataset.level || 0);
+    gsap.fromTo(fill, {
+      width: '0%'
+    }, {
+      width: `${targetLevel}%`,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: row,
+        start: 'top 85%'
+      }
+    });
   });
-});
+}
 
 function attachTiltInteractions(selector) {
   if (!useEnhancedMotion) return;
@@ -357,10 +384,12 @@ async function fetchGithubProjects() {
     bindMagneticMotion(container.querySelectorAll('.project-link.magnetic'));
     attachTiltInteractions('.project-card, .case-card');
 
-    gsap.from('.reveal-projects', {
-      scrollTrigger: { trigger: '#projects', start: "top 70%" },
-      y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
-    });
+    if (useEnhancedMotion) {
+      gsap.from('.reveal-projects', {
+        scrollTrigger: { trigger: '#projects', start: "top 70%" },
+        y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
+      });
+    }
 
   } catch (error) {
     container.innerHTML = '<p class="error" style="color:var(--text-dim);">Unable to fetch projects right now. You can check out my <a href="https://github.com/Souravjr0" style="color:var(--accent-neon);">GitHub Profile</a>.</p>';
