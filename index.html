@@ -52,24 +52,30 @@
         </nav>
       </header>
 
+      <div class="theme-toggle-wrap">
+        <button id="theme-toggle" class="theme-toggle-btn" type="button">
+          <span id="theme-icon">🌑</span>
+          <span id="theme-text">Neon Dark</span>
+        </button>
+      </div>
+
       <!-- HERO SECTION -->
       <section id="hero" class="hero">
         <div class="hero-content">
           <div class="roles reveal-fade">
-            <span>Tech Artist</span>
+            <span>Website Developer</span>
             <span class="separator">//</span>
             <span>Creative Technologist</span>
             <span class="separator">//</span>
-            <span>Data Storyteller</span>
+            <span>Full-Stack Builder</span>
           </div>
           <h1 class="hero-title">
-            <div class="line-wrapper"><span class="line">Architecting</span></div>
-            <div class="line-wrapper"><span class="line">interactive</span></div>
-            <div class="line-wrapper"><span class="line glow-text">digital experiences.</span></div>
+            <div class="line-wrapper"><span class="line">Sourav Biswas</span></div>
+            <div class="line-wrapper"><span class="line glow-text">Website Developer</span></div>
           </h1>
           <div class="hero-copy reveal-fade">
-            <p class="hero-eyebrow">Tech Artist blending data, AI, motion, and storytelling</p>
-            <p class="hero-statement">I turn data, ideas, and creativity into interactive digital work that feels alive.</p>
+            <p class="hero-eyebrow">Tech Artist & Website Developer</p>
+            <p class="hero-statement">I build beautiful, fast, full-stack websites. Open for freelance projects.</p>
             <div class="hero-actions">
               <a href="#projects" class="hero-button magnetic">View Works</a>
               <a href="#contact" class="hero-button ghost magnetic">Let's Collaborate</a>
@@ -465,50 +471,41 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- ====================== REAL CONTACT FORM (Phase 1) ====================== -->
-      <section id="contact" class="py-24 bg-[#0a0a0a] border-t border-cyan-500/20 relative overflow-hidden">
+      <!-- ====================== CONTACT FORM - RESUME STYLE (Updated) ====================== -->
+      <section id="contact" class="py-24 bg-[#0a0a0a] border-t border-cyan-500/20">
         <div class="max-w-5xl mx-auto px-6">
-          <div class="text-center mb-16">
-            <div class="inline-flex items-center gap-2 bg-black border border-cyan-500/30 rounded-3xl px-6 py-2 text-cyan-400 text-sm font-medium mb-6">
-              <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-              NOW LIVE
-            </div>
-            <h2 class="text-6xl font-bold tracking-tighter text-white mb-4">Start a Conversation</h2>
-            <p class="text-2xl text-cyan-400 max-w-2xl mx-auto">Let’s build something people remember.<br>Brief, brand, or a strange idea — I’m in.</p>
+          <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold tracking-tight text-white mb-3">Let’s Build Your Website</h2>
+            <p class="text-2xl text-cyan-400">I develop modern, fast, and beautiful websites from scratch.<br>Portfolio, business, SaaS, or full-stack — tell me what you need.</p>
           </div>
 
-          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-12 shadow-2xl">
+          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-14">
             <div class="grid md:grid-cols-2 gap-8">
               <div>
-                <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">YOUR NAME</label>
-                <input type="text" name="name" required
-                       class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg">
+                <label class="block text-xs font-medium text-gray-400 mb-3">YOUR NAME</label>
+                <input type="text" name="name" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
               </div>
               <div>
-                <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">EMAIL ADDRESS</label>
-                <input type="email" name="email" required
-                       class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg">
+                <label class="block text-xs font-medium text-gray-400 mb-3">EMAIL ADDRESS</label>
+                <input type="email" name="email" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
               </div>
             </div>
 
             <div class="mt-8">
-              <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">MESSAGE / BRIEF / IDEA</label>
-              <textarea name="message" rows="7" required
-                        class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-3xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg resize-none"></textarea>
+              <label class="block text-xs font-medium text-gray-400 mb-3">WHAT KIND OF WEBSITE DO YOU NEED?</label>
+              <textarea name="message" rows="6" required placeholder="Portfolio website • Business landing page • SaaS dashboard • E-commerce • Or just an idea..."
+                        class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-3xl px-7 py-5 text-white text-lg resize-none"></textarea>
             </div>
 
-            <div class="mt-10">
-              <button type="submit"
-                      class="w-full bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-semibold text-2xl py-7 rounded-3xl transition-all active:scale-[0.97] flex items-center justify-center gap-3 group magnetic">
-                SEND MESSAGE
-                <span class="text-3xl group-active:rotate-45 transition">→</span>
-              </button>
-            </div>
+            <button type="submit"
+                    class="mt-10 w-full bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-semibold text-2xl py-7 rounded-3xl transition-all active:scale-95 magnetic">
+              SEND BRIEF — LET’S BUILD IT
+            </button>
 
             <div id="form-status" class="mt-6 text-center text-sm font-medium hidden"></div>
           </form>
 
-          <p class="text-center text-gray-500 text-sm mt-8">Or just email me directly at <span class="text-cyan-400">biswasmail631@gmail.com</span></p>
+          <p class="text-center text-gray-500 mt-8 text-sm">Or email directly: <span class="text-cyan-400">your-email@example.com</span></p>
         </div>
       </section>
       <!-- PROJECTS SECTION -->
@@ -601,46 +598,6 @@ document.querySelector('h1').addEventListener('click', function() {
           </div>
         </div>
       </section>
-
-<!-- ====================== CONTACT FORM ====================== -->
-<section id="contact" class="py-20 bg-black border-t border-cyan-500/20">
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="text-center mb-12">
-      <h2 class="text-5xl font-bold tracking-tighter text-white mb-3">Start a Conversation</h2>
-      <p class="text-xl text-cyan-400">Let’s build something alive together.</p>
-    </div>
-
-    <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-2xl mx-auto space-y-6">
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-400 mb-2">Your Name</label>
-          <input type="text" name="name" required
-                 class="w-full bg-zinc-900 border border-cyan-500/30 rounded-2xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition">
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
-          <input type="email" name="email" required
-                 class="w-full bg-zinc-900 border border-cyan-500/30 rounded-2xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-400 mb-2">Project Type / Message</label>
-        <textarea name="message" rows="6" required
-                  class="w-full bg-zinc-900 border border-cyan-500/30 rounded-3xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition resize-none"></textarea>
-      </div>
-
-      <div class="flex items-center gap-4">
-        <button type="submit"
-                class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold py-5 rounded-3xl text-xl transition-all active:scale-95 magnetic">
-          Send Message → 
-        </button>
-      </div>
-
-      <div id="form-status" class="text-center text-sm hidden"></div>
-    </form>
-  </div>
-</section>
 
       <!-- FOOTER -->
       <footer class="footer">

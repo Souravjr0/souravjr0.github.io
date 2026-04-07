@@ -455,52 +455,74 @@ function initCodeBuilder() {
 document.addEventListener('DOMContentLoaded', initCodeBuilder);
 
 // ====================== CONTACT FORM (Phase 1) ======================
-const contactForm = document.getElementById('contact-form');
+const form = document.getElementById('contact-form');
 const statusDiv = document.getElementById('form-status');
 
-if (contactForm) {
-  contactForm.addEventListener('submit', async function (e) {
+if (form) {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = form.querySelector('button');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = 'Sending<span class="animate-pulse">...</span>';
+    submitBtn.disabled = true;
 
-    const submitButton = contactForm.querySelector('button');
-    const originalText = submitButton.innerHTML;
-
-    // Loading state
-    submitButton.innerHTML = `
-      <span class="animate-pulse">SENDING TO THE VOID...</span>
-    `;
-    submitButton.disabled = true;
-
+    const formData = new FormData(form);
+    
     try {
-      const response = await fetch(contactForm.action, {
+      const response = await fetch(form.action, {
         method: 'POST',
-        body: new FormData(contactForm),
-        headers: {
-          'Accept': 'application/json'
-        }
+        body: formData,
+        headers: { 'Accept': 'application/json' }
       });
 
       if (response.ok) {
         statusDiv.classList.remove('hidden');
-        statusDiv.innerHTML = `✅ Message received. I’ll reply within 24 hours. Thank you!`;
+        statusDiv.innerHTML = `✅ Message sent! I’ll reply within 24 hours.`;
         statusDiv.style.color = '#22ff88';
-        contactForm.reset();
+        form.reset();
       } else {
         throw new Error();
       }
-    } catch (error) {
+    } catch {
       statusDiv.classList.remove('hidden');
-      statusDiv.innerHTML = `❌ Oops — something broke. Try again or email me directly.`;
+      statusDiv.innerHTML = `❌ Something went wrong. Try again or email me directly.`;
       statusDiv.style.color = '#ff2266';
     }
 
-    // Reset button
-    submitButton.innerHTML = originalText;
-    submitButton.disabled = false;
+    submitBtn.innerHTML = originalText;
+    submitBtn.disabled = false;
 
-    // Auto-hide status
-    setTimeout(() => {
-      statusDiv.classList.add('hidden');
-    }, 8000);
+    // auto hide status after 8 seconds
+    setTimeout(() => statusDiv.classList.add('hidden'), 8000);
+  });
+}
+
+// ====================== PERSISTENT THEME TOGGLE ======================
+const toggleBtn = document.getElementById('theme-toggle');
+const themeIcon = document.getElementById('theme-icon');
+const themeText = document.getElementById('theme-text');
+
+function setTheme(isLight) {
+  if (isLight) {
+    document.documentElement.classList.add('light-mode');
+    if (themeIcon) themeIcon.textContent = '☀️';
+    if (themeText) themeText.textContent = 'Clean Light (Resume)';
+  } else {
+    document.documentElement.classList.remove('light-mode');
+    if (themeIcon) themeIcon.textContent = '🌑';
+    if (themeText) themeText.textContent = 'Neon Dark';
+  }
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'light') {
+  setTheme(true);
+}
+
+if (toggleBtn) {
+  toggleBtn.addEventListener('click', () => {
+    const isLight = !document.documentElement.classList.contains('light-mode');
+    setTheme(isLight);
   });
 }
