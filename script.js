@@ -455,37 +455,43 @@ function initCodeBuilder() {
 document.addEventListener('DOMContentLoaded', initCodeBuilder);
 
 // Contact Form Handling
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.getElementById('contact-form');
-  const status = document.getElementById('form-status');
+const form = document.getElementById('contact-form');
+const statusDiv = document.getElementById('form-status');
 
-  if (form && status) {
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const formData = new FormData(form);
-      status.classList.remove('hidden');
-      status.textContent = 'Sending...';
-      status.style.color = 'var(--text-main)';
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = form.querySelector('button');
+    submitBtn.innerHTML = 'Sending<span class="animate-pulse">...</span>';
+    submitBtn.disabled = true;
 
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-        if (response.ok) {
-          status.textContent = 'Message sent successfully!';
-          status.style.color = 'var(--accent-neon)';
-          form.reset();
-        } else {
-          throw new Error('Failed to send');
-        }
-      } catch (error) {
-        status.textContent = 'Failed to send message. Please try again.';
-        status.style.color = 'red';
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        statusDiv.classList.remove('hidden');
+        statusDiv.innerHTML = `✅ Message sent! I’ll reply within 24 hours.`;
+        statusDiv.style.color = '#22ff88';
+        form.reset();
+      } else {
+        throw new Error();
       }
-    });
-  }
-});
+    } catch {
+      statusDiv.classList.remove('hidden');
+      statusDiv.innerHTML = `❌ Something went wrong. Try again or email me directly.`;
+      statusDiv.style.color = '#ff2266';
+    }
+
+    submitBtn.innerHTML = 'Send Message →';
+    submitBtn.disabled = false;
+
+    // auto hide status after 8 seconds
+    setTimeout(() => statusDiv.classList.add('hidden'), 8000);
+  });
+}
