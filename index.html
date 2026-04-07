@@ -40,6 +40,7 @@
         <nav class="links">
           <a href="#about" class="magnetic">About</a>
           <a href="#studio" class="magnetic">Studio</a>
+          <a href="#builder" class="magnetic">Builder</a>
           <a href="#think" class="magnetic">Think</a>
           <a href="#skills" class="magnetic">Toolkit</a>
           <a href="#cases" class="magnetic">Cases</a>
@@ -152,6 +153,52 @@
               <h3>Editorial frames</h3>
               <p>Gallery-like composition with clean hierarchy and texture.</p>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEVELOPMENT BUILDER -->
+      <section id="builder" class="section builder-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Development Process</p>
+          <h2 class="section-title split-text">Build & Code Live.</h2>
+          <p class="section-subtitle reveal-up">Experience frontend and backend development with our interactive website builder. Write HTML, CSS, and JavaScript to create and preview your own web components in real-time.</p>
+
+          <div class="builder-container glass reveal-up">
+            <div class="code-panels">
+              <div class="panel">
+                <h3>HTML (Frontend)</h3>
+                <textarea id="html-code" class="code-editor" placeholder="Enter your HTML code here...">&lt;div class="hello"&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;Welcome to the builder!&lt;/p&gt;
+&lt;/div&gt;</textarea>
+              </div>
+              <div class="panel">
+                <h3>CSS (Frontend)</h3>
+                <textarea id="css-code" class="code-editor" placeholder="Enter your CSS code here...">.hello {
+  text-align: center;
+  color: #00f0ff;
+  font-family: 'Inter', sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}</textarea>
+              </div>
+              <div class="panel">
+                <h3>JavaScript (Frontend/Backend Simulation)</h3>
+                <textarea id="js-code" class="code-editor" placeholder="Enter your JavaScript code here...">// Frontend interaction
+document.querySelector('h1').addEventListener('click', function() {
+  this.style.color = '#8a2be2';
+  alert('Backend simulation: Data processed!');
+});</textarea>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <h3>Live Preview</h3>
+              <iframe id="preview" class="preview-iframe"></iframe>
+            </div>
           </div>
         </div>
       </section>

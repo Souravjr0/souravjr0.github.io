@@ -397,3 +397,59 @@ async function fetchGithubProjects() {
 }
 
 fetchGithubProjects();
+
+// Development Builder Functionality
+function initCodeBuilder() {
+  const htmlEditor = document.getElementById('html-code');
+  const cssEditor = document.getElementById('css-code');
+  const jsEditor = document.getElementById('js-code');
+  const preview = document.getElementById('preview');
+
+  if (!htmlEditor || !cssEditor || !jsEditor || !preview) return;
+
+  function updatePreview() {
+    const html = htmlEditor.value;
+    const css = cssEditor.value;
+    const js = jsEditor.value;
+
+    const fullHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #030305, #080512);
+            color: #ffffff;
+            min-height: 100vh;
+          }
+          ${css}
+        </style>
+      </head>
+      <body>
+        ${html}
+        <script>
+          ${js}
+        </script>
+      </body>
+      </html>
+    `;
+
+    preview.srcdoc = fullHTML;
+  }
+
+  // Update preview on input
+  htmlEditor.addEventListener('input', updatePreview);
+  cssEditor.addEventListener('input', updatePreview);
+  jsEditor.addEventListener('input', updatePreview);
+
+  // Initial update
+  updatePreview();
+}
+
+// Initialize builder when DOM is ready
+document.addEventListener('DOMContentLoaded', initCodeBuilder);
