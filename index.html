@@ -591,41 +591,45 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- CONTACT SECTION -->
-      <section id="contact" class="section contact-section">
-        <div class="container">
-          <div class="contact-grid">
-            <div class="contact-copy">
-              <p class="section-kicker reveal-up">Contact</p>
-              <h2 class="contact-title">Let's build something people remember</h2>
-              <p class="service-desc reveal-up">Have a brief, a brand, or a strange idea? I am interested in work that mixes utility with feeling.</p>
-              <div class="contact-links reveal-up">
-                <a href="mailto:biswasmail631@gmail.com" class="contact-link magnetic">Email</a>
-                <a href="https://github.com/Souravjr0" class="contact-link magnetic" target="_blank">GitHub</a>
-                <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" class="contact-link magnetic" target="_blank">LinkedIn</a>
-              </div>
-            </div>
+<!-- ====================== CONTACT FORM ====================== -->
+<section id="contact" class="py-20 bg-black border-t border-cyan-500/20">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-5xl font-bold tracking-tighter text-white mb-3">Start a Conversation</h2>
+      <p class="text-xl text-cyan-400">Let’s build something alive together.</p>
+    </div>
 
-            <div class="contact-glass glass reveal-up">
-              <form class="contact-form" onsubmit="event.preventDefault();">
-                <div class="input-group">
-                  <input type="text" required placeholder="Your name">
-                  <span class="input-border"></span>
-                </div>
-                <div class="input-group">
-                  <input type="email" required placeholder="Email address">
-                  <span class="input-border"></span>
-                </div>
-                <div class="input-group">
-                  <textarea required placeholder="Tell me about the idea, mood, or problem"></textarea>
-                  <span class="input-border"></span>
-                </div>
-                <button class="submit-btn magnetic">Start a Conversation <div class="btn-glow"></div></button>
-              </form>
-            </div>
-          </div>
+    <form id="contact-form" action="https://formspree.io/f/YOUR_ENDPOINT_HERE" method="POST" class="max-w-2xl mx-auto space-y-6">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2">Your Name</label>
+          <input type="text" name="name" required
+                 class="w-full bg-zinc-900 border border-cyan-500/30 rounded-2xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition">
         </div>
-      </section>
+        <div>
+          <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+          <input type="email" name="email" required
+                 class="w-full bg-zinc-900 border border-cyan-500/30 rounded-2xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Project Type / Message</label>
+        <textarea name="message" rows="6" required
+                  class="w-full bg-zinc-900 border border-cyan-500/30 rounded-3xl px-6 py-4 text-white focus:border-cyan-400 focus:outline-none transition resize-none"></textarea>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button type="submit"
+                class="flex-1 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold py-5 rounded-3xl text-xl transition-all active:scale-95">
+          Send Message → 
+        </button>
+      </div>
+
+      <div id="form-status" class="text-center text-sm hidden"></div>
+    </form>
+  </div>
+</section>
 
       <!-- FOOTER -->
       <footer class="footer">

@@ -453,3 +453,39 @@ function initCodeBuilder() {
 
 // Initialize builder when DOM is ready
 document.addEventListener('DOMContentLoaded', initCodeBuilder);
+
+// Contact Form Handling
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+
+  if (form && status) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      status.classList.remove('hidden');
+      status.textContent = 'Sending...';
+      status.style.color = 'var(--text-main)';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+        if (response.ok) {
+          status.textContent = 'Message sent successfully!';
+          status.style.color = 'var(--accent-neon)';
+          form.reset();
+        } else {
+          throw new Error('Failed to send');
+        }
+      } catch (error) {
+        status.textContent = 'Failed to send message. Please try again.';
+        status.style.color = 'red';
+      }
+    });
+  }
+});
