@@ -465,41 +465,52 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- SOCIAL PROOF -->
-      <section id="proof" class="section proof-section">
-        <div class="container">
-          <p class="section-kicker reveal-up">Social Proof</p>
-          <h2 class="section-title split-text">Signals of Trust.</h2>
-          <p class="section-subtitle reveal-up">A compact layer of evidence that keeps the page readable and fast on phones, tablets, and desktops.</p>
-
-          <div class="proof-grid">
-            <article class="proof-card glass reveal-up">
-              <span>01</span>
-              <h3>Shipped, not sketched</h3>
-              <p>Featured systems link to live GitHub work and real repo structure.</p>
-            </article>
-
-            <article class="proof-card glass reveal-up" style="transition-delay: 0.1s;">
-              <span>02</span>
-              <h3>Designed for every screen</h3>
-              <p>Heavy motion is reserved for fine-pointer desktops so mobile stays fast.</p>
-            </article>
-
-            <article class="proof-card glass reveal-up" style="transition-delay: 0.2s;">
-              <span>03</span>
-              <h3>Creative + technical</h3>
-              <p>Data, AI, motion, and editorial layout work as one portfolio language.</p>
-            </article>
-
-            <article class="proof-card glass reveal-up" style="transition-delay: 0.3s;">
-              <span>04</span>
-              <h3>Built for recruiters</h3>
-              <p>Clear hierarchy, strong labels, and a fast path from hero to evidence.</p>
-            </article>
+      <!-- ====================== REAL CONTACT FORM (Phase 1) ====================== -->
+      <section id="contact" class="py-24 bg-[#0a0a0a] border-t border-cyan-500/20 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-6">
+          <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 bg-black border border-cyan-500/30 rounded-3xl px-6 py-2 text-cyan-400 text-sm font-medium mb-6">
+              <div class="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+              NOW LIVE
+            </div>
+            <h2 class="text-6xl font-bold tracking-tighter text-white mb-4">Start a Conversation</h2>
+            <p class="text-2xl text-cyan-400 max-w-2xl mx-auto">Let’s build something people remember.<br>Brief, brand, or a strange idea — I’m in.</p>
           </div>
+
+          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-12 shadow-2xl">
+            <div class="grid md:grid-cols-2 gap-8">
+              <div>
+                <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">YOUR NAME</label>
+                <input type="text" name="name" required
+                       class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">EMAIL ADDRESS</label>
+                <input type="email" name="email" required
+                       class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg">
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <label class="block text-xs font-medium text-gray-400 mb-3 tracking-widest">MESSAGE / BRIEF / IDEA</label>
+              <textarea name="message" rows="7" required
+                        class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-3xl px-7 py-5 text-white placeholder-gray-500 transition-all text-lg resize-none"></textarea>
+            </div>
+
+            <div class="mt-10">
+              <button type="submit"
+                      class="w-full bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-semibold text-2xl py-7 rounded-3xl transition-all active:scale-[0.97] flex items-center justify-center gap-3 group magnetic">
+                SEND MESSAGE
+                <span class="text-3xl group-active:rotate-45 transition">→</span>
+              </button>
+            </div>
+
+            <div id="form-status" class="mt-6 text-center text-sm font-medium hidden"></div>
+          </form>
+
+          <p class="text-center text-gray-500 text-sm mt-8">Or just email me directly at <span class="text-cyan-400">biswasmail631@gmail.com</span></p>
         </div>
       </section>
-
       <!-- PROJECTS SECTION -->
       <section id="projects" class="section projects-section">
         <div class="container">

@@ -454,51 +454,53 @@ function initCodeBuilder() {
 // Initialize builder when DOM is ready
 document.addEventListener('DOMContentLoaded', initCodeBuilder);
 
-// Contact Form Handling
-const form = document.getElementById('contact-form');
+// ====================== CONTACT FORM (Phase 1) ======================
+const contactForm = document.getElementById('contact-form');
 const statusDiv = document.getElementById('form-status');
 
-if (form) {
-  form.addEventListener('submit', async (e) => {
+if (contactForm) {
+  contactForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    console.log('Form submitted');
-    const submitBtn = form.querySelector('button');
-    submitBtn.innerHTML = 'Sending<span class="animate-pulse">...</span>';
-    submitBtn.disabled = true;
 
-    const formData = new FormData(form);
-    
+    const submitButton = contactForm.querySelector('button');
+    const originalText = submitButton.innerHTML;
+
+    // Loading state
+    submitButton.innerHTML = `
+      <span class="animate-pulse">SENDING TO THE VOID...</span>
+    `;
+    submitButton.disabled = true;
+
     try {
-      console.log('Sending to:', form.action);
-      const response = await fetch(form.action, {
+      const response = await fetch(contactForm.action, {
         method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
+        body: new FormData(contactForm),
+        headers: {
+          'Accept': 'application/json'
+        }
       });
-      console.log('Response status:', response.status);
 
       if (response.ok) {
         statusDiv.classList.remove('hidden');
-        statusDiv.innerHTML = `✅ Message sent! I’ll reply within 24 hours.`;
+        statusDiv.innerHTML = `✅ Message received. I’ll reply within 24 hours. Thank you!`;
         statusDiv.style.color = '#22ff88';
-        form.reset();
-        console.log('Form submitted successfully');
+        contactForm.reset();
       } else {
-        throw new Error('Response not ok');
+        throw new Error();
       }
     } catch (error) {
-      console.error('Error:', error);
       statusDiv.classList.remove('hidden');
-      statusDiv.innerHTML = `❌ Something went wrong. Try again or email me directly.`;
+      statusDiv.innerHTML = `❌ Oops — something broke. Try again or email me directly.`;
       statusDiv.style.color = '#ff2266';
     }
 
-    submitBtn.innerHTML = 'Send Message →';
-    submitBtn.disabled = false;
+    // Reset button
+    submitButton.innerHTML = originalText;
+    submitButton.disabled = false;
 
-    // auto hide status after 8 seconds
-    setTimeout(() => statusDiv.classList.add('hidden'), 8000);
+    // Auto-hide status
+    setTimeout(() => {
+      statusDiv.classList.add('hidden');
+    }, 8000);
   });
-} else {
-  console.log('Form not found');
 }
