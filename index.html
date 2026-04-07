@@ -508,17 +508,6 @@ document.querySelector('h1').addEventListener('click', function() {
           <p class="text-center text-gray-500 mt-8 text-sm">Or email directly: <span class="text-cyan-400">your-email@example.com</span></p>
         </div>
       </section>
-      <!-- PROJECTS SECTION -->
-      <section id="projects" class="section projects-section">
-        <div class="container">
-          <h2 class="section-title split-text">Selected Works.</h2>
-          <p class="section-subtitle reveal-up">Live GitHub builds, presented as creative systems with practical intent.</p>
-          <div class="project-grid" id="github-projects">
-            <div class="loading-projects">Curating selected works...</div>
-          </div>
-        </div>
-      </section>
-
       <!-- CREATIVE EXPERIMENTS -->
       <section id="experiments" class="section experiments-section">
         <div class="container">
@@ -565,6 +554,26 @@ document.querySelector('h1').addEventListener('click', function() {
                 <div class="experiment-tags"><span>UI</span><span>Motion</span><span>Prototype</span></div>
               </div>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== PHASE 2: LIVE GITHUB REPO FEED ====================== -->
+      <section id="projects" class="py-24 bg-[#0a0a0a]">
+        <div class="max-w-6xl mx-auto px-6">
+          <div class="flex justify-between items-end mb-12">
+            <div>
+              <h2 class="text-5xl font-bold tracking-tighter text-white">Selected Works</h2>
+              <p class="text-cyan-400 text-2xl">Live from GitHub • Always up to date</p>
+            </div>
+            <a href="https://github.com/souravjr0" target="_blank"
+               class="text-cyan-400 hover:text-white flex items-center gap-2 text-lg font-medium">
+              View all on GitHub →
+            </a>
+          </div>
+
+          <div id="repo-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-3 text-center py-12 text-gray-400" id="loading">Loading your latest repos...</div>
           </div>
         </div>
       </section>
