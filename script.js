@@ -461,6 +461,7 @@ const statusDiv = document.getElementById('form-status');
 if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log('Form submitted');
     const submitBtn = form.querySelector('button');
     submitBtn.innerHTML = 'Sending<span class="animate-pulse">...</span>';
     submitBtn.disabled = true;
@@ -468,21 +469,25 @@ if (form) {
     const formData = new FormData(form);
     
     try {
+      console.log('Sending to:', form.action);
       const response = await fetch(form.action, {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' }
       });
+      console.log('Response status:', response.status);
 
       if (response.ok) {
         statusDiv.classList.remove('hidden');
         statusDiv.innerHTML = `✅ Message sent! I’ll reply within 24 hours.`;
         statusDiv.style.color = '#22ff88';
         form.reset();
+        console.log('Form submitted successfully');
       } else {
-        throw new Error();
+        throw new Error('Response not ok');
       }
-    } catch {
+    } catch (error) {
+      console.error('Error:', error);
       statusDiv.classList.remove('hidden');
       statusDiv.innerHTML = `❌ Something went wrong. Try again or email me directly.`;
       statusDiv.style.color = '#ff2266';
@@ -494,4 +499,6 @@ if (form) {
     // auto hide status after 8 seconds
     setTimeout(() => statusDiv.classList.add('hidden'), 8000);
   });
+} else {
+  console.log('Form not found');
 }
