@@ -45,7 +45,7 @@
           <a href="#skills" class="magnetic">Toolkit</a>
           <a href="#cases" class="magnetic">Cases</a>
           <a href="#proof" class="magnetic">Proof</a>
-          <a href="#projects" class="magnetic">Works</a>
+          <a href="#selected-works" class="magnetic">Works</a>
           <a href="#experiments" class="magnetic">Playground</a>
           <a href="#story" class="magnetic">Why</a>
           <a href="#contact" class="magnetic">Contact</a>
@@ -77,7 +77,7 @@
             <p class="hero-eyebrow">Tech Artist & Website Developer</p>
             <p class="hero-statement">I build beautiful, fast, full-stack websites. Open for freelance projects.</p>
             <div class="hero-actions">
-              <a href="#projects" class="hero-button magnetic">View Works</a>
+              <a href="#selected-works" class="hero-button magnetic">View Works</a>
               <a href="#contact" class="hero-button ghost magnetic">Let's Collaborate</a>
             </div>
           </div>
@@ -91,20 +91,15 @@
       <!-- STUDIO STRIP -->
       <section id="studio" class="section studio-band">
         <div class="container">
-          <div class="studio-marquee glass">
-            <div class="studio-track" aria-hidden="true">
-              <span>Creative technologist</span>
-              <span>Data storytelling</span>
-              <span>AI automation</span>
-              <span>Motion design</span>
-              <span>Interactive systems</span>
-              <span>Editorial portfolio</span>
-              <span>Creative technologist</span>
-              <span>Data storytelling</span>
-              <span>AI automation</span>
-              <span>Motion design</span>
-              <span>Interactive systems</span>
-              <span>Editorial portfolio</span>
+          <div class="creative-focus">
+            <h2>Creative Focus</h2>
+            <div class="focus-items">
+              <div>Creative technologist</div>
+              <div>Data storytelling</div>
+              <div>AI automation</div>
+              <div>Motion design</div>
+              <div>Interactive systems</div>
+              <div>Editorial portfolio</div>
             </div>
           </div>
 
@@ -466,7 +461,7 @@ document.querySelector('h1').addEventListener('click', function() {
           </div>
 
           <div class="cases-footer reveal-up">
-            <a href="#projects" class="case-cta magnetic">See Live GitHub Works</a>
+            <a href="#selected-works" class="case-cta magnetic">See Live GitHub Works</a>
           </div>
         </div>
       </section>
@@ -558,22 +553,51 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- ====================== PHASE 2: LIVE GITHUB REPO FEED ====================== -->
-      <section id="projects" class="py-24 bg-[#0a0a0a]">
-        <div class="max-w-6xl mx-auto px-6">
-          <div class="flex justify-between items-end mb-12">
+      <section id="selected-works" class="selected-works-section">
+        <div class="selected-works-shell">
+          <div class="selected-works-head">
             <div>
-              <h2 class="text-5xl font-bold tracking-tighter text-white">Selected Works</h2>
-              <p class="text-cyan-400 text-2xl">Live from GitHub • Always up to date</p>
+              <h2>Selected Works</h2>
+              <p class="subtitle">Live from GitHub • Always up to date</p>
             </div>
-            <a href="https://github.com/souravjr0" target="_blank"
-               class="text-cyan-400 hover:text-white flex items-center gap-2 text-lg font-medium">
-              View all on GitHub →
-            </a>
+            <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="view-all">View all on GitHub →</a>
           </div>
 
-          <div id="repo-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-3 text-center py-12 text-gray-400" id="loading">Loading your latest repos...</div>
+          <div class="repo-grid">
+            <div class="repo-card">
+              <h3>Souravjr0</h3>
+              <span class="lang">CSS</span>
+              <p>❄️ My personal portfolio site with neon cyber aesthetic</p>
+              <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card">
+              <h3>Claude-guardian</h3>
+              <span class="lang">Python</span>
+              <p>AI Safety Sandbox for testing LLMs against prompt injections, jailbreaks & hallucinations</p>
+              <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card">
+              <h3>Habit-Tracker</h3>
+              <span class="lang">JavaScript</span>
+              <p>Simple daily habit tracker with local storage — no backend needed</p>
+              <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card">
+              <h3>Zunes-wallet</h3>
+              <span class="lang">Web3</span>
+              <p>Ethereum crypto wallet interface</p>
+              <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card">
+              <h3>Cluely</h3>
+              <span class="lang">AI</span>
+              <p>AI-powered interview preparation tool</p>
+              <a href="https://github.com/souravjr0/Cluely" target="_blank" rel="noopener">View repo →</a>
+            </div>
           </div>
         </div>
       </section>
@@ -608,15 +632,24 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- FOOTER -->
-      <footer class="footer">
-        <p>&copy; 2026 Sourav. Creative portfolio blending data, AI, motion, and imagination.</p>
-      </footer>
-
     </div>
   </main>
 
   <script src="script.js"></script>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p class="copyright">&copy; 2026 Sourav Biswas. All Rights Reserved.</p>
+
+      <div class="footer-links">
+        <a href="https://github.com/souravjr0" target="_blank">GitHub</a>
+        <a href="https://x.com/Souravjr0" target="_blank">𝕏</a>
+        <a href="mailto:biswasmail631@gmail.com">Email</a>
+      </div>
+
+      <p class="footer-note">Made with neon &amp; code • Pune, India</p>
+    </div>
+  </footer>
 </body>
 </html>
 

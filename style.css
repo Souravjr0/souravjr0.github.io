@@ -2878,3 +2878,221 @@ html.light-mode #projects .repo-card {
     padding: 1.5rem;
   }
 }
+
+/* Static Selected Works */
+#selected-works {
+  padding: 6rem 0;
+  background: #0a0a0a;
+  border-top: 1px solid rgba(0, 240, 255, 0.12);
+}
+
+html.light-mode #selected-works {
+  background: #f8f9fa;
+}
+
+#selected-works > div {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+#selected-works .selected-works-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+#selected-works h2 {
+  font-size: clamp(2.75rem, 6vw, 4.8rem);
+  line-height: 0.95;
+  color: var(--text-main);
+  letter-spacing: -0.05em;
+}
+
+#selected-works .subtitle {
+  margin-top: 0.75rem;
+  color: var(--accent-neon);
+  font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+}
+
+#selected-works .view-all {
+  color: var(--accent-neon);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+#selected-works .view-all:hover {
+  color: var(--text-main);
+}
+
+#selected-works .repo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+
+#selected-works .repo-card {
+  background: rgba(9, 9, 11, 0.96);
+  border: 1px solid rgba(0, 240, 255, 0.12);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+html.light-mode #selected-works .repo-card {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(17, 17, 17, 0.08);
+}
+
+#selected-works .repo-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 240, 255, 0.45);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+#selected-works .repo-card h3 {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  margin-bottom: 0.9rem;
+}
+
+#selected-works .lang {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.92);
+  color: var(--accent-neon);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+#selected-works .repo-card p {
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 1.4rem;
+}
+
+#selected-works .repo-card a {
+  color: var(--accent-neon);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+#selected-works .repo-card a:hover {
+  color: var(--text-main);
+}
+
+#selected-works .repo-card .repo-link {
+  display: inline-flex;
+}
+
+@media (max-width: 1024px) {
+  #selected-works .repo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  #selected-works .selected-works-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #selected-works .repo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Creative Focus */
+.creative-focus {
+  max-width: 72rem;
+  margin: 0 auto 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.creative-focus h2 {
+  font-size: 1.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.focus-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.focus-items div {
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 240, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+html.light-mode .focus-items div {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(17, 17, 17, 0.08);
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid rgba(0, 240, 255, 0.12);
+  background: rgba(3, 3, 5, 0.96);
+  padding: 2.5rem 1.5rem;
+}
+
+html.light-mode .site-footer {
+  background: rgba(248, 249, 250, 0.96);
+}
+
+.footer-container {
+  max-width: 72rem;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.copyright,
+.footer-note {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.footer-links a {
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: var(--accent-neon);
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
