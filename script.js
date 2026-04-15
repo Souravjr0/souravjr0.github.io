@@ -503,6 +503,8 @@ const themeIcon = document.getElementById('theme-icon');
 const themeText = document.getElementById('theme-text');
 
 function setTheme(isLight) {
+  document.documentElement.classList.add('theme-switching');
+
   if (isLight) {
     document.documentElement.classList.add('light-mode');
     if (themeIcon) themeIcon.textContent = '☀️';
@@ -513,6 +515,12 @@ function setTheme(isLight) {
     if (themeText) themeText.textContent = 'Neon Dark';
   }
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+  window.requestAnimationFrame(() => {
+    window.setTimeout(() => {
+      document.documentElement.classList.remove('theme-switching');
+    }, 180);
+  });
 }
 
 const savedTheme = localStorage.getItem('theme');
