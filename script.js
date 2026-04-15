@@ -274,6 +274,18 @@ if (useEnhancedMotion) {
       }
     });
   });
+
+  gsap.utils.toArray('.ambient-orb').forEach((orb, index) => {
+    gsap.to(orb, {
+      xPercent: index % 2 === 0 ? 6 : -6,
+      yPercent: index === 1 ? -10 : 10,
+      scale: 1.06,
+      duration: 18 + index * 4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+  });
 }
 
 function attachTiltInteractions(selector) {
@@ -404,10 +416,55 @@ function initCodeBuilder() {
   const cssEditor = document.getElementById('css-code');
   const jsEditor = document.getElementById('js-code');
   const preview = document.getElementById('preview');
+  const previewMeta = document.getElementById('preview-meta');
+  const previewModeButtons = document.querySelectorAll('.preview-mode-btn');
+  const refreshPreviewButton = document.getElementById('refresh-preview');
+  const resetPreviewButton = document.getElementById('reset-preview');
 
   if (!htmlEditor || !cssEditor || !jsEditor || !preview) return;
 
-  function updatePreview() {
+  const defaultSamples = {
+    html: htmlEditor.value.trimEnd(),
+    css: cssEditor.value.trimEnd(),
+    js: jsEditor.value.trimEnd()
+  };
+
+  const previewState = {
+    modeLabel: 'Desktop',
+    updateTimer: null
+  };
+
+  function countLines(content) {
+    if (!content.trim()) return 0;
+    return content.split(/\r?\n/).length;
+  }
+
+  function updatePreviewMeta(isManualRun = false) {
+    if (!previewMeta) return;
+    const htmlLines = countLines(htmlEditor.value);
+    const cssLines = countLines(cssEditor.value);
+    const jsLines = countLines(jsEditor.value);
+    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const syncMode = isManualRun ? 'Manual run' : 'Auto sync';
+    previewMeta.textContent = `${previewState.modeLabel} view • HTML ${htmlLines} lines • CSS ${cssLines} lines • JS ${jsLines} lines • ${syncMode} • ${timestamp}`;
+  }
+
+  function setPreviewWidth(button) {
+    const width = button.dataset.previewWidth || '100%';
+    const label = button.textContent ? button.textContent.trim() : 'Desktop';
+    previewState.modeLabel = label;
+    preview.style.width = width === '100%' ? '100%' : `min(100%, ${width})`;
+
+    previewModeButtons.forEach((modeButton) => {
+      const isActive = modeButton === button;
+      modeButton.classList.toggle('is-active', isActive);
+      modeButton.setAttribute('aria-pressed', String(isActive));
+    });
+
+    updatePreviewMeta();
+  }
+
+  function updatePreview(isManualRun = false) {
     const html = htmlEditor.value;
     const css = cssEditor.value;
     const js = jsEditor.value;
@@ -440,12 +497,50 @@ function initCodeBuilder() {
     `;
 
     preview.srcdoc = fullHTML;
+    updatePreviewMeta(isManualRun);
+  }
+
+  function schedulePreviewUpdate() {
+    if (previewState.updateTimer) {
+      window.clearTimeout(previewState.updateTimer);
+    }
+
+    previewState.updateTimer = window.setTimeout(() => {
+      updatePreview(false);
+    }, 120);
   }
 
   // Update preview on input
-  htmlEditor.addEventListener('input', updatePreview);
-  cssEditor.addEventListener('input', updatePreview);
-  jsEditor.addEventListener('input', updatePreview);
+  htmlEditor.addEventListener('input', schedulePreviewUpdate);
+  cssEditor.addEventListener('input', schedulePreviewUpdate);
+  jsEditor.addEventListener('input', schedulePreviewUpdate);
+
+  previewModeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      setPreviewWidth(button);
+      updatePreview();
+    });
+  });
+
+  if (refreshPreviewButton) {
+    refreshPreviewButton.addEventListener('click', () => {
+      updatePreview(true);
+    });
+  }
+
+  if (resetPreviewButton) {
+    resetPreviewButton.addEventListener('click', () => {
+      htmlEditor.value = defaultSamples.html;
+      cssEditor.value = defaultSamples.css;
+      jsEditor.value = defaultSamples.js;
+      updatePreview(true);
+    });
+  }
+
+  const defaultModeButton = document.querySelector('.preview-mode-btn.is-active') || previewModeButtons[0];
+  if (defaultModeButton) {
+    setPreviewWidth(defaultModeButton);
+  }
 
   // Initial update
   updatePreview();

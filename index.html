@@ -49,6 +49,11 @@
 
   <!-- ThreeJS Background -->
   <canvas id="webgl-canvas"></canvas>
+  <div class="ambient-gradients" aria-hidden="true">
+    <span class="ambient-orb orb-cyan"></span>
+    <span class="ambient-orb orb-violet"></span>
+    <span class="ambient-orb orb-amber"></span>
+  </div>
 
   <main id="smooth-wrapper">
     <div id="smooth-content">
@@ -244,8 +249,22 @@ document.querySelector('h1').addEventListener('click', function() {
               </div>
             </div>
             <div class="preview-panel">
-              <h3>Live Preview</h3>
-              <iframe id="preview" class="preview-iframe"></iframe>
+              <div class="preview-head">
+                <h3>Live Preview</h3>
+                <div class="preview-modes" role="group" aria-label="Preview viewport mode">
+                  <button type="button" class="preview-mode-btn is-active" data-preview-width="100%">Desktop</button>
+                  <button type="button" class="preview-mode-btn" data-preview-width="780px">Tablet</button>
+                  <button type="button" class="preview-mode-btn" data-preview-width="390px">Mobile</button>
+                </div>
+              </div>
+              <div class="preview-actions">
+                <button type="button" id="refresh-preview" class="preview-action-btn">Run Preview</button>
+                <button type="button" id="reset-preview" class="preview-action-btn ghost">Reset Sample</button>
+              </div>
+              <div class="preview-frame-shell">
+                <iframe id="preview" class="preview-iframe" title="Builder output preview"></iframe>
+              </div>
+              <p id="preview-meta" class="preview-meta">Desktop view • HTML 4 lines • CSS 9 lines • JS 4 lines • Live</p>
             </div>
           </div>
         </div>
@@ -617,7 +636,7 @@ document.querySelector('h1').addEventListener('click', function() {
           </div>
 
           <div class="repo-grid">
-            <div class="repo-card">
+            <div class="repo-card reveal-up">
               <h3>Souravjr0</h3>
               <span class="lang">CSS</span>
               <p>❄️ My personal portfolio site with a neon cyber aesthetic.</p>
@@ -626,7 +645,7 @@ document.querySelector('h1').addEventListener('click', function() {
               <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener">View repo →</a>
             </div>
 
-            <div class="repo-card">
+            <div class="repo-card reveal-up" style="transition-delay: 0.08s;">
               <h3>Claude-guardian</h3>
               <span class="lang">Python</span>
               <p>AI safety sandbox for testing LLMs against prompt injections, jailbreaks, and hallucinations.</p>
@@ -635,7 +654,7 @@ document.querySelector('h1').addEventListener('click', function() {
               <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener">View repo →</a>
             </div>
 
-            <div class="repo-card">
+            <div class="repo-card reveal-up" style="transition-delay: 0.16s;">
               <h3>Habit-Tracker</h3>
               <span class="lang">JavaScript</span>
               <p>Simple daily habit tracker with local storage and no backend dependencies.</p>
@@ -644,7 +663,7 @@ document.querySelector('h1').addEventListener('click', function() {
               <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener">View repo →</a>
             </div>
 
-            <div class="repo-card">
+            <div class="repo-card reveal-up" style="transition-delay: 0.24s;">
               <h3>Zunes-wallet</h3>
               <span class="lang">Web3</span>
               <p>Ethereum crypto wallet interface with a clean product-style layout.</p>
@@ -653,7 +672,7 @@ document.querySelector('h1').addEventListener('click', function() {
               <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener">View repo →</a>
             </div>
 
-            <div class="repo-card">
+            <div class="repo-card reveal-up" style="transition-delay: 0.32s;">
               <h3>Cluely</h3>
               <span class="lang">AI</span>
               <p>AI-powered interview preparation tool for focused practice and confidence building.</p>
