@@ -1,94 +1,97 @@
-﻿body {
+﻿* {
   margin: 0;
-  font-family: 'Segoe UI';
-  background: linear-gradient(135deg, #020617, #0f172a);
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background: #0f172a;
   color: white;
 }
 
-/* NAV */
+/* NAVBAR */
 nav {
   display: flex;
   justify-content: space-between;
   padding: 20px;
+  background: #020617;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav ul li {
+  margin: 0 15px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
 }
 
 /* HERO */
 .hero {
   text-align: center;
-  padding: 120px 20px;
+  padding: 100px 20px;
 }
 
 .hero span {
   color: #38bdf8;
 }
 
-/* BUTTONS */
-.btn {
-  padding: 12px 25px;
-  margin: 10px;
-  background: linear-gradient(45deg, #38bdf8, #6366f1);
-  border-radius: 8px;
-  text-decoration: none;
-  color: white;
-  transition: 0.3s;
+.buttons {
+  margin-top: 20px;
 }
 
-.btn:hover {
-  transform: scale(1.1);
+.btn {
+  padding: 10px 20px;
+  background: #38bdf8;
+  color: black;
+  margin: 10px;
+  text-decoration: none;
+  border-radius: 5px;
 }
 
 .btn.outline {
   background: transparent;
   border: 1px solid #38bdf8;
+  color: #38bdf8;
 }
 
 /* SECTION */
 section {
-  padding: 80px 20px;
+  padding: 60px 20px;
   text-align: center;
 }
 
 /* SKILLS */
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
+.skill-box span {
+  display: inline-block;
+  background: #1e293b;
   margin: 10px;
-  padding: 20px;
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-10px);
+  padding: 10px;
+  border-radius: 5px;
 }
 
 /* PROJECTS */
-.project-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.project-card {
-  background: rgba(255,255,255,0.05);
+.project {
+  background: #1e293b;
+  margin: 20px auto;
   padding: 20px;
-  margin: 15px;
-  width: 250px;
+  width: 80%;
   border-radius: 10px;
-  transition: 0.3s;
 }
 
-.project-card:hover {
-  transform: scale(1.05);
+.project a {
+  color: #38bdf8;
 }
 
+/* FOOTER */
 footer {
   text-align: center;
   padding: 20px;
+  background: #020617;
 }
