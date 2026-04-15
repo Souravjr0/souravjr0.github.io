@@ -3,8 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Sourav | Tech Artist Portfolio</title>
-  <meta name="description" content="Creative portfolio blending data, AI, motion, and storytelling into premium interactive digital experiences." />
+  <title>Sourav Biswas | Website Developer & Tech Artist</title>
+  <meta name="description" content="Sourav Biswas builds fast, modern websites, portfolio sites, landing pages, and interactive digital experiences with data, AI, and motion." />
+  <meta name="keywords" content="Sourav Biswas, website developer, front-end developer, full-stack developer, portfolio, SaaS, business website, AI, data, motion design" />
+  <meta property="og:title" content="Sourav Biswas | Website Developer & Tech Artist" />
+  <meta property="og:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sourav Biswas | Website Developer & Tech Artist" />
+  <meta name="twitter:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
   <script>
     (function () {
       try {
@@ -48,10 +55,10 @@
 
       <!-- Header -->
       <header class="nav-header">
-          <p>Or email directly: <a href="mailto:biswasmail631@gmail.com" style="color: #00ffcc; text-decoration: underline;">biswasmail631@gmail.com</a></p>
         <nav class="links">
           <a href="#about" class="magnetic">About</a>
           <a href="#studio" class="magnetic">Studio</a>
+          <a href="#services" class="magnetic">Services</a>
           <a href="#builder" class="magnetic">Builder</a>
           <a href="#think" class="magnetic">Think</a>
           <a href="#skills" class="magnetic">Toolkit</a>
@@ -65,7 +72,7 @@
       </header>
 
       <div class="theme-toggle-wrap">
-        <button id="theme-toggle" class="theme-toggle-btn" type="button">
+        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle color theme" aria-pressed="false">
           <span id="theme-icon">🌑</span>
           <span id="theme-text">Neon Dark</span>
         </button>
@@ -130,6 +137,34 @@
               <span>Energy</span>
               <strong>Editorial framing with neon atmosphere</strong>
               <p>The layout leans gallery-like while staying practical.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section id="services" class="section services-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Services</p>
+          <h2 class="section-title split-text">What I Build.</h2>
+          <p class="section-subtitle reveal-up">Clear, conversion-focused work for people who need a site that looks good and gets the job done.</p>
+
+          <div class="services-grid">
+            <article class="service-card glass reveal-up">
+              <h3 class="service-title">Portfolio Websites</h3>
+              <p class="service-desc">Clean personal sites that turn your work into a strong first impression and help people contact you fast.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.1s;">
+              <h3 class="service-title">Business Landing Pages</h3>
+              <p class="service-desc">Focused marketing pages for services, agencies, and launches with strong hierarchy and clear calls to action.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.2s;">
+              <h3 class="service-title">SaaS & Dashboard UI</h3>
+              <p class="service-desc">Practical product interfaces with data clarity, responsive layout systems, and polished interaction details.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.3s;">
+              <h3 class="service-title">Interactive Web Experiences</h3>
+              <p class="service-desc">Motion-led pages, AI assistants, and data-driven experiences that feel modern without becoming heavy.</p>
             </article>
           </div>
         </div>
@@ -486,6 +521,8 @@ document.querySelector('h1').addEventListener('click', function() {
             <p class="text-2xl text-cyan-400">I develop modern, fast, and beautiful websites from scratch.<br>Portfolio, business, SaaS, or full-stack — tell me what you need.</p>
           </div>
 
+          <p class="contact-services text-center text-lg text-gray-400 mb-8">Website Development • Portfolio Sites • Business Pages • Interactive Experiences</p>
+
           <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-14">
             <div class="grid md:grid-cols-2 gap-8">
               <div>
@@ -579,37 +616,74 @@ document.querySelector('h1').addEventListener('click', function() {
             <div class="repo-card">
               <h3>Souravjr0</h3>
               <span class="lang">CSS</span>
-              <p>❄️ My personal portfolio site with neon cyber aesthetic</p>
+              <p>❄️ My personal portfolio site with a neon cyber aesthetic.</p>
+              <p class="repo-outcome">Outcome: a sharp personal brand page built to feel bold and memorable.</p>
+              <div class="repo-tags"><span>Responsive</span><span>Motion</span></div>
               <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener">View repo →</a>
             </div>
 
             <div class="repo-card">
               <h3>Claude-guardian</h3>
               <span class="lang">Python</span>
-              <p>AI Safety Sandbox for testing LLMs against prompt injections, jailbreaks & hallucinations</p>
+              <p>AI safety sandbox for testing LLMs against prompt injections, jailbreaks, and hallucinations.</p>
+              <p class="repo-outcome">Outcome: a practical evaluation layer for safer prompt experimentation.</p>
+              <div class="repo-tags"><span>AI Safety</span><span>Python</span></div>
               <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener">View repo →</a>
             </div>
 
             <div class="repo-card">
               <h3>Habit-Tracker</h3>
               <span class="lang">JavaScript</span>
-              <p>Simple daily habit tracker with local storage — no backend needed</p>
+              <p>Simple daily habit tracker with local storage and no backend dependencies.</p>
+              <p class="repo-outcome">Outcome: a lightweight productivity tool that works instantly in the browser.</p>
+              <div class="repo-tags"><span>LocalStorage</span><span>UI</span></div>
               <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener">View repo →</a>
             </div>
 
             <div class="repo-card">
               <h3>Zunes-wallet</h3>
               <span class="lang">Web3</span>
-              <p>Ethereum crypto wallet interface</p>
+              <p>Ethereum crypto wallet interface with a clean product-style layout.</p>
+              <p class="repo-outcome">Outcome: a simple Web3 UI concept focused on clarity and trust.</p>
+              <div class="repo-tags"><span>Ethereum</span><span>Web3</span></div>
               <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener">View repo →</a>
             </div>
 
             <div class="repo-card">
               <h3>Cluely</h3>
               <span class="lang">AI</span>
-              <p>AI-powered interview preparation tool</p>
+              <p>AI-powered interview preparation tool for focused practice and confidence building.</p>
+              <p class="repo-outcome">Outcome: a guided prep workflow for faster interview readiness.</p>
+              <div class="repo-tags"><span>AI</span><span>Prep</span></div>
               <a href="https://github.com/souravjr0/Cluely" target="_blank" rel="noopener">View repo →</a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROOF -->
+      <section id="proof" class="section proof-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Proof</p>
+          <h2 class="section-title split-text">Why This Works.</h2>
+          <p class="section-subtitle reveal-up">A small set of signals that matter to clients, recruiters, and anyone trying to understand how I build.</p>
+
+          <div class="proof-grid">
+            <article class="proof-card glass reveal-up">
+              <span>Conversion-first</span>
+              <h3>Pages that guide people toward action.</h3>
+              <p>Structure, hierarchy, and a strong contact path make the site easier to scan and easier to trust.</p>
+            </article>
+            <article class="proof-card glass reveal-up" style="transition-delay: 0.1s;">
+              <span>Fast shipping</span>
+              <h3>Focused scope keeps work moving.</h3>
+              <p>Smaller, clearer sections and reusable patterns make it easier to iterate without breaking the whole page.</p>
+            </article>
+            <article class="proof-card glass reveal-up" style="transition-delay: 0.2s;">
+              <span>Clean handoff</span>
+              <h3>Readable code and easy maintenance.</h3>
+              <p>The result is a portfolio that looks polished now and stays manageable later.</p>
+            </article>
           </div>
         </div>
       </section>

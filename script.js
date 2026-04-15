@@ -514,6 +514,9 @@ function setTheme(isLight) {
     if (themeIcon) themeIcon.textContent = '🌑';
     if (themeText) themeText.textContent = 'Neon Dark';
   }
+  if (toggleBtn) {
+    toggleBtn.setAttribute('aria-pressed', String(isLight));
+  }
   localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
   window.requestAnimationFrame(() => {
