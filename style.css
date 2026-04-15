@@ -12,6 +12,11 @@
   --glass-bg: rgba(255, 255, 255, 0.02);
   --glass-border: rgba(255, 255, 255, 0.05);
   --app-height: 1vh;
+  color-scheme: dark;
+}
+
+html.light-mode {
+  color-scheme: light;
 }
 
   -webkit-background-clip: text;
