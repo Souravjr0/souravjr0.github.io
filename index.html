@@ -1,89 +1,764 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sourav | Portfolio</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Sourav Biswas | Website Developer & Tech Artist</title>
+  <meta name="description" content="Sourav Biswas builds fast, modern websites, portfolio sites, landing pages, and interactive digital experiences with data, AI, and motion." />
+  <meta name="keywords" content="Sourav Biswas, website developer, front-end developer, full-stack developer, portfolio, SaaS, business website, AI, data, motion design" />
+  <meta property="og:title" content="Sourav Biswas | Website Developer & Tech Artist" />
+  <meta property="og:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sourav Biswas | Website Developer & Tech Artist" />
+  <meta name="twitter:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
+          document.documentElement.classList.add('light-mode');
+        }
+      } catch (error) {
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+  
+  <!-- CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 </head>
+<body class="loading dark-theme">
 
-<body>
-
-<!-- NAVBAR -->
-<nav>
-  <h2>Sourav</h2>
-  <ul>
-    <li><a href="#about">About</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <h1>Hi, I'm <span>Sourav</span> 👋</h1>
-  <p>AI & NLP Developer | Frontend Creator | Problem Solver</p>
-  <div class="buttons">
-    <a href="#projects" class="btn">View Projects</a>
-    <a href="#contact" class="btn outline">Hire Me</a>
-  </div>
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-  <h2>About Me</h2>
-  <p>
-    I build intelligent AI systems and modern web applications.
-    Passionate about solving real-world problems using NLP, machine learning,
-    and clean UI design.
-  </p>
-</section>
-
-<!-- SKILLS -->
-<section id="skills">
-  <h2>Skills</h2>
-  <div class="skill-box">
-    <span>Python</span>
-    <span>Machine Learning</span>
-    <span>NLP</span>
-    <span>Flask</span>
-    <span>JavaScript</span>
-    <span>React</span>
-    <span>HTML/CSS</span>
-    <span>GitHub</span>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <h2>Projects</h2>
-
-  <div class="project">
-    <h3>AI Chatbot</h3>
-    <p>Built an NLP chatbot using Python and Flask.</p>
-    <a href="#">GitHub</a>
+  <!-- Loader -->
+  <div class="loader">
+    <div class="loader-text">SOURAV<span class="dot">.</span></div>
+    <div class="loader-progress"><span class="loader-fill"></span></div>
   </div>
 
-  <div class="project">
-    <h3>X-Ray Disease Detection</h3>
-    <p>ML model to detect diseases with high accuracy.</p>
-    <a href="#">GitHub</a>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-glow"></div>
+
+  <!-- ThreeJS Background -->
+  <canvas id="webgl-canvas"></canvas>
+  <div class="ambient-gradients" aria-hidden="true">
+    <span class="ambient-orb orb-cyan"></span>
+    <span class="ambient-orb orb-violet"></span>
+    <span class="ambient-orb orb-amber"></span>
   </div>
 
-</section>
+  <main id="smooth-wrapper">
+    <div id="smooth-content">
 
-<!-- CONTACT -->
-<section id="contact">
-  <h2>Contact Me</h2>
-  <p>Email: your@email.com</p>
-  <p>LinkedIn: your-linkedin</p>
-</section>
+      <!-- Header -->
+      <header class="nav-header">
+        <nav class="links">
+          <a href="#about" class="magnetic">About</a>
+          <a href="#studio" class="magnetic">Studio</a>
+          <a href="#services" class="magnetic">Services</a>
+          <a href="#builder" class="magnetic">Builder</a>
+          <a href="#think" class="magnetic">Think</a>
+          <a href="#skills" class="magnetic">Toolkit</a>
+          <a href="#cases" class="magnetic">Cases</a>
+          <a href="#proof" class="magnetic">Proof</a>
+          <a href="#selected-works" class="magnetic">Works</a>
+          <a href="#experiments" class="magnetic">Playground</a>
+          <a href="#story" class="magnetic">Why</a>
+          <a href="#contact" class="magnetic">Contact</a>
+        </nav>
+      </header>
 
-<footer>
-  <p>© 2026 Sourav | Portfolio</p>
-</footer>
+      <div class="theme-toggle-wrap">
+        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle color theme" aria-pressed="false">
+          <span id="theme-icon">🌑</span>
+          <span id="theme-text">Neon Dark</span>
+        </button>
+      </div>
 
-<script src="script.js"></script>
+      <!-- HERO SECTION -->
+      <section id="hero" class="hero">
+        <div class="hero-content">
+          <div class="roles reveal-fade">
+            <span>Website Developer</span>
+            <span class="separator">//</span>
+            <span>Creative Technologist</span>
+            <span class="separator">//</span>
+            <span>Full-Stack Builder</span>
+          </div>
+          <h1 class="hero-title">
+            <div class="line-wrapper"><span class="line">Sourav Biswas</span></div>
+            <div class="line-wrapper"><span class="line glow-text">Website Developer</span></div>
+          </h1>
+          <div class="hero-copy reveal-fade">
+            <p class="hero-eyebrow">Tech Artist & Website Developer</p>
+            <p class="hero-statement">I build beautiful, fast, full-stack websites. Open for freelance projects.</p>
+            <div class="hero-actions">
+              <a href="#selected-works" class="hero-button magnetic">View Works</a>
+              <a href="#contact" class="hero-button ghost magnetic">Let's Collaborate</a>
+            </div>
+          </div>
+          <div class="scroll-indicator reveal-fade">
+            <div class="mouse"></div>
+            <span>Discover</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STUDIO STRIP -->
+      <section id="studio" class="section studio-band">
+        <div class="container">
+          <div class="creative-focus">
+            <h2>Creative Focus</h2>
+            <div class="focus-items">
+              <div>Creative technologist</div>
+              <div>Data storytelling</div>
+              <div>AI automation</div>
+              <div>Motion design</div>
+              <div>Interactive systems</div>
+              <div>Editorial portfolio</div>
+            </div>
+          </div>
+
+          <div class="studio-grid">
+            <article class="studio-note glass reveal-up">
+              <span>Focus</span>
+              <strong>Data, AI, and motion as one system</strong>
+              <p>Built to feel like a digital studio wall, not a CV.</p>
+            </article>
+            <article class="studio-note glass reveal-up" style="transition-delay: 0.1s;">
+              <span>Intent</span>
+              <strong>Recruiter-friendly clarity</strong>
+              <p>Fast to scan, rich to explore, and visually distinct.</p>
+            </article>
+            <article class="studio-note glass reveal-up" style="transition-delay: 0.2s;">
+              <span>Energy</span>
+              <strong>Editorial framing with neon atmosphere</strong>
+              <p>The layout leans gallery-like while staying practical.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section id="services" class="section services-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Services</p>
+          <h2 class="section-title split-text">What I Build.</h2>
+          <p class="section-subtitle reveal-up">Clear, conversion-focused work for people who need a site that looks good and gets the job done.</p>
+
+          <div class="services-grid">
+            <article class="service-card glass reveal-up">
+              <h3 class="service-title">Portfolio Websites</h3>
+              <p class="service-desc">Clean personal sites that turn your work into a strong first impression and help people contact you fast.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.1s;">
+              <h3 class="service-title">Business Landing Pages</h3>
+              <p class="service-desc">Focused marketing pages for services, agencies, and launches with strong hierarchy and clear calls to action.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.2s;">
+              <h3 class="service-title">SaaS & Dashboard UI</h3>
+              <p class="service-desc">Practical product interfaces with data clarity, responsive layout systems, and polished interaction details.</p>
+            </article>
+            <article class="service-card glass reveal-up" style="transition-delay: 0.3s;">
+              <h3 class="service-title">Interactive Web Experiences</h3>
+              <p class="service-desc">Motion-led pages, AI assistants, and data-driven experiences that feel modern without becoming heavy.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- MOTION SHOWREEL -->
+      <section id="reel" class="section reel-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Motion Showreel</p>
+          <h2 class="section-title split-text">Frames in Motion.</h2>
+          <p class="section-subtitle reveal-up">A lightweight strip of visual fragments, built to swipe smoothly on touch and glide on desktop.</p>
+
+          <div class="reel-strip" aria-label="Motion showreel strip">
+            <article class="reel-card reel-card-a glass reveal-up">
+              <span>01 / Pulse</span>
+              <h3>Rhythmic dashboards</h3>
+              <p>Interfaces that feel alive without becoming noisy.</p>
+            </article>
+
+            <article class="reel-card reel-card-b glass reveal-up" style="transition-delay: 0.05s;">
+              <span>02 / Flow</span>
+              <h3>AI motion loops</h3>
+              <p>Small movement studies for data and automation ideas.</p>
+            </article>
+
+            <article class="reel-card reel-card-c glass reveal-up" style="transition-delay: 0.1s;">
+              <span>03 / Signal</span>
+              <h3>Insight gradients</h3>
+              <p>Color and shape used to translate complex data quickly.</p>
+            </article>
+
+            <article class="reel-card reel-card-d glass reveal-up" style="transition-delay: 0.15s;">
+              <span>04 / Layer</span>
+              <h3>Editorial frames</h3>
+              <p>Gallery-like composition with clean hierarchy and texture.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- DEVELOPMENT BUILDER -->
+      <section id="builder" class="section builder-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Development Process</p>
+          <h2 class="section-title split-text">Build & Code Live.</h2>
+          <p class="section-subtitle reveal-up">Experience frontend and backend development with our interactive website builder. Write HTML, CSS, and JavaScript to create and preview your own web components in real-time.</p>
+
+          <div class="builder-container glass reveal-up">
+            <div class="code-panels">
+              <div class="panel">
+                <h3>HTML (Frontend)</h3>
+                <textarea id="html-code" class="code-editor" placeholder="Enter your HTML code here...">&lt;div class="hello"&gt;
+  &lt;h1&gt;Hello World&lt;/h1&gt;
+  &lt;p&gt;Welcome to the builder!&lt;/p&gt;
+&lt;/div&gt;</textarea>
+              </div>
+              <div class="panel">
+                <h3>CSS (Frontend)</h3>
+                <textarea id="css-code" class="code-editor" placeholder="Enter your CSS code here...">.hello {
+  text-align: center;
+  color: #00f0ff;
+  font-family: 'Inter', sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}</textarea>
+              </div>
+              <div class="panel">
+                <h3>JavaScript (Frontend/Backend Simulation)</h3>
+                <textarea id="js-code" class="code-editor" placeholder="Enter your JavaScript code here...">// Frontend interaction
+document.querySelector('h1').addEventListener('click', function() {
+  this.style.color = '#8a2be2';
+  alert('Backend simulation: Data processed!');
+});</textarea>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <div class="preview-head">
+                <h3>Live Preview</h3>
+                <div class="preview-modes" role="group" aria-label="Preview viewport mode">
+                  <button type="button" class="preview-mode-btn is-active" data-preview-width="100%">Desktop</button>
+                  <button type="button" class="preview-mode-btn" data-preview-width="780px">Tablet</button>
+                  <button type="button" class="preview-mode-btn" data-preview-width="390px">Mobile</button>
+                </div>
+              </div>
+              <div class="preview-actions">
+                <button type="button" id="refresh-preview" class="preview-action-btn">Run Preview</button>
+                <button type="button" id="reset-preview" class="preview-action-btn ghost">Reset Sample</button>
+              </div>
+              <div class="preview-frame-shell">
+                <iframe id="preview" class="preview-iframe" title="Builder output preview"></iframe>
+              </div>
+              <p id="preview-meta" class="preview-meta">Desktop view • HTML 4 lines • CSS 9 lines • JS 4 lines • Live</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCROLL INTERLUDE -->
+      <section class="interlude split-text">
+        <div class="container">
+          <h2 class="massive-text" aria-label="Signal Shape Emotion">
+            <span>Signal</span>
+            <span>Shape</span>
+            <span>Emotion</span>
+          </h2>
+        </div>
+      </section>
+
+      <!-- ABOUT SECTION -->
+      <section id="about" class="section about-section">
+        <div class="container">
+          <div class="about-grid-large">
+            <div class="about-text-block">
+              <p class="section-kicker reveal-up">Creative Identity</p>
+              <h2 class="section-title split-text">Who I Am.</h2>
+              <p class="about-desc reveal-up">
+                I'm Sourav, a Tech Artist building immersive digital experiences where data, AI, and motion work together.
+              </p>
+              <p class="about-desc reveal-up" style="transition-delay: 0.1s;">
+                I like making ideas feel tactile. The goal is not just clarity, but atmosphere, rhythm, and a little surprise.
+              </p>
+              <div class="about-tags reveal-up" style="transition-delay: 0.2s;">
+                <span class="magnetic">Signal</span>
+                <span class="magnetic">AI</span>
+                <span class="magnetic">Motion</span>
+                <span class="magnetic">Story</span>
+              </div>
+            </div>
+            
+            <div class="about-stack">
+              <div class="about-card glass reveal-up">
+                <div class="about-card-index">01</div>
+                <h3>See the signal</h3>
+                <p>I look for the hidden pattern before I touch the pixels.</p>
+              </div>
+              <div class="about-card glass reveal-up" style="transition-delay: 0.1s;">
+                <div class="about-card-index">02</div>
+                <h3>Shape the story</h3>
+                <p>I use data and AI to translate complexity into a clean narrative.</p>
+              </div>
+              <div class="about-card glass reveal-up" style="transition-delay: 0.2s;">
+                <div class="about-card-index">03</div>
+                <h3>Polish the mood</h3>
+                <p>Small motion and micro-details make the work feel alive.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW I THINK -->
+      <section id="think" class="section think-section">
+        <div class="container">
+          <h2 class="section-title split-text">How I Think.</h2>
+          <p class="section-subtitle reveal-up">A simple loop: look closely, move with intent, and shape the idea until it feels inevitable.</p>
+
+          <div class="timeline think-timeline">
+            <div class="timeline-item reveal-up">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content glass">
+                <h3>01. See the signal</h3>
+                <p>I start by finding the part of the problem that actually matters and ignore the noise around it.</p>
+              </div>
+            </div>
+            <div class="timeline-item reveal-up">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content glass">
+                <h3>02. Use AI as a co-pilot</h3>
+                <p>AI helps me move faster, test more ideas, and keep the creative intent intact.</p>
+              </div>
+            </div>
+            <div class="timeline-item reveal-up">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content glass">
+                <h3>03. Turn data into narrative</h3>
+                <p>Once the data speaks clearly, I shape it into something people can feel and act on.</p>
+              </div>
+            </div>
+            <div class="timeline-item reveal-up">
+              <div class="timeline-dot"></div>
+              <div class="timeline-content glass">
+                <h3>04. Polish the experience</h3>
+                <p>The last layer is rhythm, motion, and detail. That is what makes the work stay in memory.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS SECTION -->
+      <section id="skills" class="section skills-section">
+        <div class="container">
+          <h2 class="section-title split-text">Toolkit.</h2>
+          <p class="section-subtitle reveal-up">The instruments I reach for when I am building with data, AI, and motion.</p>
+
+          <div class="skills-grid">
+            <article class="skill-card glass reveal-up">
+              <p class="skill-kicker">Data & Insight</p>
+              <h3>Reading patterns in the noise</h3>
+              <div class="skill-list">
+                <div class="skill-row" data-level="96"><div class="skill-row-head"><span>Python</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="92"><div class="skill-row-head"><span>SQL</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="94"><div class="skill-row-head"><span>Pandas</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="90"><div class="skill-row-head"><span>NumPy</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              </div>
+              <div class="skill-chips">
+                <span class="magnetic">Matplotlib</span>
+                <span class="magnetic">Seaborn</span>
+                <span class="magnetic">Tableau</span>
+                <span class="magnetic">Plotly</span>
+              </div>
+            </article>
+
+            <article class="skill-card glass reveal-up" style="transition-delay: 0.1s;">
+              <p class="skill-kicker">AI & Automation</p>
+              <h3>Making systems that think and ship</h3>
+              <div class="skill-list">
+                <div class="skill-row" data-level="95"><div class="skill-row-head"><span>Scikit-learn</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="90"><div class="skill-row-head"><span>TensorFlow</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="88"><div class="skill-row-head"><span>PyTorch</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="86"><div class="skill-row-head"><span>FastAPI</span><span>Solid</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              </div>
+              <div class="skill-chips">
+                <span class="magnetic">Hugging Face</span>
+                <span class="magnetic">OpenCV</span>
+                <span class="magnetic">NLTK</span>
+                <span class="magnetic">Docker</span>
+                <span class="magnetic">AWS</span>
+                <span class="magnetic">GCP</span>
+              </div>
+            </article>
+
+            <article class="skill-card glass reveal-up" style="transition-delay: 0.2s;">
+              <p class="skill-kicker">Creative & Motion</p>
+              <h3>Giving ideas a visual pulse</h3>
+              <div class="skill-list">
+                <div class="skill-row" data-level="95"><div class="skill-row-head"><span>HTML5 / CSS3</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="90"><div class="skill-row-head"><span>JavaScript</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="86"><div class="skill-row-head"><span>React</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+                <div class="skill-row" data-level="88"><div class="skill-row-head"><span>GSAP / Motion</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              </div>
+              <div class="skill-chips">
+                <span class="magnetic">Three.js</span>
+                <span class="magnetic">Streamlit</span>
+                <span class="magnetic">UI Storytelling</span>
+                <span class="magnetic">Responsive Design</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- FEATURED CASE STUDIES -->
+      <section id="cases" class="section cases-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Featured Case Studies</p>
+          <h2 class="section-title split-text">Selected Systems.</h2>
+          <p class="section-subtitle reveal-up">Three bigger stories showing how I shape data, AI, and design into usable systems.</p>
+
+          <div class="cases-grid">
+            <article class="case-card glass reveal-up">
+              <div class="case-visual case-visual-a">
+                <div class="case-visual-head">
+                  <span class="case-number">01</span>
+                  <span class="case-eyebrow">Automation</span>
+                </div>
+                <p class="case-visual-title">Workflow intelligence</p>
+              </div>
+              <div class="case-body">
+                <p class="case-label">Demand Forecasting MLOps Pipeline</p>
+                <h3>Make forecasting feel structured and deployable.</h3>
+                <p class="case-description">A system shaped to stay reproducible, visually clear, and ready to serve results outside the notebook.</p>
+                <div class="case-points">
+                  <div class="case-point">
+                    <span>Problem</span>
+                    <p>Forecasting work needs structure, repeatability, and a clean handoff.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Approach</span>
+                    <p>Synthetic data, lag features, training, evaluation, and FastAPI serving.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Feel</span>
+                    <p>Precise, calm, and production-minded.</p>
+                  </div>
+                </div>
+                <div class="case-tags">
+                  <span>Forecasting</span><span>MLOps</span><span>FastAPI</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="case-card glass reveal-up" style="transition-delay: 0.1s;">
+              <div class="case-visual case-visual-b">
+                <div class="case-visual-head">
+                  <span class="case-number">02</span>
+                  <span class="case-eyebrow">Language</span>
+                </div>
+                <p class="case-visual-title">Text as signal</p>
+              </div>
+              <div class="case-body">
+                <p class="case-label">Multilingual News Topic Classifier</p>
+                <h3>Turn messy text into something readable.</h3>
+                <p class="case-description">An NLP build designed to classify articles quickly while keeping the interface simple enough to actually use.</p>
+                <div class="case-points">
+                  <div class="case-point">
+                    <span>Problem</span>
+                    <p>Text classification should be fast, transparent, and easy to reuse.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Approach</span>
+                    <p>TF-IDF, Linear SVM, and a Streamlit layer for interaction.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Feel</span>
+                    <p>Clear, lean, and easy to scan.</p>
+                  </div>
+                </div>
+                <div class="case-tags">
+                  <span>NLP</span><span>Streamlit</span><span>Scikit-learn</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="case-card glass reveal-up" style="transition-delay: 0.2s;">
+              <div class="case-visual case-visual-c">
+                <div class="case-visual-head">
+                  <span class="case-number">03</span>
+                  <span class="case-eyebrow">Insights</span>
+                </div>
+                <p class="case-visual-title">Patterns in the crowd</p>
+              </div>
+              <div class="case-body">
+                <p class="case-label">Customer Segmentation Dashboard</p>
+                <h3>Make clusters feel like a story.</h3>
+                <p class="case-description">A dashboard that turns behavioral patterns into segments, then presents them with more mood than a standard chart wall.</p>
+                <div class="case-points">
+                  <div class="case-point">
+                    <span>Problem</span>
+                    <p>Clusters are easier to understand when they are visual and interactive.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Approach</span>
+                    <p>K-Means, analytics, and a dashboard built for exploration.</p>
+                  </div>
+                  <div class="case-point">
+                    <span>Feel</span>
+                    <p>Editorial, layered, and insight-led.</p>
+                  </div>
+                </div>
+                <div class="case-tags">
+                  <span>Clustering</span><span>Dashboards</span><span>Plotly</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="cases-footer reveal-up">
+            <a href="#selected-works" class="case-cta magnetic">See Live GitHub Works</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================== CONTACT FORM - RESUME STYLE (Updated) ====================== -->
+      <section id="contact" class="py-24 bg-[#0a0a0a] border-t border-cyan-500/20">
+        <div class="max-w-5xl mx-auto px-6">
+          <div class="text-center mb-12">
+            <h2 class="text-5xl font-bold tracking-tight text-white mb-3">Let’s Build Your Website</h2>
+            <p class="text-2xl text-cyan-400">I develop modern, fast, and beautiful websites from scratch.<br>Portfolio, business, SaaS, or full-stack — tell me what you need.</p>
+          </div>
+
+          <p class="contact-services text-center text-lg text-gray-400 mb-8">Website Development • Portfolio Sites • Business Pages • Interactive Experiences</p>
+
+          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-14">
+            <div class="grid md:grid-cols-2 gap-8">
+              <div>
+                <label class="block text-xs font-medium text-gray-400 mb-3">YOUR NAME</label>
+                <input type="text" name="name" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-gray-400 mb-3">EMAIL ADDRESS</label>
+                <input type="email" name="email" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <label class="block text-xs font-medium text-gray-400 mb-3">WHAT KIND OF WEBSITE DO YOU NEED?</label>
+              <textarea name="message" rows="6" required placeholder="Portfolio website • Business landing page • SaaS dashboard • E-commerce • Or just an idea..."
+                        class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-3xl px-7 py-5 text-white text-lg resize-none"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="mt-10 w-full bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-semibold text-2xl py-7 rounded-3xl transition-all active:scale-95 magnetic">
+              SEND BRIEF — LET’S BUILD IT
+            </button>
+
+            <div id="form-status" class="mt-6 text-center text-sm font-medium hidden"></div>
+          </form>
+
+          <p>Or email directly: <a href="mailto:biswasmail631@gmail.com" style="color: #00ffcc; text-decoration: underline;">biswasmail631@gmail.com</a></p>
+        </div>
+      </section>
+      <!-- CREATIVE EXPERIMENTS -->
+      <section id="experiments" class="section experiments-section">
+        <div class="container">
+          <h2 class="section-title split-text">Playground.</h2>
+          <p class="section-subtitle reveal-up">Small visual studies, motion tests, and data moments that sit outside the main gallery.</p>
+
+          <div class="experiment-grid">
+            <article class="experiment-card glass reveal-up">
+              <div class="experiment-preview preview-a"></div>
+              <div class="experiment-content">
+                <p class="experiment-kicker">UI Study 01</p>
+                <h3>Neon pulse dashboard</h3>
+                <p>A luminous interface study that treats analytics like atmosphere.</p>
+                <div class="experiment-tags"><span>Motion</span><span>Dashboard</span><span>Glass</span></div>
+              </div>
+            </article>
+
+            <article class="experiment-card glass reveal-up" style="transition-delay: 0.1s;">
+              <div class="experiment-preview preview-b"></div>
+              <div class="experiment-content">
+                <p class="experiment-kicker">Data Visual 02</p>
+                <h3>Data poster sketch</h3>
+                <p>A chart-led composition with poster energy and strong contrast.</p>
+                <div class="experiment-tags"><span>Data Viz</span><span>Story</span><span>Poster</span></div>
+              </div>
+            </article>
+
+            <article class="experiment-card glass reveal-up" style="transition-delay: 0.2s;">
+              <div class="experiment-preview preview-c"></div>
+              <div class="experiment-content">
+                <p class="experiment-kicker">AI System 03</p>
+                <h3>AI workflow fragments</h3>
+                <p>Ideas for automations, prompts, and productivity tools that keep things moving.</p>
+                <div class="experiment-tags"><span>AI</span><span>Workflow</span><span>Tools</span></div>
+              </div>
+            </article>
+
+            <article class="experiment-card glass reveal-up" style="transition-delay: 0.3s;">
+              <div class="experiment-preview preview-d"></div>
+              <div class="experiment-content">
+                <p class="experiment-kicker">Micro Interaction 04</p>
+                <h3>Motion playground</h3>
+                <p>Micro interaction tests for buttons, cards, and transitions that make the portfolio feel alive.</p>
+                <div class="experiment-tags"><span>UI</span><span>Motion</span><span>Prototype</span></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="selected-works" class="selected-works-section">
+        <div class="selected-works-shell">
+          <div class="selected-works-head">
+            <div>
+              <h2>Selected Works</h2>
+              <p class="subtitle">Live from GitHub • Always up to date</p>
+            </div>
+            <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="view-all">View all on GitHub →</a>
+          </div>
+
+          <div class="repo-grid">
+            <div class="repo-card reveal-up">
+              <h3>Souravjr0</h3>
+              <span class="lang">CSS</span>
+              <p>❄️ My personal portfolio site with a neon cyber aesthetic.</p>
+              <p class="repo-outcome">Outcome: a sharp personal brand page built to feel bold and memorable.</p>
+              <div class="repo-tags"><span>Responsive</span><span>Motion</span></div>
+              <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card reveal-up" style="transition-delay: 0.08s;">
+              <h3>Claude-guardian</h3>
+              <span class="lang">Python</span>
+              <p>AI safety sandbox for testing LLMs against prompt injections, jailbreaks, and hallucinations.</p>
+              <p class="repo-outcome">Outcome: a practical evaluation layer for safer prompt experimentation.</p>
+              <div class="repo-tags"><span>AI Safety</span><span>Python</span></div>
+              <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card reveal-up" style="transition-delay: 0.16s;">
+              <h3>Habit-Tracker</h3>
+              <span class="lang">JavaScript</span>
+              <p>Simple daily habit tracker with local storage and no backend dependencies.</p>
+              <p class="repo-outcome">Outcome: a lightweight productivity tool that works instantly in the browser.</p>
+              <div class="repo-tags"><span>LocalStorage</span><span>UI</span></div>
+              <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card reveal-up" style="transition-delay: 0.24s;">
+              <h3>Zunes-wallet</h3>
+              <span class="lang">Web3</span>
+              <p>Ethereum crypto wallet interface with a clean product-style layout.</p>
+              <p class="repo-outcome">Outcome: a simple Web3 UI concept focused on clarity and trust.</p>
+              <div class="repo-tags"><span>Ethereum</span><span>Web3</span></div>
+              <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener">View repo →</a>
+            </div>
+
+            <div class="repo-card reveal-up" style="transition-delay: 0.32s;">
+              <h3>Cluely</h3>
+              <span class="lang">AI</span>
+              <p>AI-powered interview preparation tool for focused practice and confidence building.</p>
+              <p class="repo-outcome">Outcome: a guided prep workflow for faster interview readiness.</p>
+              <div class="repo-tags"><span>AI</span><span>Prep</span></div>
+              <a href="https://github.com/souravjr0/Cluely" target="_blank" rel="noopener">View repo →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROOF -->
+      <section id="proof" class="section proof-section">
+        <div class="container">
+          <p class="section-kicker reveal-up">Proof</p>
+          <h2 class="section-title split-text">Why This Works.</h2>
+          <p class="section-subtitle reveal-up">A small set of signals that matter to clients, recruiters, and anyone trying to understand how I build.</p>
+
+          <div class="proof-grid">
+            <article class="proof-card glass reveal-up">
+              <span>Conversion-first</span>
+              <h3>Pages that guide people toward action.</h3>
+              <p>Structure, hierarchy, and a strong contact path make the site easier to scan and easier to trust.</p>
+            </article>
+            <article class="proof-card glass reveal-up" style="transition-delay: 0.1s;">
+              <span>Fast shipping</span>
+              <h3>Focused scope keeps work moving.</h3>
+              <p>Smaller, clearer sections and reusable patterns make it easier to iterate without breaking the whole page.</p>
+            </article>
+            <article class="proof-card glass reveal-up" style="transition-delay: 0.2s;">
+              <span>Clean handoff</span>
+              <h3>Readable code and easy maintenance.</h3>
+              <p>The result is a portfolio that looks polished now and stays manageable later.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY I DO THIS -->
+      <section id="story" class="section story-section">
+        <div class="container">
+          <h2 class="section-title split-text">Why I Create.</h2>
+          <p class="section-subtitle reveal-up">Tech is my medium for turning messy signals into something people can feel and use.</p>
+          <div class="story-grid">
+            <article class="story-card glass reveal-up">
+              <p class="story-label">The short version</p>
+              <p>Data gives me structure, AI gives me velocity, and creativity gives the work a pulse.</p>
+              <p>My background as a national championship gold medal footballer in India taught me discipline, rhythm, and how to perform when it matters.</p>
+            </article>
+
+            <div class="story-stack">
+              <article class="story-mini glass reveal-up" style="transition-delay: 0.1s;">
+                <span>Medium</span>
+                <p>I use code, motion, and data as creative materials.</p>
+              </article>
+              <article class="story-mini glass reveal-up" style="transition-delay: 0.2s;">
+                <span>Experiment</span>
+                <p>I like testing ideas quickly and refining what works.</p>
+              </article>
+              <article class="story-mini glass reveal-up" style="transition-delay: 0.3s;">
+                <span>Purpose</span>
+                <p>I want the work to be useful, memorable, and real.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+
+  <footer class="site-footer">
+    <div class="footer-container" style="background:rgba(10,10,20,0.95); padding:2rem 1rem; text-align:center; border-top:2px solid #00ffcc;">
+      <p class="copyright" style="color:#ccc; margin-bottom:1rem;">&copy; 2026 Sourav Biswas. All Rights Reserved.</p>
+      
+      <div class="footer-links" style="margin-bottom:1rem;">
+        <a href="https://github.com/souravjr0" target="_blank" style="color:#00ffcc; margin:0 15px; text-decoration:none;">GitHub</a>
+        <a href="https://x.com/Souravjr0" target="_blank" style="color:#00ffcc; margin:0 15px; text-decoration:none;">𝕏</a>
+        <a href="mailto:biswasmail631@gmail.com" style="color:#00ffcc; margin:0 15px; text-decoration:none;">Email</a>
+      </div>
+
+      <p class="footer-note" style="color:#666; font-size:0.9rem;">Made with neon &amp; code • Pune, India</p>
+    </div>
+  </footer>
 </body>
 </html>
+
