@@ -3171,3 +3171,242 @@ textarea:focus-visible {
     text-align: left;
   }
 }
+
+@media (max-width: 768px) {
+  .theme-toggle-wrap {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .theme-toggle-btn {
+    padding: 0.7rem 0.95rem;
+    font-size: 0.78rem;
+  }
+
+  .hero {
+    padding: calc(5.5rem + env(safe-area-inset-top)) 1rem calc(3rem + env(safe-area-inset-bottom));
+  }
+
+  .roles {
+    gap: 0.5rem;
+    letter-spacing: 1px;
+    font-size: 0.72rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 13vw, 3.6rem);
+    line-height: 0.95;
+    max-width: 100%;
+  }
+
+  .hero-copy {
+    margin-top: 0.5rem;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+  }
+
+  .hero-statement {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+
+  .section {
+    padding: 3.5rem 0;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 10vw, 3rem);
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+  }
+
+  .creative-focus {
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .creative-focus h2 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .focus-items {
+    gap: 0.55rem;
+  }
+
+  .focus-items div {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .services-grid,
+  .proof-grid,
+  .repo-grid,
+  .skills-grid,
+  .cases-grid,
+  .experiment-grid,
+  .story-grid,
+  .about-grid-large,
+  .studio-grid {
+    gap: 1rem;
+  }
+
+  .service-card,
+  .proof-card,
+  .repo-card,
+  .about-card,
+  .story-card,
+  .story-mini,
+  .skill-card,
+  .case-body,
+  .experiment-content {
+    padding: 1.15rem;
+  }
+
+  .service-title,
+  .proof-card h3,
+  .repo-card h3,
+  .about-card h3,
+  .story-mini p,
+  .case-body h3 {
+    font-size: 1.1rem;
+    line-height: 1.35;
+  }
+
+  .service-desc,
+  .proof-card p,
+  .repo-card p,
+  .about-desc,
+  .timeline-content p,
+  .experiment-content p,
+  .story-card p,
+  .story-mini p {
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  #selected-works {
+    padding: 4rem 0;
+  }
+
+  #selected-works > div {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #selected-works h2 {
+    font-size: clamp(2rem, 11vw, 3rem);
+  }
+
+  #selected-works .subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  #selected-works .repo-card,
+  .repo-card {
+    padding: 1.1rem;
+  }
+
+  .repo-outcome {
+    font-size: 0.88rem;
+  }
+
+  .repo-tags {
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .repo-tags span {
+    font-size: 0.7rem;
+  }
+
+  .contact-services {
+    font-size: 0.9rem;
+  }
+
+  #contact {
+    padding: 3.5rem 0;
+  }
+
+  #contact .text-5xl,
+  #contact .text-6xl {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+    line-height: 1;
+  }
+
+  #contact .text-2xl {
+    font-size: 1.05rem;
+    line-height: 1.55;
+  }
+
+  #contact .max-w-5xl,
+  #contact .max-w-3xl {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #contact form,
+  #contact .p-10,
+  #contact .md\:p-14 {
+    padding: 1.1rem;
+  }
+
+  #contact input,
+  #contact textarea {
+    padding: 1rem 1.1rem;
+    font-size: 1rem;
+  }
+
+  #contact button[type="submit"] {
+    font-size: 1rem;
+    padding: 1.15rem 1rem;
+  }
+
+  .site-footer {
+    padding: 2rem 1rem;
+  }
+
+  .footer-links {
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .copyright,
+  .footer-note {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: clamp(2rem, 15vw, 3rem);
+  }
+
+  .hero-button,
+  .contact-link,
+  .project-link,
+  .case-cta {
+    font-size: 0.85rem;
+  }
+
+  .focus-items div,
+  .repo-tags span {
+    letter-spacing: 0.03em;
+  }
+
+  .selected-works-head a,
+  .view-all {
+    white-space: normal;
+  }
+}
