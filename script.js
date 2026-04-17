@@ -1,712 +1,174 @@
-﻿// Register GSAP plugins
+// ============================================================
+//  SOURAV BISWAS PORTFOLIO — script.js (Redesign)
+// ============================================================
+
 gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
-const useEnhancedMotion = isDesktop && !prefersReducedMotion;
+const useMotion = isDesktop && !prefersReducedMotion;
 
-let appHeightRaf = null;
-function updateAppHeight() {
-  const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  document.documentElement.style.setProperty('--app-height', `${viewportHeight * 0.01}px`);
-}
-
-function scheduleAppHeightUpdate() {
-  if (appHeightRaf) cancelAnimationFrame(appHeightRaf);
-  appHeightRaf = requestAnimationFrame(() => {
-    updateAppHeight();
-    appHeightRaf = null;
-  });
-}
-
-updateAppHeight();
-window.addEventListener('resize', scheduleAppHeightUpdate, { passive: true });
-window.addEventListener('orientationchange', scheduleAppHeightUpdate);
-if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', scheduleAppHeightUpdate, { passive: true });
-}
-
-// 1. Lenis Smooth Scroll Setup
-let lenis = null;
-if (useEnhancedMotion) {
-  lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    direction: 'vertical',
-    gestureDirection: 'vertical',
-    smooth: true,
-    mouseMultiplier: 1,
-    smoothTouch: false,
-    touchMultiplier: 2,
-  });
-
-  // Keep ScrollTrigger in sync with Lenis without a second RAF loop.
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
-  gsap.ticker.lagSmoothing(0);
-}
-
-
-// 2. Custom Cursor Logic
-const cursorDot = document.querySelector('.cursor-dot');
-const cursorGlow = document.querySelector('.cursor-glow');
-const magnetics = document.querySelectorAll('.magnetic');
-
-function setCursorHoverState(active) {
-  if (!cursorDot || !cursorGlow) return;
-  cursorDot.classList.toggle('hover', active);
-  cursorGlow.classList.toggle('hover', active);
-}
-
-function bindHoverTargets(elements) {
-  elements.forEach((el) => {
-    if (el.dataset.hoverBound === 'true') return;
-    el.dataset.hoverBound = 'true';
-
-    el.addEventListener('mouseenter', () => setCursorHoverState(true));
-    el.addEventListener('mouseleave', () => setCursorHoverState(false));
-  });
-}
-
-function bindMagneticMotion(elements) {
-  if (!useEnhancedMotion) return;
-
-  elements.forEach((elem) => {
-    if (elem.dataset.magneticBound === 'true') return;
-    elem.dataset.magneticBound = 'true';
-
-    elem.addEventListener('mousemove', (e) => {
-      const rect = elem.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
-
-      gsap.to(elem, { x: x * 0.3, y: y * 0.3, duration: 0.4, ease: 'power2.out' });
-      setCursorHoverState(true);
-    });
-
-    elem.addEventListener('mouseleave', () => {
-      gsap.to(elem, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
-      setCursorHoverState(false);
-    });
-  });
-}
-
-if (useEnhancedMotion) {
-  // Move cursor
-  window.addEventListener('mousemove', (e) => {
-    if(cursorDot) gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
-    if(cursorGlow) gsap.to(cursorGlow, { x: e.clientX, y: e.clientY, duration: 0.8, ease: "power2.out" });
-  });
-
-  // Magnetic hover effects
-  bindMagneticMotion(magnetics);
-
-  // General hover for a/button
-  bindHoverTargets(document.querySelectorAll('a, button, .project-card, .case-card, .experiment-card, .skill-card, .about-card, .story-card, .story-mini, .studio-note, input, textarea'));
-}
-
-
-// 3. Three.js Background (Stars / abstract particles)
-const canvas = document.querySelector('#webgl-canvas');
-if (canvas && useEnhancedMotion) {
-    const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x030305, 0.001);
-
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-  camera.position.z = 500;
-
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    // Create Particles
-    const geometry = new THREE.BufferGeometry();
-    const particlesCount = 400;
-    const posArray = new Float32Array(particlesCount * 3);
-    const colorsArray = new Float32Array(particlesCount * 3);
-
-    const color1 = new THREE.Color(0x00f0ff); // neon
-    const color2 = new THREE.Color(0x8a2be2); // purple
-
-    for(let i = 0; i < particlesCount * 3; i+=3) {
-        // Random position in a sphere-like distribution
-        const x = (Math.random() - 0.5) * 2000;
-        const y = (Math.random() - 0.5) * 2000;
-        const z = (Math.random() - 0.5) * 2000;
-        posArray[i] = x;
-        posArray[i+1] = y;
-        posArray[i+2] = z;
-
-        // Mix colors
-        const mixColor = color1.clone().lerp(color2, Math.random());
-        colorsArray[i] = mixColor.r;
-        colorsArray[i+1] = mixColor.g;
-        colorsArray[i+2] = mixColor.b;
-    }
-
-    geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
-
-    const material = new THREE.PointsMaterial({
-      size: 1.8,
-        vertexColors: true,
-        transparent: true,
-      opacity: 0.75,
-        blending: THREE.AdditiveBlending
-    });
-
-    const particlesMesh = new THREE.Points(geometry, material);
-    scene.add(particlesMesh);
-
-    // Mouse interaction for ThreeJS
-    let mouseX = 0;
-    let mouseY = 0;
-    window.addEventListener('mousemove', (event) => {
-      mouseX = (event.clientX / window.innerWidth) - 0.5;
-      mouseY = (event.clientY / window.innerHeight) - 0.5;
-    });
-
-    const clock = new THREE.Clock();
-    function animateThree() {
-        const elapsedTime = clock.getElapsedTime();
-        
-        // Slow rotation
-        particlesMesh.rotation.y = elapsedTime * 0.05;
-        particlesMesh.rotation.x = elapsedTime * 0.02;
-
-        // Mouse parallax
-        camera.position.x += (mouseX * 200 - camera.position.x) * 0.05;
-        camera.position.y += (-mouseY * 200 - camera.position.y) * 0.05;
-        camera.lookAt(scene.position);
-
-        renderer.render(scene, camera);
-        requestAnimationFrame(animateThree);
-    }
-    animateThree();
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-}
-
-// 4. Initial Loader Animation
+// ------- Loader -------
 window.addEventListener('load', () => {
   const tl = gsap.timeline();
-
-  // Progress bar animation mock
-  tl.to('.loader-fill', {
-    width: '100%',
-    duration: 1.5,
-    ease: "power3.inOut"
-  })
-  .to('.loader', {
-    yPercent: -100,
-    duration: 1,
-    ease: "power4.inOut"
-  })
-  .add(() => {
-    document.body.classList.remove('loading');
-    setTimeout(() => {
-      const loader = document.querySelector('.loader');
-      if (loader) loader.remove();
-    }, 1000);
-  }, "-=0.5")
-
-  // Hero reveals
-  .from('.line', {
-    y: 100,
-    opacity: 0,
-    duration: 1,
-    stagger: 0.2,
-    ease: "power4.out"
-  }, "-=0.5")
-  .from('.reveal-fade', {
-    opacity: 0,
-    y: 20,
-    duration: 1,
-    ease: "power2.out",
-    stagger: 0.2
-  }, "-=0.5");
+  tl.to('.loader-fill', { width: '100%', duration: 1.2, ease: 'power3.inOut' })
+    .to('#loader', { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
+    .add(() => {
+      document.body.classList.remove('loading');
+      document.getElementById('loader')?.remove();
+    }, '-=0.3')
+    .from('.hero-line', { y: 80, opacity: 0, duration: 1, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
+    .from('.reveal-fade', { opacity: 0, y: 16, duration: 0.8, stagger: 0.12, ease: 'power2.out' }, '-=0.6');
 });
 
-
-// 5. Scroll Animations
-if (useEnhancedMotion) {
-  gsap.utils.toArray('.reveal-up').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: {
-        trigger: el,
-        start: "top 85%",
-      },
-      y: 60,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out"
-    });
+// ------- Custom Cursor (desktop only) -------
+if (useMotion) {
+  const dot  = document.querySelector('.cursor-dot');
+  const glow = document.querySelector('.cursor-glow');
+  window.addEventListener('mousemove', e => {
+    if (dot)  gsap.to(dot,  { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
+    if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.7, ease: 'power2.out' });
   });
-
-  const splitTexts = document.querySelectorAll('.split-text');
-  splitTexts.forEach(st => {
-    gsap.from(st, {
-      scrollTrigger: { trigger: st, start: "top 80%" },
-      opacity: 0, x: -50, duration: 1, ease: "power3.out"
-    });
-  });
-
-  gsap.utils.toArray('.skill-row').forEach((row) => {
-    const fill = row.querySelector('.skill-fill');
-    if (!fill) return;
-
-    const targetLevel = Number(row.dataset.level || 0);
-    gsap.fromTo(fill, {
-      width: '0%'
-    }, {
-      width: `${targetLevel}%`,
-      duration: 1.2,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: row,
-        start: 'top 85%'
-      }
-    });
-  });
-
-  gsap.utils.toArray('.ambient-orb').forEach((orb, index) => {
-    gsap.to(orb, {
-      xPercent: index % 2 === 0 ? 6 : -6,
-      yPercent: index === 1 ? -10 : 10,
-      scale: 1.06,
-      duration: 18 + index * 4,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut'
-    });
+  document.querySelectorAll('a, button, .service-card, .skill-card, .project-card, input, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => dot?.classList.add('hover'));
+    el.addEventListener('mouseleave', () => dot?.classList.remove('hover'));
   });
 }
 
-function attachTiltInteractions(selector) {
-  if (!useEnhancedMotion) return;
-
-  document.querySelectorAll(selector).forEach((card) => {
-    if (card.dataset.tiltBound === 'true') return;
-    card.dataset.tiltBound = 'true';
-
-    card.addEventListener('mousemove', (event) => {
-      const rect = card.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const rotateX = ((y - centerY) / centerY) * -8;
-      const rotateY = ((x - centerX) / centerX) * 8;
-
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale3d(1.01, 1.01, 1.01)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale3d(1, 1, 1)';
-    });
-  });
-}
-
-attachTiltInteractions('.project-card, .case-card, .experiment-card');
-
-
-// 6. Fetch GitHub Projects Dynamically
-async function fetchGithubProjects() {
-  const container = document.getElementById('github-projects');
-  if(!container) return;
-
-  const projectProfiles = {
-    'demand-forecasting-mlops': {
-      title: 'Demand Forecasting MLOps Pipeline',
-      summary: 'An end-to-end forecasting system that turns synthetic data into a usable pipeline with lag features, evaluation, artifacts, and a FastAPI face.',
-      stack: ['Python', 'Pandas', 'Scikit-learn', 'FastAPI']
-    },
-    'news-topic-classifier': {
-      title: 'Multilingual News Topic Classifier',
-      summary: 'A compact NLP build that classifies articles with TF-IDF and Linear SVM, wrapped in a Streamlit demo.',
-      stack: ['Python', 'NLP', 'Scikit-learn', 'Streamlit']
-    },
-    'defect-detection-cv': {
-      title: 'Industrial Defect Detection',
-      summary: 'A computer vision study using synthetic imagery, edge features, and SVM classification to detect defects quickly.',
-      stack: ['OpenCV', 'NumPy', 'Scikit-learn', 'Python']
-    },
-    'customer-segmentation-dashboard': {
-      title: 'Customer Segmentation Dashboard',
-      summary: 'A clustering dashboard that turns customer behavior into clear segments and interactive insight.',
-      stack: ['Python', 'Pandas', 'Plotly', 'Streamlit']
-    }
-  };
-
-  function formatRepoName(name) {
-    return name
-      .split('-')
-      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(' ');
-  }
-
-  try {
-    // Specifically grabbing the 6 latest repos
-    const response = await fetch('https://api.github.com/users/Souravjr0/repos?sort=updated&per_page=6');
-    if (!response.ok) throw new Error('API Rate Limit or Network Issue');
-    const repos = await response.json();
-    
-    container.innerHTML = '';
-    
-    repos.forEach((repo, i) => {
-      const profile = projectProfiles[repo.name] || {
-        title: formatRepoName(repo.name),
-        summary: repo.description || 'A GitHub build from my portfolio, shaped to solve a concrete data, AI, or automation problem.',
-        stack: repo.language ? [repo.language, 'GitHub'] : ['GitHub']
-      };
-      const tech = repo.language ? repo.language : 'Tech Stack';
-      const stars = repo.stargazers_count;
-      const updatedAt = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      const stackHTML = profile.stack.map((item) => `<span>${item}</span>`).join('');
-      
-      const cardHTML = `
-        <article class="project-card glass reveal-projects">
-          <div class="project-card-inner">
-            <p class="repo-label">Selected Work</p>
-            <h3 class="repo-name">${profile.title}</h3>
-            <p class="repo-desc">${profile.summary}</p>
-            <div class="project-tags">${stackHTML}</div>
-            <div class="project-meta-row">
-              <div class="repo-meta">
-                <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4l3 3"></path></svg> ${tech}</span>
-                <span>★ ${stars}</span>
-                <span>${updatedAt}</span>
-              </div>
-              <a href="${repo.html_url}" target="_blank" rel="noreferrer" class="project-link magnetic">Open Work</a>
-            </div>
-          </div>
-        </article>
-      `;
-      container.insertAdjacentHTML('beforeend', cardHTML);
-    });
-
-    // Re-bind cursor triggers for new elements
-    bindHoverTargets(container.querySelectorAll('.project-card, .project-link'));
-    bindMagneticMotion(container.querySelectorAll('.project-link.magnetic'));
-    attachTiltInteractions('.project-card, .case-card');
-
-    if (useEnhancedMotion) {
-      gsap.from('.reveal-projects', {
-        scrollTrigger: { trigger: '#projects', start: "top 70%" },
-        y: 50, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out"
-      });
-    }
-
-  } catch (error) {
-    container.innerHTML = '<p class="error" style="color:var(--text-dim);">Unable to fetch projects right now. You can check out my <a href="https://github.com/Souravjr0" style="color:var(--accent-neon);">GitHub Profile</a>.</p>';
-  }
-}
-
-fetchGithubProjects();
-
-// Development Builder Functionality
-function initCodeBuilder() {
-  const htmlEditor = document.getElementById('html-code');
-  const cssEditor = document.getElementById('css-code');
-  const jsEditor = document.getElementById('js-code');
-  const preview = document.getElementById('preview');
-  const previewMeta = document.getElementById('preview-meta');
-  const previewModeButtons = document.querySelectorAll('.preview-mode-btn');
-  const refreshPreviewButton = document.getElementById('refresh-preview');
-  const resetPreviewButton = document.getElementById('reset-preview');
-
-  if (!htmlEditor || !cssEditor || !jsEditor || !preview) return;
-
-  const defaultSamples = {
-    html: htmlEditor.value.trimEnd(),
-    css: cssEditor.value.trimEnd(),
-    js: jsEditor.value.trimEnd()
-  };
-
-  const previewState = {
-    modeLabel: 'Desktop',
-    updateTimer: null
-  };
-
-  function countLines(content) {
-    if (!content.trim()) return 0;
-    return content.split(/\r?\n/).length;
-  }
-
-  function updatePreviewMeta(isManualRun = false) {
-    if (!previewMeta) return;
-    const htmlLines = countLines(htmlEditor.value);
-    const cssLines = countLines(cssEditor.value);
-    const jsLines = countLines(jsEditor.value);
-    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const syncMode = isManualRun ? 'Manual run' : 'Auto sync';
-    previewMeta.textContent = `${previewState.modeLabel} view • HTML ${htmlLines} lines • CSS ${cssLines} lines • JS ${jsLines} lines • ${syncMode} • ${timestamp}`;
-  }
-
-  function setPreviewWidth(button) {
-    const width = button.dataset.previewWidth || '100%';
-    const label = button.textContent ? button.textContent.trim() : 'Desktop';
-    previewState.modeLabel = label;
-    preview.style.width = width === '100%' ? '100%' : `min(100%, ${width})`;
-
-    previewModeButtons.forEach((modeButton) => {
-      const isActive = modeButton === button;
-      modeButton.classList.toggle('is-active', isActive);
-      modeButton.setAttribute('aria-pressed', String(isActive));
-    });
-
-    updatePreviewMeta();
-  }
-
-  function updatePreview(isManualRun = false) {
-    const html = htmlEditor.value;
-    const css = cssEditor.value;
-    const js = jsEditor.value;
-
-    const fullHTML = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-          body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #030305, #080512);
-            color: #ffffff;
-            min-height: 100vh;
-          }
-          ${css}
-        </style>
-      </head>
-      <body>
-        ${html}
-        <script>
-          ${js}
-        </script>
-      </body>
-      </html>
-    `;
-
-    preview.srcdoc = fullHTML;
-    updatePreviewMeta(isManualRun);
-  }
-
-  function schedulePreviewUpdate() {
-    if (previewState.updateTimer) {
-      window.clearTimeout(previewState.updateTimer);
-    }
-
-    previewState.updateTimer = window.setTimeout(() => {
-      updatePreview(false);
-    }, 120);
-  }
-
-  // Update preview on input
-  htmlEditor.addEventListener('input', schedulePreviewUpdate);
-  cssEditor.addEventListener('input', schedulePreviewUpdate);
-  jsEditor.addEventListener('input', schedulePreviewUpdate);
-
-  previewModeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      setPreviewWidth(button);
-      updatePreview();
-    });
-  });
-
-  if (refreshPreviewButton) {
-    refreshPreviewButton.addEventListener('click', () => {
-      updatePreview(true);
-    });
-  }
-
-  if (resetPreviewButton) {
-    resetPreviewButton.addEventListener('click', () => {
-      htmlEditor.value = defaultSamples.html;
-      cssEditor.value = defaultSamples.css;
-      jsEditor.value = defaultSamples.js;
-      updatePreview(true);
-    });
-  }
-
-  const defaultModeButton = document.querySelector('.preview-mode-btn.is-active') || previewModeButtons[0];
-  if (defaultModeButton) {
-    setPreviewWidth(defaultModeButton);
-  }
-
-  // Initial update
-  updatePreview();
-}
-
-// Initialize builder when DOM is ready
-document.addEventListener('DOMContentLoaded', initCodeBuilder);
-
-// ====================== CONTACT FORM (Phase 1) ======================
-const form = document.getElementById('contact-form');
-const statusDiv = document.getElementById('form-status');
-
-if (form) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const submitBtn = form.querySelector('button');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = 'Sending<span class="animate-pulse">...</span>';
-    submitBtn.disabled = true;
-
-    const formData = new FormData(form);
-    
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        statusDiv.classList.remove('hidden');
-        statusDiv.innerHTML = `✅ Message sent! I’ll reply within 24 hours.`;
-        statusDiv.style.color = '#22ff88';
-        form.reset();
-      } else {
-        throw new Error();
-      }
-    } catch {
-      statusDiv.classList.remove('hidden');
-      statusDiv.innerHTML = `❌ Something went wrong. Try again or email me directly.`;
-      statusDiv.style.color = '#ff2266';
-    }
-
-    submitBtn.innerHTML = originalText;
-    submitBtn.disabled = false;
-
-    // auto hide status after 8 seconds
-    setTimeout(() => statusDiv.classList.add('hidden'), 8000);
-  });
-}
-
-// ============================================================
-//  NEW JS — Phase 2 Overhaul
-// ============================================================
-
-// Hamburger / Mobile Nav
+// ------- Hamburger Nav -------
 (function () {
-  const hamburger = document.getElementById('hamburger');
-  const navLinks  = document.getElementById('nav-links');
-  if (!hamburger || !navLinks) return;
-
-  // Create backdrop overlay
+  const btn     = document.getElementById('hamburger');
+  const links   = document.getElementById('nav-links');
+  if (!btn || !links) return;
   const overlay = document.createElement('div');
   overlay.className = 'nav-overlay';
   document.body.appendChild(overlay);
 
-  function openNav() {
-    navLinks.classList.add('is-open');
-    hamburger.classList.add('is-open');
-    overlay.classList.add('is-visible');
-    hamburger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
+  const open  = () => { links.classList.add('is-open'); btn.classList.add('is-open'); overlay.classList.add('is-visible'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; };
+  const close = () => { links.classList.remove('is-open'); btn.classList.remove('is-open'); overlay.classList.remove('is-visible'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
 
-  function closeNav() {
-    navLinks.classList.remove('is-open');
-    hamburger.classList.remove('is-open');
-    overlay.classList.remove('is-visible');
-    hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.contains('is-open') ? closeNav() : openNav();
-  });
-
-  overlay.addEventListener('click', closeNav);
-
-  navLinks.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', closeNav);
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeNav();
-  });
+  btn.addEventListener('click', () => links.classList.contains('is-open') ? close() : open());
+  overlay.addEventListener('click', close);
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  document.addEventListener('keydown', e => e.key === 'Escape' && close());
 })();
 
-// Scroll Progress Bar
+// ------- Scroll Progress -------
 (function () {
   const bar = document.getElementById('scroll-progress');
   if (!bar) return;
-
-  function updateProgress() {
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-    bar.style.width = pct + '%';
-  }
-
-  window.addEventListener('scroll', updateProgress, { passive: true });
-  updateProgress();
+  const update = () => {
+    const d = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 })();
 
-// Active Nav Link on Scroll
+// ------- Nav scrolled state -------
+(function () {
+  const nav = document.getElementById('nav-header');
+  if (!nav) return;
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+})();
+
+// ------- Active Nav Link -------
 (function () {
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
-  if (!sections.length || !navLinks.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(link => {
-          const href = link.getAttribute('href');
-          link.classList.toggle('is-active', href === '#' + id);
-        });
+  const links    = document.querySelectorAll('.nav-link');
+  if (!sections.length) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        links.forEach(l => l.classList.toggle('is-active', l.getAttribute('href') === '#' + id));
       }
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
-
-  sections.forEach(s => observer.observe(s));
+  sections.forEach(s => obs.observe(s));
 })();
 
-// Back to Top Button
+// ------- Back to Top -------
 (function () {
   const btn = document.getElementById('back-to-top');
   if (!btn) return;
-
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('is-visible', window.scrollY > 600);
-  }, { passive: true });
-
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  window.addEventListener('scroll', () => btn.classList.toggle('is-visible', window.scrollY > 600), { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 })();
 
-// Skill bar mobile IntersectionObserver fallback
+// ------- Scroll Reveal (IntersectionObserver — works on mobile too) -------
 (function () {
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024) return;
+  const els = document.querySelectorAll('.reveal-up, .reveal-fade');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+})();
 
-  document.querySelectorAll('.skill-row').forEach(row => {
-    const fill = row.querySelector('.skill-fill');
-    if (!fill) return;
-    const level = row.dataset.level || 80;
-    fill.style.setProperty('--skill-level', level + '%');
+// ------- Skill Bars -------
+(function () {
+  const rows = document.querySelectorAll('.skill-row');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const fill = e.target.querySelector('.skill-fill');
+        if (fill) fill.style.width = (e.target.dataset.level || 80) + '%';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  rows.forEach(r => obs.observe(r));
+})();
 
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          fill.style.width = level + '%';
-          obs.disconnect();
-        }
-      });
-    }, { threshold: 0.2 });
-    obs.observe(row);
+// ------- GSAP enhanced animations (desktop) -------
+if (useMotion) {
+  // Project cards tilt
+  document.querySelectorAll('.project-card, .service-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const rx = ((y - r.height/2) / r.height) * -6;
+      const ry = ((x - r.width/2)  / r.width)  *  6;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// ------- Contact Form -------
+(function () {
+  const form   = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  if (!form || !status) return;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+      if (res.ok) {
+        status.textContent = "Message sent! I'll reply within 24 hours.";
+        status.style.color = '#7c9e9a';
+        form.reset();
+      } else { throw new Error(); }
+    } catch {
+      status.textContent = 'Something went wrong. Email me directly at biswasmail631@gmail.com';
+      status.style.color = '#c97070';
+    }
+    status.classList.remove('hidden');
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+    setTimeout(() => status.classList.add('hidden'), 8000);
   });
 })();
