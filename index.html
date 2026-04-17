@@ -12,30 +12,19 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Sourav Biswas | Website Developer & Tech Artist" />
   <meta name="twitter:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
-  <script>
-    (function () {
-      try {
-        var savedTheme = localStorage.getItem('theme');
-        var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-        if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
-          document.documentElement.classList.add('light-mode');
-        }
-      } catch (error) {
-      }
-    })();
-  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>⚡</text></svg>" />
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
-  
+
   <!-- CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 </head>
-<body class="loading dark-theme">
+<body class="loading">
 
   <!-- Loader -->
   <div class="loader">
@@ -58,30 +47,29 @@
   <main id="smooth-wrapper">
     <div id="smooth-content">
 
+      <!-- Scroll Progress Bar -->
+      <div class="scroll-progress-bar" id="scroll-progress"></div>
+
       <!-- Header -->
       <header class="nav-header">
-        <nav class="links">
-          <a href="#about" class="magnetic">About</a>
-          <a href="#studio" class="magnetic">Studio</a>
-          <a href="#services" class="magnetic">Services</a>
-          <a href="#builder" class="magnetic">Builder</a>
-          <a href="#think" class="magnetic">Think</a>
-          <a href="#skills" class="magnetic">Toolkit</a>
-          <a href="#cases" class="magnetic">Cases</a>
-          <a href="#proof" class="magnetic">Proof</a>
-          <a href="#selected-works" class="magnetic">Works</a>
-          <a href="#experiments" class="magnetic">Playground</a>
-          <a href="#story" class="magnetic">Why</a>
-          <a href="#contact" class="magnetic">Contact</a>
+        <a href="#hero" class="nav-logo">SB<span class="nav-logo-dot">.</span></a>
+        <nav class="links" id="nav-links">
+          <a href="#about" class="magnetic nav-link">About</a>
+          <a href="#studio" class="magnetic nav-link">Studio</a>
+          <a href="#services" class="magnetic nav-link">Services</a>
+          <a href="#builder" class="magnetic nav-link">Builder</a>
+          <a href="#think" class="magnetic nav-link">Think</a>
+          <a href="#skills" class="magnetic nav-link">Toolkit</a>
+          <a href="#cases" class="magnetic nav-link">Cases</a>
+          <a href="#selected-works" class="magnetic nav-link">Works</a>
+          <a href="#experiments" class="magnetic nav-link">Playground</a>
+          <a href="#story" class="magnetic nav-link">Why</a>
+          <a href="#contact" class="magnetic nav-link">Contact</a>
         </nav>
-      </header>
-
-      <div class="theme-toggle-wrap">
-        <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle color theme" aria-pressed="false">
-          <span id="theme-icon">🌑</span>
-          <span id="theme-text">Neon Dark</span>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
         </button>
-      </div>
+      </header>
 
       <!-- HERO SECTION -->
       <section id="hero" class="hero">
@@ -288,6 +276,17 @@ document.querySelector('h1').addEventListener('click', function() {
             <div class="about-text-block">
               <p class="section-kicker reveal-up">Creative Identity</p>
               <h2 class="section-title split-text">Who I Am.</h2>
+              <div class="about-avatar-row reveal-up">
+                <div class="about-avatar-wrap">
+                  <img src="assets/sourav-avatar.png" alt="Sourav Biswas — developer portrait" class="about-avatar" width="200" height="200" />
+                  <div class="about-avatar-ring"></div>
+                </div>
+                <div class="about-avatar-meta">
+                  <p class="about-name">Sourav Biswas</p>
+                  <p class="about-role">Tech Artist &amp; Website Developer</p>
+                  <p class="about-location">📍 Pune, India</p>
+                </div>
+              </div>
               <p class="about-desc reveal-up">
                 I'm Sourav, a Tech Artist building immersive digital experiences where data, AI, and motion work together.
               </p>
@@ -301,7 +300,7 @@ document.querySelector('h1').addEventListener('click', function() {
                 <span class="magnetic">Story</span>
               </div>
             </div>
-            
+
             <div class="about-stack">
               <div class="about-card glass reveal-up">
                 <div class="about-card-index">01</div>
@@ -536,43 +535,38 @@ document.querySelector('h1').addEventListener('click', function() {
         </div>
       </section>
 
-      <!-- ====================== CONTACT FORM - RESUME STYLE (Updated) ====================== -->
-      <section id="contact" class="py-24 bg-[#0a0a0a] border-t border-cyan-500/20">
-        <div class="max-w-5xl mx-auto px-6">
-          <div class="text-center mb-12">
-            <h2 class="text-5xl font-bold tracking-tight text-white mb-3">Let’s Build Your Website</h2>
-            <p class="text-2xl text-cyan-400">I develop modern, fast, and beautiful websites from scratch.<br>Portfolio, business, SaaS, or full-stack — tell me what you need.</p>
+      <!-- CONTACT SECTION -->
+      <section id="contact" class="section contact-section">
+        <div class="container">
+          <div class="contact-header">
+            <p class="section-kicker reveal-up">Let's Work Together</p>
+            <h2 class="section-title split-text">Let's Build Your Website.</h2>
+            <p class="section-subtitle reveal-up">I develop modern, fast, and beautiful websites from scratch.<br>Portfolio, business, SaaS, or full-stack — tell me what you need.</p>
+            <p class="contact-services-strip reveal-up">Website Development &nbsp;•&nbsp; Portfolio Sites &nbsp;•&nbsp; Business Pages &nbsp;•&nbsp; Interactive Experiences</p>
           </div>
 
-          <p class="contact-services text-center text-lg text-gray-400 mb-8">Website Development • Portfolio Sites • Business Pages • Interactive Experiences</p>
-
-          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="max-w-3xl mx-auto bg-zinc-950 border border-cyan-500/10 rounded-3xl p-10 md:p-14">
-            <div class="grid md:grid-cols-2 gap-8">
-              <div>
-                <label class="block text-xs font-medium text-gray-400 mb-3">YOUR NAME</label>
-                <input type="text" name="name" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
+          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="contact-form-card glass reveal-up">
+            <div class="contact-row">
+              <div class="contact-field">
+                <label class="contact-label" for="contact-name">Your Name</label>
+                <input id="contact-name" type="text" name="name" required placeholder="Sourav Biswas" class="contact-input" />
               </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-400 mb-3">EMAIL ADDRESS</label>
-                <input type="email" name="email" required class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-2xl px-7 py-5 text-white text-lg">
+              <div class="contact-field">
+                <label class="contact-label" for="contact-email">Email Address</label>
+                <input id="contact-email" type="email" name="email" required placeholder="hello@example.com" class="contact-input" />
               </div>
             </div>
 
-            <div class="mt-8">
-              <label class="block text-xs font-medium text-gray-400 mb-3">WHAT KIND OF WEBSITE DO YOU NEED?</label>
-              <textarea name="message" rows="6" required placeholder="Portfolio website • Business landing page • SaaS dashboard • E-commerce • Or just an idea..."
-                        class="w-full bg-black border border-cyan-500/30 focus:border-cyan-400 rounded-3xl px-7 py-5 text-white text-lg resize-none"></textarea>
+            <div class="contact-field">
+              <label class="contact-label" for="contact-message">What Kind of Website Do You Need?</label>
+              <textarea id="contact-message" name="message" rows="6" required placeholder="Portfolio website • Business landing page • SaaS dashboard • E-commerce • Or just an idea..." class="contact-textarea"></textarea>
             </div>
 
-            <button type="submit"
-                    class="mt-10 w-full bg-gradient-to-r from-cyan-400 to-purple-400 hover:from-cyan-300 hover:to-purple-300 text-black font-semibold text-2xl py-7 rounded-3xl transition-all active:scale-95 magnetic">
-              SEND BRIEF — LET’S BUILD IT
-            </button>
-
-            <div id="form-status" class="mt-6 text-center text-sm font-medium hidden"></div>
+            <button type="submit" class="contact-submit magnetic">Send Brief — Let's Build It</button>
+            <div id="form-status" class="form-status hidden"></div>
           </form>
 
-          <p>Or email directly: <a href="mailto:biswasmail631@gmail.com" style="color: #00ffcc; text-decoration: underline;">biswasmail631@gmail.com</a></p>
+          <p class="contact-direct reveal-up">Or email directly: <a href="mailto:biswasmail631@gmail.com" class="contact-email-link">biswasmail631@gmail.com</a></p>
         </div>
       </section>
       <!-- CREATIVE EXPERIMENTS -->
@@ -635,52 +629,8 @@ document.querySelector('h1').addEventListener('click', function() {
             <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="view-all">View all on GitHub →</a>
           </div>
 
-          <div class="repo-grid">
-            <div class="repo-card reveal-up">
-              <h3>Souravjr0</h3>
-              <span class="lang">CSS</span>
-              <p>❄️ My personal portfolio site with a neon cyber aesthetic.</p>
-              <p class="repo-outcome">Outcome: a sharp personal brand page built to feel bold and memorable.</p>
-              <div class="repo-tags"><span>Responsive</span><span>Motion</span></div>
-              <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener">View repo →</a>
-            </div>
-
-            <div class="repo-card reveal-up" style="transition-delay: 0.08s;">
-              <h3>Claude-guardian</h3>
-              <span class="lang">Python</span>
-              <p>AI safety sandbox for testing LLMs against prompt injections, jailbreaks, and hallucinations.</p>
-              <p class="repo-outcome">Outcome: a practical evaluation layer for safer prompt experimentation.</p>
-              <div class="repo-tags"><span>AI Safety</span><span>Python</span></div>
-              <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener">View repo →</a>
-            </div>
-
-            <div class="repo-card reveal-up" style="transition-delay: 0.16s;">
-              <h3>Habit-Tracker</h3>
-              <span class="lang">JavaScript</span>
-              <p>Simple daily habit tracker with local storage and no backend dependencies.</p>
-              <p class="repo-outcome">Outcome: a lightweight productivity tool that works instantly in the browser.</p>
-              <div class="repo-tags"><span>LocalStorage</span><span>UI</span></div>
-              <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener">View repo →</a>
-            </div>
-
-            <div class="repo-card reveal-up" style="transition-delay: 0.24s;">
-              <h3>Zunes-wallet</h3>
-              <span class="lang">Web3</span>
-              <p>Ethereum crypto wallet interface with a clean product-style layout.</p>
-              <p class="repo-outcome">Outcome: a simple Web3 UI concept focused on clarity and trust.</p>
-              <div class="repo-tags"><span>Ethereum</span><span>Web3</span></div>
-              <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener">View repo →</a>
-            </div>
-
-            <div class="repo-card reveal-up" style="transition-delay: 0.32s;">
-              <h3>Cluely</h3>
-              <span class="lang">AI</span>
-              <p>AI-powered interview preparation tool for focused practice and confidence building.</p>
-              <p class="repo-outcome">Outcome: a guided prep workflow for faster interview readiness.</p>
-              <div class="repo-tags"><span>AI</span><span>Prep</span></div>
-              <a href="https://github.com/souravjr0/Cluely" target="_blank" rel="noopener">View repo →</a>
-            </div>
-          </div>
+          <!-- GitHub projects fetched dynamically -->
+          <div id="github-projects" class="repo-grid"></div>
         </div>
       </section>
 
@@ -746,17 +696,19 @@ document.querySelector('h1').addEventListener('click', function() {
 
   <script src="script.js"></script>
 
-  <footer class="site-footer">
-    <div class="footer-container" style="background:rgba(10,10,20,0.95); padding:2rem 1rem; text-align:center; border-top:2px solid #00ffcc;">
-      <p class="copyright" style="color:#ccc; margin-bottom:1rem;">&copy; 2026 Sourav Biswas. All Rights Reserved.</p>
-      
-      <div class="footer-links" style="margin-bottom:1rem;">
-        <a href="https://github.com/souravjr0" target="_blank" style="color:#00ffcc; margin:0 15px; text-decoration:none;">GitHub</a>
-        <a href="https://x.com/Souravjr0" target="_blank" style="color:#00ffcc; margin:0 15px; text-decoration:none;">𝕏</a>
-        <a href="mailto:biswasmail631@gmail.com" style="color:#00ffcc; margin:0 15px; text-decoration:none;">Email</a>
-      </div>
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">&#8593;</button>
 
-      <p class="footer-note" style="color:#666; font-size:0.9rem;">Made with neon &amp; code • Pune, India</p>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copyright">&copy; 2026 Sourav Biswas. All Rights Reserved.</p>
+      <nav class="footer-links" aria-label="Social links">
+        <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+        <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
+        <a href="https://x.com/Souravjr0" target="_blank" rel="noopener" class="footer-link">&#120143; Twitter</a>
+        <a href="mailto:biswasmail631@gmail.com" class="footer-link">Email</a>
+      </nav>
+      <p class="footer-note">Made with neon &amp; code &bull; Pune, India</p>
     </div>
   </footer>
 </body>

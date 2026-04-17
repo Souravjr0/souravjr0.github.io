@@ -592,43 +592,121 @@ if (form) {
   });
 }
 
-// ====================== PERSISTENT THEME TOGGLE ======================
-const toggleBtn = document.getElementById('theme-toggle');
-const themeIcon = document.getElementById('theme-icon');
-const themeText = document.getElementById('theme-text');
+// ============================================================
+//  NEW JS — Phase 2 Overhaul
+// ============================================================
 
-function setTheme(isLight) {
-  document.documentElement.classList.add('theme-switching');
+// Hamburger / Mobile Nav
+(function () {
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  if (!hamburger || !navLinks) return;
 
-  if (isLight) {
-    document.documentElement.classList.add('light-mode');
-    if (themeIcon) themeIcon.textContent = '☀️';
-    if (themeText) themeText.textContent = 'Clean Light (Resume)';
-  } else {
-    document.documentElement.classList.remove('light-mode');
-    if (themeIcon) themeIcon.textContent = '🌑';
-    if (themeText) themeText.textContent = 'Neon Dark';
+  // Create backdrop overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'nav-overlay';
+  document.body.appendChild(overlay);
+
+  function openNav() {
+    navLinks.classList.add('is-open');
+    hamburger.classList.add('is-open');
+    overlay.classList.add('is-visible');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
   }
-  if (toggleBtn) {
-    toggleBtn.setAttribute('aria-pressed', String(isLight));
+
+  function closeNav() {
+    navLinks.classList.remove('is-open');
+    hamburger.classList.remove('is-open');
+    overlay.classList.remove('is-visible');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
   }
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
-  window.requestAnimationFrame(() => {
-    window.setTimeout(() => {
-      document.documentElement.classList.remove('theme-switching');
-    }, 180);
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.contains('is-open') ? closeNav() : openNav();
   });
-}
 
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'light') {
-  setTheme(true);
-}
+  overlay.addEventListener('click', closeNav);
 
-if (toggleBtn) {
-  toggleBtn.addEventListener('click', () => {
-    const isLight = !document.documentElement.classList.contains('light-mode');
-    setTheme(isLight);
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeNav);
   });
-}
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeNav();
+  });
+})();
+
+// Scroll Progress Bar
+(function () {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    bar.style.width = pct + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+})();
+
+// Active Nav Link on Scroll
+(function () {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  if (!sections.length || !navLinks.length) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          link.classList.toggle('is-active', href === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+})();
+
+// Back to Top Button
+(function () {
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('is-visible', window.scrollY > 600);
+  }, { passive: true });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+// Skill bar mobile IntersectionObserver fallback
+(function () {
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024) return;
+
+  document.querySelectorAll('.skill-row').forEach(row => {
+    const fill = row.querySelector('.skill-fill');
+    if (!fill) return;
+    const level = row.dataset.level || 80;
+    fill.style.setProperty('--skill-level', level + '%');
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          fill.style.width = level + '%';
+          obs.disconnect();
+        }
+      });
+    }, { threshold: 0.2 });
+    obs.observe(row);
+  });
+})();
