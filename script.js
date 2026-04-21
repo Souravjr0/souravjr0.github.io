@@ -130,7 +130,7 @@ if (useMotion) {
 // ------- GSAP enhanced animations (desktop) -------
 if (useMotion) {
   // Project cards tilt
-  document.querySelectorAll('.project-card, .service-card').forEach(card => {
+  document.querySelectorAll('.service-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const r = card.getBoundingClientRect();
       const x = e.clientX - r.left, y = e.clientY - r.top;
@@ -172,3 +172,195 @@ if (useMotion) {
     setTimeout(() => status.classList.add('hidden'), 8000);
   });
 })();
+
+
+// ------- Three.js Interactive TorusKnot + Dust -------
+if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
+  const initThreeJS = () => {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Abstract Core
+    const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 120, 20);
+    const mat = new THREE.MeshBasicMaterial({ 
+        color: 0xc9a96e, 
+        wireframe: true, 
+        transparent: true, 
+        opacity: 0.18 
+    });
+    const coreMesh = new THREE.Mesh(geometry, mat);
+    
+    const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 120, 20);
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0x1a1917 });
+    const innerMesh = new THREE.Mesh(innerGeom, innerMat);
+    coreMesh.add(innerMesh);
+    
+    // Add particle dust
+    const dustGeom = new THREE.BufferGeometry();
+    const dustCount = 400;
+    const dustPos = new Float32Array(dustCount * 3);
+    for(let i=0; i<dustCount*3; i++){
+        dustPos[i] = (Math.random() - 0.5) * 25;
+    }
+    dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({ size: 0.04, color: 0x7c9e9a, transparent: true, opacity: 0.5 });
+    const dustMesh = new THREE.Points(dustGeom, dustMat);
+
+    scene.add(coreMesh);
+    scene.add(dustMesh);
+
+    camera.position.z = 7;
+    // Move slightly right and up so it balances the text
+    coreMesh.position.x = 2;
+    coreMesh.position.y = 0;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+    });
+
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        const targetX = mouseX * 0.001;
+        const targetY = mouseY * 0.001;
+
+        coreMesh.rotation.y += 0.05 * (targetX - coreMesh.rotation.y);
+        coreMesh.rotation.x += 0.05 * (targetY - coreMesh.rotation.x);
+        coreMesh.rotation.z += 0.001;
+        
+        dustMesh.rotation.y = t * 0.03;
+        dustMesh.rotation.x = t * 0.01;
+
+        renderer.render(scene, camera);
+    };
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  };
+  initThreeJS();
+}
+
+// ------- Magnetic Buttons -------
+if (useMotion) {
+  document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width/2) * 0.3;
+      const y = (e.clientY - rect.top - rect.height/2) * 0.3;
+      gsap.to(btn, { x, y, duration: 0.4, ease: 'power2.out' });
+    });
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+    });
+  });
+}
+
+// ------- Project Stacking Effect -------
+window.addEventListener('load', () => {
+  if (useMotion) {
+    const cards = gsap.utils.toArray('.project-card');
+    cards.forEach((card, i) => {
+      if (i === cards.length - 1) return;
+      gsap.to(card, {
+        scale: 0.94,
+        opacity: 0.4,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: cards[i + 1],
+          start: 'top 85%',
+          end: 'top 20%',
+          scrub: true,
+        }
+      });
+    });
+  }
+});
+
+// ------- Text Scramble -------
+class TextScramble {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  setText(newText) {
+    const oldText = this.el.innerText;
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => this.resolve = resolve);
+    this.queue = [];
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || '';
+      const to = newText[i] || '';
+      const start = Math.floor(Math.random() * 40);
+      const end = start + Math.floor(Math.random() * 40);
+      this.queue.push({ from, to, start, end });
+    }
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  update() {
+    let output = '';
+    let complete = 0;
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) {
+        complete++;
+        output += to;
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.randomChar();
+          this.queue[i].char = char;
+        }
+        output += `<span class="scramble-char">${char}</span>`;
+      } else {
+        output += from;
+      }
+    }
+    this.el.innerHTML = output;
+    if (complete === this.queue.length) {
+      this.resolve();
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
+    }
+  }
+  randomChar() {
+    return this.chars[Math.floor(Math.random() * this.chars.length)];
+  }
+}
+
+const statementEl = document.querySelector('.hero-statement');
+if (statementEl && useMotion) {
+    const originalHTML = statementEl.innerHTML;
+    const originalText = statementEl.innerText;
+    statementEl.innerHTML = '';
+    const fx = new TextScramble(statementEl);
+    
+    setTimeout(() => {
+        fx.setText(originalText).then(() => {
+            statementEl.innerHTML = originalHTML; // restore br tags
+        });
+    }, 2400);
+}

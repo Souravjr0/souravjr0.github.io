@@ -250,7 +250,9 @@ h1, h2, h3 {
   padding-top: 6rem;
   position: relative;
 }
-.hero-inner { max-width: 900px; }
+#hero-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: auto; opacity: 0.75; }
+.hero-inner { max-width: 900px; position: relative; z-index: 10; pointer-events: none; }
+.hero-inner * { pointer-events: auto; }
 .hero-badge-row {
   display: flex; align-items: center; gap: 1.5rem;
   margin-bottom: 2rem; flex-wrap: wrap;
@@ -450,21 +452,25 @@ h1, h2, h3 {
 /* PROJECTS */
 .projects-section { border-top: 1px solid var(--border); }
 .projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem; margin-bottom: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto 4rem auto;
+  position: relative;
 }
 .project-card {
   background: var(--bg-2);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.3s, transform 0.35s, box-shadow 0.35s;
+  position: sticky;
+  top: 100px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
+  transition: border-color 0.3s;
 }
 .project-card:hover {
   border-color: var(--border-hi);
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
 }
 .project-cover {
   display: flex; justify-content: space-between;
@@ -618,3 +624,32 @@ h1, h2, h3 {
 /* Placeholder text colour */
 ::placeholder { color: var(--bg-3); opacity: 1; }
 ::-webkit-input-placeholder { color: var(--text-dim); opacity: 0.5; }
+
+/* PROCESS */
+.process-section { border-top: 1px solid var(--border); }
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2.5rem;
+}
+.process-step {
+  position: relative;
+  padding-top: 1.5rem;
+}
+.process-step::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 40px; height: 1px;
+  background: var(--gold);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.process-step:hover::before { width: 100%; }
+.step-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.5rem; font-weight: 700;
+  color: rgba(201,169,110,0.15);
+  margin-bottom: 0.5rem; line-height: 1;
+}
+.process-step h3 { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--text); }
+.process-step p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; }
+
+.scramble-char { color: var(--gold); }

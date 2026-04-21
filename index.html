@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="loading">
 
@@ -42,6 +43,7 @@
       <a href="#about" class="nav-link">About</a>
       <a href="#services" class="nav-link">Services</a>
       <a href="#skills" class="nav-link">Skills</a>
+      <a href="#process" class="nav-link">Process</a>
       <a href="#projects" class="nav-link">Projects</a>
       <a href="#contact" class="nav-link cta-nav">Let's Talk</a>
     </nav>
@@ -54,6 +56,7 @@
 
     <!-- 01 HERO -->
     <section id="hero" class="hero-section">
+      <canvas id="hero-canvas"></canvas>
       <div class="hero-inner">
         <div class="hero-badge-row reveal-fade">
           <span class="available-badge">
@@ -191,10 +194,43 @@
       </div>
     </section>
 
-    <!-- 05 PROJECTS -->
+    
+    <!-- 05 PROCESS -->
+    <section id="process" class="section process-section">
+      <div class="container">
+        <div class="section-label">05 / Process</div>
+        <h2 class="section-title">How I Work.</h2>
+        <p class="section-sub">A structured approach to moving from abstract ideas to shipped products.</p>
+        <div class="process-grid">
+          <div class="process-step reveal-up">
+            <div class="step-num">01</div>
+            <h3>Discover & Architect</h3>
+            <p>Understanding the problem, mapping data flows, and defining technical architecture before writing code.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">02</div>
+            <h3>Design & Motion</h3>
+            <p>Crafting the visual language and interaction design. Using motion to guide attention and create a premium feel.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">03</div>
+            <h3>Build & Integrate</h3>
+            <p>Writing clean, scalable code. Connecting AI models, managing databases, and bringing the frontend to life.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">04</div>
+            <h3>Test & Ship</h3>
+            <p>Rigorous performance profiling, security checks, and responsive testing across devices before launching.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 PROJECTS -->
+
     <section id="projects" class="section projects-section">
       <div class="container">
-        <div class="section-label">05 / Projects</div>
+        <div class="section-label">06 / Projects</div>
         <h2 class="section-title">Selected Works.</h2>
         <p class="section-sub">Five builds showing how I shape data, AI, and design into usable systems.</p>
         <div class="projects-grid">
@@ -271,10 +307,10 @@
       </div>
     </section>
 
-    <!-- 06 CONTACT -->
+    <!-- 07 CONTACT -->
     <section id="contact" class="section contact-section">
       <div class="container">
-        <div class="section-label">06 / Contact</div>
+        <div class="section-label">07 / Contact</div>
         <h2 class="section-title">Let's Build Something.</h2>
         <p class="section-sub">Portfolio, business, SaaS, or full-stack&mdash;tell me what you need.</p>
         <div class="contact-wrap">
