@@ -468,6 +468,8 @@ h1, h2, h3 {
   top: 100px;
   box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
   transition: border-color 0.3s;
+  will-change: transform, opacity;
+  transform: translateZ(0);
 }
 .project-card:hover {
   border-color: var(--border-hi);

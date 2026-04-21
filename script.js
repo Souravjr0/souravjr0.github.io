@@ -185,10 +185,10 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
     // Abstract Core
-    const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 120, 20);
+    const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 64, 12);
     const mat = new THREE.MeshBasicMaterial({ 
         color: 0xc9a96e, 
         wireframe: true, 
@@ -197,14 +197,14 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
     });
     const coreMesh = new THREE.Mesh(geometry, mat);
     
-    const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 120, 20);
+    const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 64, 12);
     const innerMat = new THREE.MeshBasicMaterial({ color: 0x1a1917 });
     const innerMesh = new THREE.Mesh(innerGeom, innerMat);
     coreMesh.add(innerMesh);
     
     // Add particle dust
     const dustGeom = new THREE.BufferGeometry();
-    const dustCount = 400;
+    const dustCount = 150;
     const dustPos = new Float32Array(dustCount * 3);
     for(let i=0; i<dustCount*3; i++){
         dustPos[i] = (Math.random() - 0.5) * 25;
@@ -235,6 +235,9 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
 
     const animate = () => {
         requestAnimationFrame(animate);
+        // Pause rendering if scrolled past hero section to save CPU/GPU
+        if (window.scrollY > window.innerHeight + 50) return;
+
         const t = clock.getElapsedTime();
 
         const targetX = mouseX * 0.001;
@@ -263,13 +266,19 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
 // ------- Magnetic Buttons -------
 if (useMotion) {
   document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
+    let rect;
+    btn.addEventListener('mouseenter', () => {
+      // Cache the bounding rect once on enter to avoid heavy layout recalculations
+      rect = btn.getBoundingClientRect();
+    });
     btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
+      if (!rect) return;
       const x = (e.clientX - rect.left - rect.width/2) * 0.3;
       const y = (e.clientY - rect.top - rect.height/2) * 0.3;
       gsap.to(btn, { x, y, duration: 0.4, ease: 'power2.out' });
     });
     btn.addEventListener('mouseleave', () => {
+      rect = null;
       gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
     });
   });
