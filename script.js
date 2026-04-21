@@ -190,7 +190,7 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
     // Abstract Core
     const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 64, 12);
     const mat = new THREE.MeshBasicMaterial({ 
-        color: 0xc9a96e, 
+        color: 0xff5722, 
         wireframe: true, 
         transparent: true, 
         opacity: 0.18 
@@ -198,7 +198,7 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
     const coreMesh = new THREE.Mesh(geometry, mat);
     
     const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 64, 12);
-    const innerMat = new THREE.MeshBasicMaterial({ color: 0x1a1917 });
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0x1e2128 });
     const innerMesh = new THREE.Mesh(innerGeom, innerMat);
     coreMesh.add(innerMesh);
     
@@ -210,7 +210,7 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
         dustPos[i] = (Math.random() - 0.5) * 25;
     }
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-    const dustMat = new THREE.PointsMaterial({ size: 0.04, color: 0x7c9e9a, transparent: true, opacity: 0.5 });
+    const dustMat = new THREE.PointsMaterial({ size: 0.04, color: 0x38bdf8, transparent: true, opacity: 0.5 });
     const dustMesh = new THREE.Points(dustGeom, dustMat);
 
     scene.add(coreMesh);
