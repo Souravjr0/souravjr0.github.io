@@ -1,0 +1,240 @@
+//@version=5
+indicator("Elite Super-Consensus & Dynamic Trailing Stop Engine", overlay=true, max_lines_limit=500, max_labels_limit=500)
+
+// ==============================================================================
+// 1. INPUT PARAMETERS & STRATEGY SETTINGS
+// ==============================================================================
+atrPeriod = input.int(14, "ATR Period for SL/TP", group="Risk Management Settings")
+slMultiplier = input.float(2.0, "Stop Loss ATR Multiplier", group="Risk Management Settings")
+tpMultiplier = input.float(3.0, "Take Profit ATR Multiplier", group="Risk Management Settings")
+
+chPeriod = input.int(22, "Chandelier Exit Period", group="Chandelier Trailing Stop Settings")
+chMult = input.float(3.0, "Chandelier Exit ATR Multiplier", group="Chandelier Trailing Stop Settings")
+
+emaFastLen = input.int(9, "EMA Fast Length", group="EMA Cross + RSI Settings")
+emaSlowLen = input.int(21, "EMA Slow Length", group="EMA Cross + RSI Settings")
+rsiLen = input.int(14, "RSI Period", group="Oscillator Settings")
+
+webhookSecret = input.string("YOUR_SECRET", "TradingView Webhook Secret", group="Automation Settings", tooltip="Should match TRADINGVIEW_WEBHOOK_SECRET in your .env")
+
+// ==============================================================================
+// 2. MATHEMATICAL INDICATOR CALCULATIONS
+// ==============================================================================
+// Common variables
+atr = ta.atr(atrPeriod)
+trVal = ta.tr(true)
+
+// Indicator 1: EMA Crossover + RSI (14)
+emaFast = ta.ema(close, emaFastLen)
+emaSlow = ta.ema(close, emaSlowLen)
+rsiVal = ta.rsi(close, rsiLen)
+
+emaCrossUp = ta.crossover(emaFast, emaSlow)
+emaCrossDown = ta.crossunder(emaFast, emaSlow)
+
+bool emaRsiLong = emaCrossUp and rsiVal > 50
+bool emaRsiShort = emaCrossDown and rsiVal < 50
+
+// Indicator 2: Bollinger Bands + RSI Mean Reversion
+[bbMid, bbUpper, bbLower] = ta.bb(close, 20, 2)
+bool meanRevLong = rsiVal < 30 or close <= bbLower
+bool meanRevShort = rsiVal > 70 or close >= bbUpper
+
+// Indicator 3: Donchian Channel Breakout
+donchianHigh = ta.highest(high[1], 20)
+donchianLow = ta.lowest(low[1], 20)
+bool breakoutLong = close > donchianHigh
+bool breakoutShort = close < donchianLow
+
+// Indicator 4: Supertrend (10, 3.0)
+[supertrendVal, stDirection] = ta.supertrend(3, 10)
+bool stLong = stDirection < 0
+bool stShort = stDirection > 0
+
+// Indicator 5: Ichimoku Cloud (9, 26, 52)
+tenkan = math.avg(ta.highest(high, 9), ta.lowest(low, 9))
+kijun = math.avg(ta.highest(high, 26), ta.lowest(low, 26))
+senkouA = math.avg(tenkan, kijun)
+senkouB = math.avg(ta.highest(high, 52), ta.lowest(low, 52))
+bool ichiBull = close > senkouA[26] and close > senkouB[26] and tenkan > kijun
+bool ichiBear = close < senkouA[26] and close < senkouB[26] and tenkan < kijun
+
+// Indicator 6: Squeeze Momentum (LazyBear style)
+dev = ta.stdev(close, 20)
+upperBB = bbMid + 2.0 * dev
+lowerBB = bbMid - 2.0 * dev
+
+kcMid = ta.ema(close, 20)
+kcATR = ta.sma(trVal, 20)
+upperKC = kcMid + 1.5 * kcATR
+lowerKC = kcMid - 1.5 * kcATR
+
+bool sqOn = (lowerBB > lowerKC) and (upperBB < upperKC)
+bool sqOff = (lowerBB < lowerKC) or (upperBB > upperKC)
+
+highestHigh = ta.highest(high, 20)
+lowestLow = ta.lowest(low, 20)
+midpoint = math.avg(highestHigh, lowestLow)
+avgMid = math.avg(midpoint, bbMid)
+diff = close - avgMid
+sqMomVal = ta.linreg(diff, 20, 0)
+
+bool sqMomLong = not sqOn and sqMomVal > 0 and sqMomVal > nz(sqMomVal[1])
+bool sqMomShort = not sqOn and sqMomVal < 0 and sqMomVal < nz(sqMomVal[1])
+
+// ==============================================================================
+// 3. SUPER-CONSENSUS SIGNAL ENGINE (>= 4 of 6 votes)
+// ==============================================================================
+int buyVotes = 0
+int sellVotes = 0
+
+buyVotes += (emaRsiLong ? 1 : 0)
+buyVotes += (meanRevLong ? 1 : 0)
+buyVotes += (breakoutLong ? 1 : 0)
+buyVotes += (stLong ? 1 : 0)
+buyVotes += (ichiBull ? 1 : 0)
+buyVotes += (sqMomLong ? 1 : 0)
+
+sellVotes += (emaRsiShort ? 1 : 0)
+sellVotes += (meanRevShort ? 1 : 0)
+sellVotes += (breakoutShort ? 1 : 0)
+sellVotes += (stShort ? 1 : 0)
+sellVotes += (ichiBear ? 1 : 0)
+sellVotes += (sqMomShort ? 1 : 0)
+
+bool isBuySignal = buyVotes >= 4
+bool isSellSignal = sellVotes >= 4
+
+// ==============================================================================
+// 4. CHANDELIER EXIT & DYNAMIC POSITION TRACKING
+// ==============================================================================
+chATR = ta.sma(trVal, chPeriod)
+chHighMax = ta.highest(high, chPeriod)
+chLowMin = ta.lowest(low, chPeriod)
+float chandelierLong = chHighMax - chATR * chMult
+float chandelierShort = chLowMin + chATR * chMult
+
+// Persistent variables for state tracking
+var float currentStop = na
+var int activePosition = 0 // 1 = Long, -1 = Short, 0 = None
+var float entryPrice = na
+var float takeProfit = na
+var float stopLoss = na
+
+if (isBuySignal and activePosition <= 0)
+    activePosition := 1
+    entryPrice := close
+    stopLoss := close - atr * slMultiplier
+    takeProfit := close + atr * tpMultiplier
+    currentStop := chandelierLong
+
+if (isSellSignal and activePosition >= 0)
+    activePosition := -1
+    entryPrice := close
+    stopLoss := close + atr * slMultiplier
+    takeProfit := close - atr * tpMultiplier
+    currentStop := chandelierShort
+
+// Trailing stop updates
+if (activePosition == 1)
+    currentStop := math.max(nz(currentStop, chandelierLong), chandelierLong)
+    if (close < currentStop or close <= stopLoss)
+        activePosition := 0
+        entryPrice := na
+        stopLoss := na
+        takeProfit := na
+        currentStop := na
+    else if (close >= takeProfit)
+        activePosition := 0
+        entryPrice := na
+        stopLoss := na
+        takeProfit := na
+        currentStop := na
+
+if (activePosition == -1)
+    currentStop := math.min(nz(currentStop, chandelierShort), chandelierShort)
+    if (close > currentStop or close >= stopLoss)
+        activePosition := 0
+        entryPrice := na
+        stopLoss := na
+        takeProfit := na
+        currentStop := na
+    else if (close <= takeProfit)
+        activePosition := 0
+        entryPrice := na
+        stopLoss := na
+        takeProfit := na
+        currentStop := na
+
+// ==============================================================================
+// 5. CHART VISUALIZATION & PLOTTING
+// ==============================================================================
+// Signal shapes
+plotshape(isBuySignal and activePosition[1] <= 0, title="Consensus BUY", style=shape.triangleup, location=location.belowbar, color=color.new(color.green, 10), size=size.normal, text="BUY")
+plotshape(isSellSignal and activePosition[1] >= 0, title="Consensus SELL", style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 10), size=size.normal, text="SELL")
+
+// Level Lines
+plot(activePosition == 1 ? currentStop : na, "Chandelier Trailing Long", color=color.orange, style=plot.style_linebr, linewidth=2)
+plot(activePosition == -1 ? currentStop : na, "Chandelier Trailing Short", color=color.orange, style=plot.style_linebr, linewidth=2)
+
+plot(activePosition != 0 ? entryPrice : na, "Active Entry", color=color.blue, style=plot.style_linebr, linewidth=1)
+plot(activePosition != 0 ? stopLoss : na, "Hard Stop Loss (SL)", color=color.red, style=plot.style_linebr, linewidth=1)
+plot(activePosition != 0 ? takeProfit : na, "Hard Take Profit (TP)", color=color.green, style=plot.style_linebr, linewidth=1)
+
+// ==============================================================================
+// 6. RICH USER OVERLAY DASHBOARD
+// ==============================================================================
+var table panel = table.new(position.top_right, 4, 9, bgcolor=color.new(color.black, 15), border_color=color.black, border_width=1)
+
+if barstate.islast
+    // Panel title rows
+    table.cell(panel, 0, 0, "6-INDICATOR CONSENSUS SCANNER", text_color=color.white, bgcolor=color.black, text_size=size.small)
+    table.cell(panel, 1, 0, "", bgcolor=color.black)
+    table.cell(panel, 2, 0, "", bgcolor=color.black)
+    table.cell(panel, 3, 0, "", bgcolor=color.black)
+
+    table.cell(panel, 0, 1, "Technical System Indicator", text_color=color.white, bgcolor=color.navy, text_size=size.small)
+    table.cell(panel, 1, 1, "Indicator State", text_color=color.white, bgcolor=color.navy, text_size=size.small)
+    table.cell(panel, 2, 1, "Premium Volatility Indicator", text_color=color.white, bgcolor=color.navy, text_size=size.small)
+    table.cell(panel, 3, 1, "Indicator State", text_color=color.white, bgcolor=color.navy, text_size=size.small)
+
+    // Cell coloring helper function
+    f_set_cell(tbl, col, row, label, state) =>
+        bg = state == "LONG" ? color.new(color.green, 30) : state == "SHORT" ? color.new(color.red, 30) : color.new(color.gray, 50)
+        table.cell(tbl, col, row, label, text_color=color.white, bgcolor=bg, text_size=size.small)
+        table.cell(tbl, col + 1, row, state, text_color=color.white, bgcolor=bg, text_size=size.small)
+
+    f_set_cell(panel, 0, 2, "1. EMA Crossover + RSI", (emaRsiLong ? "LONG" : emaRsiShort ? "SHORT" : "NEUTRAL"))
+    f_set_cell(panel, 0, 3, "2. Bollinger Mean-Rev", (meanRevLong ? "LONG" : meanRevShort ? "SHORT" : "NEUTRAL"))
+    f_set_cell(panel, 0, 4, "3. Donchian Channel Breakout", (breakoutLong ? "LONG" : breakoutShort ? "SHORT" : "NEUTRAL"))
+    
+    f_set_cell(panel, 2, 2, "4. Supertrend", (stLong ? "LONG" : stShort ? "SHORT" : "NEUTRAL"))
+    f_set_cell(panel, 2, 3, "5. Ichimoku Cloud Direction", (ichiBull ? "LONG" : ichiBear ? "SHORT" : "NEUTRAL"))
+    f_set_cell(panel, 2, 4, "6. Squeeze Momentum", (sqMomLong ? "LONG" : sqMomShort ? "SHORT" : "NEUTRAL"))
+
+    // Super-consensus summary block
+    scoreStr = str.tostring(math.max(buyVotes, sellVotes)) + "/6"
+    consensusState = buyVotes >= 4 ? "BUY" : sellVotes >= 4 ? "SELL" : "WAIT"
+    consensusBg = consensusState == "BUY" ? color.green : consensusState == "SELL" ? color.red : color.gray
+    table.cell(panel, 0, 5, "DECISION CONSENSUS", text_color=color.white, bgcolor=consensusBg, text_size=size.small)
+    table.cell(panel, 1, 5, consensusState + " (" + scoreStr + ")", text_color=color.white, bgcolor=consensusBg, text_size=size.small)
+
+    table.cell(panel, 2, 5, "ACTIVE PAPER STATE", text_color=color.white, bgcolor=color.purple, text_size=size.small)
+    table.cell(panel, 3, 5, (activePosition == 1 ? "LONG" : activePosition == -1 ? "SHORT" : "NONE"), text_color=color.white, bgcolor=color.purple, text_size=size.small)
+
+    // Current levels row
+    table.cell(panel, 0, 6, "Entry Price", text_color=color.white, bgcolor=color.new(color.blue, 20), text_size=size.small)
+    table.cell(panel, 1, 6, activePosition != 0 ? str.tostring(entryPrice, "#.####") : "-", text_color=color.white, bgcolor=color.new(color.blue, 20), text_size=size.small)
+    table.cell(panel, 2, 6, "Trailing Stop Loss", text_color=color.white, bgcolor=color.new(color.orange, 20), text_size=size.small)
+    table.cell(panel, 3, 6, activePosition != 0 ? str.tostring(currentStop, "#.####") : "-", text_color=color.white, bgcolor=color.new(color.orange, 20), text_size=size.small)
+
+    table.cell(panel, 0, 7, "Hard Stop (SL)", text_color=color.white, bgcolor=color.new(color.red, 20), text_size=size.small)
+    table.cell(panel, 1, 7, activePosition != 0 ? str.tostring(stopLoss, "#.####") : "-", text_color=color.white, bgcolor=color.new(color.red, 20), text_size=size.small)
+    table.cell(panel, 2, 7, "Hard Target (TP)", text_color=color.white, bgcolor=color.new(color.green, 20), text_size=size.small)
+    table.cell(panel, 3, 7, activePosition != 0 ? str.tostring(takeProfit, "#.####") : "-", text_color=color.white, bgcolor=color.new(color.green, 20), text_size=size.small)
+
+// ==============================================================================
+// 7. REAL-TIME API AUTOMATION WEBHOOKS
+// ==============================================================================
+alertcondition(isBuySignal and activePosition[1] <= 0, title="API Buy Webhook", message='{"secret": "{{webhookSecret}}", "symbol": "{{ticker}}", "side": "BUY", "price": "{{close}}", "qty": 0.01}')
+alertcondition(isSellSignal and activePosition[1] >= 0, title="API Sell Webhook", message='{"secret": "{{webhookSecret}}", "symbol": "{{ticker}}", "side": "SELL", "price": "{{close}}", "qty": 0.01}')

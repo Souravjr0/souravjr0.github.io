@@ -29,7 +29,7 @@ if (useMotion) {
     if (dot)  gsap.to(dot,  { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
     if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.7, ease: 'power2.out' });
   });
-  document.querySelectorAll('a, button, .service-card, .skill-card, .project-card, input, textarea').forEach(el => {
+  document.querySelectorAll('a, button, .service-card, .skill-card, .project-card, .short-card, input, textarea').forEach(el => {
     el.addEventListener('mouseenter', () => dot?.classList.add('hover'));
     el.addEventListener('mouseleave', () => dot?.classList.remove('hover'));
   });
@@ -159,7 +159,7 @@ if (useMotion) {
       const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
       if (res.ok) {
         status.textContent = "Message sent! I'll reply within 24 hours.";
-        status.style.color = '#7c9e9a';
+        status.style.color = '#d4508a';
         form.reset();
       } else { throw new Error(); }
     } catch {
@@ -174,90 +174,179 @@ if (useMotion) {
 })();
 
 
-// ------- Three.js Interactive TorusKnot + Dust -------
+// ------- Three.js Morphing Crystal Sphere + Orbiting Rings -------
 if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
   const initThreeJS = () => {
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-    // Abstract Core
-    const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 64, 12);
-    const mat = new THREE.MeshBasicMaterial({ 
-        color: 0xff5722, 
-        wireframe: true, 
-        transparent: true, 
-        opacity: 0.18 
+    // --- Main morphing crystal (Icosahedron) ---
+    const crystalGeom = new THREE.IcosahedronGeometry(2.2, 3);
+    const crystalMat = new THREE.MeshBasicMaterial({
+      color: 0x8B004A,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.22
     });
-    const coreMesh = new THREE.Mesh(geometry, mat);
-    
-    const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 64, 12);
-    const innerMat = new THREE.MeshBasicMaterial({ color: 0x1e2128 });
-    const innerMesh = new THREE.Mesh(innerGeom, innerMat);
-    coreMesh.add(innerMesh);
-    
-    // Add particle dust
+    const crystal = new THREE.Mesh(crystalGeom, crystalMat);
+    // Store original positions for morphing
+    const origPositions = crystalGeom.attributes.position.array.slice();
+
+    // Inner solid glow core
+    const coreGeom = new THREE.IcosahedronGeometry(1.6, 2);
+    const coreMat = new THREE.MeshBasicMaterial({
+      color: 0x8B004A,
+      transparent: true,
+      opacity: 0.06
+    });
+    const coreMesh = new THREE.Mesh(coreGeom, coreMat);
+    crystal.add(coreMesh);
+
+    // --- Orbiting particle ring 1 ---
+    const ring1Group = new THREE.Group();
+    const ring1Count = 80;
+    const ring1Geom = new THREE.BufferGeometry();
+    const ring1Pos = new Float32Array(ring1Count * 3);
+    for (let i = 0; i < ring1Count; i++) {
+      const angle = (i / ring1Count) * Math.PI * 2;
+      ring1Pos[i * 3] = Math.cos(angle) * 3.8;
+      ring1Pos[i * 3 + 1] = (Math.random() - 0.5) * 0.3;
+      ring1Pos[i * 3 + 2] = Math.sin(angle) * 3.8;
+    }
+    ring1Geom.setAttribute('position', new THREE.BufferAttribute(ring1Pos, 3));
+    const ring1Mat = new THREE.PointsMaterial({ size: 0.04, color: 0xd4508a, transparent: true, opacity: 0.7 });
+    const ring1 = new THREE.Points(ring1Geom, ring1Mat);
+    ring1Group.add(ring1);
+
+    // --- Orbiting particle ring 2 (tilted) ---
+    const ring2Group = new THREE.Group();
+    const ring2Count = 60;
+    const ring2Geom = new THREE.BufferGeometry();
+    const ring2Pos = new Float32Array(ring2Count * 3);
+    for (let i = 0; i < ring2Count; i++) {
+      const angle = (i / ring2Count) * Math.PI * 2;
+      ring2Pos[i * 3] = Math.cos(angle) * 4.5;
+      ring2Pos[i * 3 + 1] = (Math.random() - 0.5) * 0.2;
+      ring2Pos[i * 3 + 2] = Math.sin(angle) * 4.5;
+    }
+    ring2Geom.setAttribute('position', new THREE.BufferAttribute(ring2Pos, 3));
+    const ring2Mat = new THREE.PointsMaterial({ size: 0.03, color: 0xF2EFE7, transparent: true, opacity: 0.35 });
+    const ring2 = new THREE.Points(ring2Geom, ring2Mat);
+    ring2Group.add(ring2);
+    ring2Group.rotation.x = Math.PI * 0.35;
+    ring2Group.rotation.z = Math.PI * 0.15;
+
+    // --- Floating diamond shards ---
+    const shardGroup = new THREE.Group();
+    const shardCount = 12;
+    for (let i = 0; i < shardCount; i++) {
+      const shardGeom = new THREE.OctahedronGeometry(0.12 + Math.random() * 0.15, 0);
+      const shardMat = new THREE.MeshBasicMaterial({
+        color: i % 2 === 0 ? 0x8B004A : 0xd4508a,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4 + Math.random() * 0.3
+      });
+      const shard = new THREE.Mesh(shardGeom, shardMat);
+      const r = 4.5 + Math.random() * 3;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.random() * Math.PI;
+      shard.position.set(
+        r * Math.sin(phi) * Math.cos(theta),
+        r * Math.sin(phi) * Math.sin(theta),
+        r * Math.cos(phi)
+      );
+      shard.userData = { speed: 0.3 + Math.random() * 0.8, offset: Math.random() * Math.PI * 2 };
+      shardGroup.add(shard);
+    }
+
+    // --- Background dust ---
     const dustGeom = new THREE.BufferGeometry();
-    const dustCount = 150;
+    const dustCount = 200;
     const dustPos = new Float32Array(dustCount * 3);
-    for(let i=0; i<dustCount*3; i++){
-        dustPos[i] = (Math.random() - 0.5) * 25;
+    for (let i = 0; i < dustCount * 3; i++) {
+      dustPos[i] = (Math.random() - 0.5) * 30;
     }
     dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-    const dustMat = new THREE.PointsMaterial({ size: 0.04, color: 0x38bdf8, transparent: true, opacity: 0.5 });
+    const dustMat = new THREE.PointsMaterial({ size: 0.025, color: 0xF2EFE7, transparent: true, opacity: 0.25 });
     const dustMesh = new THREE.Points(dustGeom, dustMat);
 
-    scene.add(coreMesh);
+    scene.add(crystal);
+    scene.add(ring1Group);
+    scene.add(ring2Group);
+    scene.add(shardGroup);
     scene.add(dustMesh);
 
-    camera.position.z = 7;
-    // Move slightly right and up so it balances the text
-    coreMesh.position.x = 2;
-    coreMesh.position.y = 0;
+    camera.position.z = 8;
+    crystal.position.x = 2.5;
+    crystal.position.y = 0.3;
+    ring1Group.position.copy(crystal.position);
+    ring2Group.position.copy(crystal.position);
+    shardGroup.position.copy(crystal.position);
 
-    let mouseX = 0;
-    let mouseY = 0;
-    const windowHalfX = window.innerWidth / 2;
-    const windowHalfY = window.innerHeight / 2;
+    let mouseX = 0, mouseY = 0;
+    const halfW = window.innerWidth / 2;
+    const halfH = window.innerHeight / 2;
 
-    document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - windowHalfX);
-        mouseY = (event.clientY - windowHalfY);
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX - halfW);
+      mouseY = (e.clientY - halfH);
     });
 
     const clock = new THREE.Clock();
 
     const animate = () => {
-        requestAnimationFrame(animate);
-        // Pause rendering if scrolled past hero section to save CPU/GPU
-        if (window.scrollY > window.innerHeight + 50) return;
+      requestAnimationFrame(animate);
+      if (window.scrollY > window.innerHeight + 50) return;
 
-        const t = clock.getElapsedTime();
+      const t = clock.getElapsedTime();
+      const tx = mouseX * 0.0008;
+      const ty = mouseY * 0.0008;
 
-        const targetX = mouseX * 0.001;
-        const targetY = mouseY * 0.001;
+      // Morph crystal vertices
+      const pos = crystalGeom.attributes.position.array;
+      for (let i = 0; i < pos.length; i += 3) {
+        const ox = origPositions[i], oy = origPositions[i + 1], oz = origPositions[i + 2];
+        const noise = Math.sin(ox * 2.5 + t * 1.2) * Math.cos(oy * 2.5 + t * 0.8) * Math.sin(oz * 2.5 + t) * 0.15;
+        pos[i] = ox + ox * noise;
+        pos[i + 1] = oy + oy * noise;
+        pos[i + 2] = oz + oz * noise;
+      }
+      crystalGeom.attributes.position.needsUpdate = true;
 
-        coreMesh.rotation.y += 0.05 * (targetX - coreMesh.rotation.y);
-        coreMesh.rotation.x += 0.05 * (targetY - coreMesh.rotation.x);
-        coreMesh.rotation.z += 0.001;
-        
-        dustMesh.rotation.y = t * 0.03;
-        dustMesh.rotation.x = t * 0.01;
+      crystal.rotation.y += 0.04 * (tx - crystal.rotation.y * 0.5) + 0.002;
+      crystal.rotation.x += 0.04 * (ty - crystal.rotation.x * 0.5);
 
-        renderer.render(scene, camera);
+      ring1Group.rotation.y = t * 0.25;
+      ring2Group.rotation.y = -t * 0.18;
+
+      // Animate diamond shards
+      shardGroup.children.forEach(s => {
+        s.rotation.x += 0.01 * s.userData.speed;
+        s.rotation.y += 0.015 * s.userData.speed;
+        s.position.y += Math.sin(t * s.userData.speed + s.userData.offset) * 0.003;
+      });
+
+      dustMesh.rotation.y = t * 0.02;
+
+      // Pulse core opacity
+      coreMat.opacity = 0.04 + Math.sin(t * 1.5) * 0.03;
+
+      renderer.render(scene, camera);
     };
     animate();
 
     window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
     });
   };
   initThreeJS();
@@ -373,3 +462,29 @@ if (statementEl && useMotion) {
         });
     }, 2400);
 }
+
+// ------- Shorts Video Playback -------
+(function () {
+  const cards = document.querySelectorAll('.short-card');
+  cards.forEach(card => {
+    const video = card.querySelector('video');
+    if (!video) return;
+    card.addEventListener('click', () => {
+      if (video.paused) {
+        // Pause all other videos first
+        cards.forEach(c => {
+          const v = c.querySelector('video');
+          if (v && v !== video && !v.paused) {
+            v.pause();
+            c.classList.remove('playing');
+          }
+        });
+        video.play();
+        card.classList.add('playing');
+      } else {
+        video.pause();
+        card.classList.remove('playing');
+      }
+    });
+  });
+})();

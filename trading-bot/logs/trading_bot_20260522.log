@@ -1,0 +1,11 @@
+{"timestamp": "2026-05-22T13:32:33.277524Z", "level": "INFO", "logger": "TradingBot", "message": "Starting trading bot...", "taskName": null}
+{"timestamp": "2026-05-22T13:32:34.916159Z", "level": "INFO", "logger": "TradingBot", "message": "Metrics server started on port 8000", "taskName": null}
+{"timestamp": "2026-05-22T13:32:36.631281Z", "level": "INFO", "logger": "TradingBot", "message": "Initializing paper trader state store...", "taskName": null, "exchange": "BINANCE", "initial_capital": 10000.0}
+{"timestamp": "2026-05-22T13:32:36.631593Z", "level": "INFO", "logger": "TradingBot", "message": "State store initialized", "taskName": null, "storage_type": "PostgreSQL", "exchange": "BINANCE"}
+{"timestamp": "2026-05-22T13:32:36.632581Z", "level": "INFO", "logger": "TradingBot", "message": "Risk Manager: Fixed Position Size Manager (size=10.0%)", "taskName": null}
+{"timestamp": "2026-05-22T13:33:00.393299Z", "level": "INFO", "logger": "TradingBot", "message": "Starting trading bot...", "taskName": null}
+{"timestamp": "2026-05-22T13:33:01.917113Z", "level": "INFO", "logger": "TradingBot", "message": "Metrics server started on port 8000", "taskName": null}
+{"timestamp": "2026-05-22T13:33:03.658520Z", "level": "INFO", "logger": "TradingBot", "message": "Initializing paper trader state store...", "taskName": null, "exchange": "BINANCE", "initial_capital": 10000.0}
+{"timestamp": "2026-05-22T13:33:03.658805Z", "level": "INFO", "logger": "TradingBot", "message": "State store initialized", "taskName": null, "storage_type": "PostgreSQL", "exchange": "BINANCE"}
+{"timestamp": "2026-05-22T13:33:03.659035Z", "level": "INFO", "logger": "TradingBot", "message": "Risk Manager: Fixed Position Size Manager (size=10.0%)", "taskName": null}
+{"timestamp": "2026-05-22T13:33:06.667214Z", "level": "INFO", "logger": "TradingBot", "message": "Database logging enabled (PostgreSQL detected)", "taskName": null}

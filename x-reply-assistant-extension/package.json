@@ -1,0 +1,6 @@
+{
+  "name": "x-reply-assistant-extension",
+  "version": "0.1.0",
+  "description": "Chrome MV3 extension to draft and post replies on X with LLM assistance.",
+  "private": true
+}

@@ -1,0 +1,14 @@
+{
+  "BTCUSDT": {
+    "symbol": "BTCUSDT",
+    "timeframe": "15m",
+    "ema_fast": 16,
+    "ema_slow": 51,
+    "kalman_q": 0.008777956147413163,
+    "kalman_r": 0.02002107094902489,
+    "atr_multiplier_sl": 2.1398,
+    "atr_multiplier_tp": 4.5327,
+    "opt_fitness": 485.4156,
+    "optimized_at": "2026-05-25 14:04:19 UTC"
+  }
+}
