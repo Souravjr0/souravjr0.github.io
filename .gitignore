@@ -1,2 +1,7 @@
 trading-bot/.env
 trading-bot/external/
+floating bot/
+trader.db
+trades.db
+*.log
+.env
