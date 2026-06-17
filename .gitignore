@@ -1,5 +1,4 @@
-trading-bot/.env
-trading-bot/external/
+trading-bot/
 floating bot/
 trader.db
 trades.db
