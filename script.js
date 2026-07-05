@@ -1,136 +1,68 @@
 // ============================================================
-//  SOURAV BISWAS PORTFOLIO — script.js (Awwwards Redesign)
+//  SOURAV BISWAS PORTFOLIO — script.js (Redesign)
 // ============================================================
 
-const hasGSAP = typeof gsap !== 'undefined';
-
-if (hasGSAP) {
-  gsap.registerPlugin(ScrollTrigger);
-}
+gsap.registerPlugin(ScrollTrigger);
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
 const useMotion = isDesktop && !prefersReducedMotion;
 
-// ------- Loader Control -------
-const startLoaderAnimation = () => {
-  const loader = document.getElementById('loader');
-  if (!loader) return;
+// ------- Loader -------
+window.addEventListener('load', () => {
+  const tl = gsap.timeline();
+  tl.to('.loader-fill', { width: '100%', duration: 1.2, ease: 'power3.inOut' })
+    .to('#loader', { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
+    .add(() => {
+      document.body.classList.remove('loading');
+      document.getElementById('loader')?.remove();
+    }, '-=0.3')
+    .from('.hero-line', { y: 80, opacity: 0, duration: 1, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
+    .from('.reveal-fade', { opacity: 0, y: 16, duration: 0.8, stagger: 0.12, ease: 'power2.out' }, '-=0.6');
+});
 
-  if (hasGSAP) {
-    const tl = gsap.timeline();
-    tl.to('.loader-bar', { width: '100%', duration: 0.8, ease: 'power2.inOut' })
-      .to(loader, { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
-      .add(() => {
-        document.body.classList.remove('loading');
-        loader.remove();
-      }, '-=0.3')
-      // Hero entry animations
-      .from('.status-badge', { opacity: 0, y: 15, duration: 0.6 }, '-=0.2')
-      .from('.hero-title span', { y: 60, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
-      .from('.hero-meta .meta-item', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4')
-      .from('.hero-actions .btn', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4');
-  } else {
-    // Fallback if GSAP is not loaded
-    document.body.classList.remove('loading');
-    loader.remove();
-    document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
-      el.classList.add('visible');
-      el.style.opacity = 1;
-      el.style.transform = 'none';
-    });
-  }
-};
-
-// Check if document is already loaded to prevent loader lockup
-if (document.readyState === 'complete') {
-  startLoaderAnimation();
-} else {
-  window.addEventListener('load', startLoaderAnimation);
-}
-
-// ------- Custom Cursor -------
+// ------- Custom Cursor (desktop only) -------
 if (useMotion) {
-  const cursor = document.querySelector('.custom-cursor');
-  const glow = document.querySelector('.custom-cursor-glow');
-  let cursorInitialized = false;
-
+  const dot  = document.querySelector('.cursor-dot');
+  const glow = document.querySelector('.cursor-glow');
   window.addEventListener('mousemove', e => {
-    // Save cursor position variables on document root for CSS text offset
-    document.documentElement.style.setProperty('--mx', e.clientX + 'px');
-    document.documentElement.style.setProperty('--my', e.clientY + 'px');
-
-    if (!cursorInitialized) {
-      if (hasGSAP) {
-        gsap.set([cursor, glow], { opacity: 1 });
-      } else {
-        if (cursor) cursor.style.opacity = '1';
-        if (glow) glow.style.opacity = '1';
-      }
-      cursorInitialized = true;
-    }
-
-    if (hasGSAP) {
-      if (cursor) gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.08, ease: 'power2.out' });
-      if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.35, ease: 'power2.out' });
-    } else {
-      if (cursor) {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
-      }
-      if (glow) {
-        glow.style.left = e.clientX + 'px';
-        glow.style.top = e.clientY + 'px';
-      }
-    }
+    if (dot)  gsap.to(dot,  { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
+    if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.7, ease: 'power2.out' });
   });
-
-  document.querySelectorAll('a, button, .cert-tab-btn, input, textarea, [data-category]').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      document.body.classList.add('cursor-hover');
-    });
-    el.addEventListener('mouseleave', () => {
-      document.body.classList.remove('cursor-hover');
-    });
+  document.querySelectorAll('a, button, .service-card, .skill-card, .project-card, input, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => dot?.classList.add('hover'));
+    el.addEventListener('mouseleave', () => dot?.classList.remove('hover'));
   });
-
-  // Highlight blocks get "VIEW" tag on cursor
-  document.querySelectorAll('.metric-card, .story-highlight-card, .skills-block').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      document.body.classList.add('cursor-view');
-    });
-    el.addEventListener('mouseleave', () => {
-      document.body.classList.remove('cursor-view');
-    });
-  });
-} else {
-  // Hide custom cursor elements on mobile/non-motion
-  document.querySelector('.custom-cursor')?.remove();
-  document.querySelector('.custom-cursor-glow')?.remove();
 }
 
 // ------- Hamburger Nav -------
 (function () {
-  const btn = document.getElementById('hamburger');
-  const links = document.getElementById('nav-links');
+  const btn     = document.getElementById('hamburger');
+  const links   = document.getElementById('nav-links');
   if (!btn || !links) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'nav-overlay';
+  document.body.appendChild(overlay);
 
-  const open = () => {
-    links.classList.add('is-open');
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  };
-  const close = () => {
-    links.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  };
+  const open  = () => { links.classList.add('is-open'); btn.classList.add('is-open'); overlay.classList.add('is-visible'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; };
+  const close = () => { links.classList.remove('is-open'); btn.classList.remove('is-open'); overlay.classList.remove('is-visible'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
 
   btn.addEventListener('click', () => links.classList.contains('is-open') ? close() : open());
+  overlay.addEventListener('click', close);
   links.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
   document.addEventListener('keydown', e => e.key === 'Escape' && close());
+})();
+
+// ------- Scroll Progress -------
+(function () {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  const update = () => {
+    const d = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
+  };
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 })();
 
 // ------- Nav scrolled state -------
@@ -145,7 +77,7 @@ if (useMotion) {
 // ------- Active Nav Link -------
 (function () {
   const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-link');
+  const links    = document.querySelectorAll('.nav-link');
   if (!sections.length) return;
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -158,437 +90,286 @@ if (useMotion) {
   sections.forEach(s => obs.observe(s));
 })();
 
-// ------- Certifications filtering -------
+// ------- Back to Top -------
 (function () {
-  const tabs = document.querySelectorAll('.cert-tab-btn');
-  const cards = document.querySelectorAll('.cert-card');
-  if (!tabs.length || !cards.length) return;
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      const filter = tab.dataset.filter;
-
-      cards.forEach(card => {
-        if (filter === 'all' || card.dataset.category === filter) {
-          if (hasGSAP) {
-            gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, display: 'block' });
-          } else {
-            card.style.opacity = '1';
-            card.style.transform = 'scale(1)';
-            card.style.display = 'block';
-          }
-        } else {
-          if (hasGSAP) {
-            gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, display: 'none' });
-          } else {
-            card.style.opacity = '0';
-            card.style.transform = 'scale(0.9)';
-            card.style.display = 'none';
-          }
-        }
-      });
-    });
-  });
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  window.addEventListener('scroll', () => btn.classList.toggle('is-visible', window.scrollY > 600), { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 })();
 
-// ------- Skills filling animation (GSAP triggered) -------
-window.addEventListener('load', () => {
-  if (!hasGSAP) return;
-  document.querySelectorAll('.skill-row').forEach(row => {
-    const level = row.dataset.level || '80';
-    const bar = row.querySelector('.skill-progress-bar');
-    if (!bar) return;
-
-    gsap.to(bar, {
-      width: level + '%',
-      scrollTrigger: {
-        trigger: row,
-        start: 'top 92%',
-        ease: 'power2.out',
-        toggleActions: 'play none none none'
-      }
-    });
-  });
-});
-
-// ------- GSAP reveal animations -------
-if (hasGSAP) {
-  if (useMotion) {
-    document.querySelectorAll('.reveal-up').forEach((el) => {
-      gsap.from(el, {
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none'
-        }
-      });
-    });
-  } else {
-    document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
-      el.classList.add('visible');
-      el.style.opacity = 1;
-      el.style.transform = 'none';
-    });
-  }
-}
-
-// ------- Three.js Organic "Neural Heartbeat" Particle Field -------
-if (useMotion && typeof THREE !== 'undefined') {
-  const initThreeJS = () => {
-    const canvas = document.getElementById('hero-canvas');
-    if (!canvas) return;
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-
-    // Groups
-    const mainGroup = new THREE.Group();
-    scene.add(mainGroup);
-
-    // --- Dynamic Neural Hubs (200 nodes connected by dynamic lines) ---
-    const hubCount = 200;
-    const hubGeometry = new THREE.BufferGeometry();
-    const hubPositions = new Float32Array(hubCount * 3);
-    const hubOffsets = [];
-    const hubSpeeds = [];
-
-    for (let i = 0; i < hubCount; i++) {
-      // Sphere coordinate distribution
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 2.2 + Math.random() * 0.6; // Spherical band thickness
-
-      hubPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      hubPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      hubPositions[i * 3 + 2] = r * Math.cos(phi);
-
-      hubOffsets.push(Math.random() * Math.PI * 2);
-      hubSpeeds.push(0.4 + Math.random() * 0.8);
-    }
-
-    hubGeometry.setAttribute('position', new THREE.BufferAttribute(hubPositions, 3));
-    
-    // Save original position copies for math morphs
-    const origHubPositions = hubPositions.slice();
-
-    const hubMaterial = new THREE.PointsMaterial({
-      size: 0.04,
-      color: 0xff2a85, // Cyber Magenta
-      transparent: true,
-      opacity: 0.85
-    });
-
-    const hubs = new THREE.Points(hubGeometry, hubMaterial);
-    mainGroup.add(hubs);
-
-    // --- Connections lines ---
-    const maxConnections = 500;
-    const lineGeometry = new THREE.BufferGeometry();
-    const linePositions = new Float32Array(maxConnections * 2 * 3); // max * 2 points * 3 coordinates
-    const lineColors = new Float32Array(maxConnections * 2 * 3);
-
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
-
-    // Semi-transparent connection material
-    const lineMaterial = new THREE.LineBasicMaterial({
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.22,
-      blending: THREE.AdditiveBlending
-    });
-
-    const networkLines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    mainGroup.add(networkLines);
-
-    // --- Ambient Halo Dust (1,000 drifting stars) ---
-    const dustCount = 800;
-    const dustGeometry = new THREE.BufferGeometry();
-    const dustPositions = new Float32Array(dustCount * 3);
-
-    for (let i = 0; i < dustCount; i++) {
-      // Wider distribution
-      const u = Math.random();
-      const v = Math.random();
-      const theta = u * 2.0 * Math.PI;
-      const phi = Math.acos(2.0 * v - 1.0);
-      const r = 3.2 + Math.random() * 4.8;
-
-      dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      dustPositions[i * 3 + 2] = r * Math.cos(phi);
-    }
-
-    dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
-    const dustMaterial = new THREE.PointsMaterial({
-      size: 0.018,
-      color: 0x00f0ff, // Electric Cyan
-      transparent: true,
-      opacity: 0.45
-    });
-
-    const dustParticles = new THREE.Points(dustGeometry, dustMaterial);
-    mainGroup.add(dustParticles);
-
-    // Position camera
-    camera.position.z = 7.5;
-
-    // Reposition scene elements depending on viewport width
-    const handleResize = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-
-      // Desktop: Shift WebGL right to fit next to Hero text. Mobile: Centered
-      if (w >= 1024) {
-        mainGroup.position.set(2.4, 0.15, 0);
-      } else {
-        mainGroup.position.set(0, 0, -1);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    // Mouse interactive tracking
-    let targetMouseX = 0, targetMouseY = 0;
-    let mouseX = 0, mouseY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      targetMouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
-      targetMouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-    });
-
-    // Scroll trigger interaction
-    if (hasGSAP) {
-      gsap.to(mainGroup.rotation, {
-        y: Math.PI * 1.5,
-        scrollTrigger: {
-          trigger: 'body',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 1
-        }
-      });
-
-      gsap.to(camera.position, {
-        z: 5.5,
-        scrollTrigger: {
-          trigger: '#about',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1
-        }
-      });
-    }
-
-    const clock = new THREE.Clock();
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-
-      // Don't render WebGL if scrolled far out of view for performance
-      if (window.scrollY > window.innerHeight * 1.5) return;
-
-      const t = clock.getElapsedTime();
-
-      // Lerp mouse coordinates to smooth out lags
-      mouseX += (targetMouseX - mouseX) * 0.08;
-      mouseY += (targetMouseY - mouseY) * 0.08;
-
-      // Pulse rhythm factor (Calm, organic heartbeat simulation)
-      const heartbeat = 1.0 + Math.sin(t * 1.8) * Math.cos(t * 0.6) * 0.08;
-
-      // Animate core hub nodes
-      const pos = hubGeometry.attributes.position.array;
-      for (let i = 0; i < hubCount; i++) {
-        const idx = i * 3;
-        const ox = origHubPositions[idx];
-        const oy = origHubPositions[idx + 1];
-        const oz = origHubPositions[idx + 2];
-
-        // Complex noise-like ripple math morphing
-        const offset = hubOffsets[i];
-        const speed = hubSpeeds[i];
-        const ripple = Math.sin(t * speed + offset) * 0.06;
-
-        // Apply heartbeat pulse + noise ripple
-        pos[idx] = ox * heartbeat + ox * ripple;
-        pos[idx + 1] = oy * heartbeat + oy * ripple;
-        pos[idx + 2] = oz * heartbeat + oz * ripple;
-
-        // Mouse magnetic attraction effect
-        // Project mouse coordinate shifts to 3D positions
-        const dx = pos[idx] + mainGroup.position.x - (mouseX * 4);
-        const dy = pos[idx + 1] + mainGroup.position.y - (-mouseY * 3);
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 1.4) {
-          const force = (1.4 - dist) * 0.15;
-          pos[idx] -= dx * force;
-          pos[idx + 1] -= dy * force;
-        }
-      }
-      hubGeometry.attributes.position.needsUpdate = true;
-
-      // --- Dynamic connection line drawing ---
-      let lineIndex = 0;
-      const positions = networkLines.geometry.attributes.position.array;
-      const colors = networkLines.geometry.attributes.color.array;
-
-      // Optimize by comparing squared distance first to avoid heavy Math.sqrt calls
-      const limit = 1.35;
-      const limitSq = limit * limit;
-
-      for (let i = 0; i < hubCount; i++) {
-        for (let j = i + 1; j < hubCount; j++) {
-          if (lineIndex >= maxConnections) break;
-
-          const idxA = i * 3;
-          const idxB = j * 3;
-
-          const dx = pos[idxA] - pos[idxB];
-          const dy = pos[idxA + 1] - pos[idxB + 1];
-          const dz = pos[idxA + 2] - pos[idxB + 2];
-          
-          const distSq = dx * dx + dy * dy + dz * dz;
-
-          // Connect if particles are close
-          if (distSq < limitSq) {
-            const dist = Math.sqrt(distSq);
-            const linePosIndex = lineIndex * 6;
-            
-            // Point A
-            positions[linePosIndex] = pos[idxA];
-            positions[linePosIndex + 1] = pos[idxA + 1];
-            positions[linePosIndex + 2] = pos[idxA + 2];
-
-            // Point B
-            positions[linePosIndex + 3] = pos[idxB];
-            positions[linePosIndex + 4] = pos[idxB + 1];
-            positions[linePosIndex + 5] = pos[idxB + 2];
-
-            // Calculate colors (Gradient shift between Magenta & Cyan depending on distance)
-            const lineColorIndex = lineIndex * 6;
-            const alpha = 1.0 - (dist / limit); // closer -> brighter
-
-            // Point A color (Magenta bias)
-            colors[lineColorIndex] = 1.0 * alpha; // R
-            colors[lineColorIndex + 1] = 0.16 * alpha; // G
-            colors[lineColorIndex + 2] = 0.52 * alpha; // B
-
-            // Point B color (Cyan bias)
-            colors[lineColorIndex + 3] = 0.0 * alpha;
-            colors[lineColorIndex + 4] = 0.94 * alpha;
-            colors[lineColorIndex + 5] = 1.0 * alpha;
-
-            lineIndex++;
-          }
-        }
-      }
-
-      // Reset rest of the unused line values to 0 to prevent trail artifacts
-      for (let i = lineIndex; i < maxConnections; i++) {
-        const linePosIndex = i * 6;
-        positions[linePosIndex] = 0;
-        positions[linePosIndex + 1] = 0;
-        positions[linePosIndex + 2] = 0;
-        positions[linePosIndex + 3] = 0;
-        positions[linePosIndex + 4] = 0;
-        positions[linePosIndex + 5] = 0;
-      }
-
-      networkLines.geometry.attributes.position.needsUpdate = true;
-      networkLines.geometry.attributes.color.needsUpdate = true;
-
-      // Gentle continuous spin of the outer dust cloud
-      dustParticles.rotation.y = t * 0.015;
-      dustParticles.rotation.x = t * 0.008;
-
-      // Mouse-influence tilt
-      mainGroup.rotation.x = mouseY * 0.12;
-      mainGroup.rotation.y += 0.0025;
-
-      renderer.render(scene, camera);
-    };
-    animate();
-  };
-
-  initThreeJS();
-}
-
-// ------- Interactive Magnet Hover Effects -------
-if (useMotion && hasGSAP) {
-  document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
-    let rect;
-    btn.addEventListener('mouseenter', () => {
-      rect = btn.getBoundingClientRect();
-    });
-    btn.addEventListener('mousemove', (e) => {
-      if (!rect) return;
-      const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
-      const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
-      gsap.to(btn, { x, y, duration: 0.3, ease: 'power2.out' });
-    });
-    btn.addEventListener('mouseleave', () => {
-      rect = null;
-      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1.1, 0.4)' });
-    });
-  });
-}
-
-// ------- Contact Form Submission Handler -------
+// ------- Scroll Reveal (IntersectionObserver — works on mobile too) -------
 (function () {
-  const form = document.getElementById('contact-form');
+  const els = document.querySelectorAll('.reveal-up, .reveal-fade');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+})();
+
+// ------- Skill Bars -------
+(function () {
+  const rows = document.querySelectorAll('.skill-row');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const fill = e.target.querySelector('.skill-fill');
+        if (fill) fill.style.width = (e.target.dataset.level || 80) + '%';
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  rows.forEach(r => obs.observe(r));
+})();
+
+// ------- GSAP enhanced animations (desktop) -------
+if (useMotion) {
+  // Project cards tilt
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      const rx = ((y - r.height/2) / r.height) * -6;
+      const ry = ((x - r.width/2)  / r.width)  *  6;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// ------- Contact Form -------
+(function () {
+  const form   = document.getElementById('contact-form');
   const status = document.getElementById('form-status');
   if (!form || !status) return;
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const btn = form.querySelector('button[type="submit"]');
-    btn.textContent = 'Sending Message...';
+    btn.textContent = 'Sending...';
     btn.disabled = true;
-
     try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
-      });
-
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
       if (res.ok) {
-        status.textContent = "Thank you! Your message has been sent. I'll get back to you shortly.";
-        status.style.color = 'var(--secondary)';
-        status.style.borderColor = 'rgba(0, 240, 255, 0.2)';
+        status.textContent = "Message sent! I'll reply within 24 hours.";
+        status.style.color = '#7c9e9a';
         form.reset();
-      } else {
-        throw new Error();
-      }
+      } else { throw new Error(); }
     } catch {
-      status.textContent = 'Oops! Something went wrong. Please email directly at biswasmail631@gmail.com';
-      status.style.color = 'var(--primary)';
-      status.style.borderColor = 'rgba(255, 42, 133, 0.2)';
+      status.textContent = 'Something went wrong. Email me directly at biswasmail631@gmail.com';
+      status.style.color = '#c97070';
     }
-
     status.classList.remove('hidden');
     btn.textContent = 'Send Message';
     btn.disabled = false;
-
-    setTimeout(() => status.classList.add('hidden'), 7000);
+    setTimeout(() => status.classList.add('hidden'), 8000);
   });
 })();
+
+
+// ------- Three.js Interactive TorusKnot + Dust -------
+if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
+  const initThreeJS = () => {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+    
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+    // Abstract Core
+    const geometry = new THREE.TorusKnotGeometry(1.8, 0.6, 64, 12);
+    const mat = new THREE.MeshBasicMaterial({ 
+        color: 0xff5722, 
+        wireframe: true, 
+        transparent: true, 
+        opacity: 0.18 
+    });
+    const coreMesh = new THREE.Mesh(geometry, mat);
+    
+    const innerGeom = new THREE.TorusKnotGeometry(1.75, 0.55, 64, 12);
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0x1e2128 });
+    const innerMesh = new THREE.Mesh(innerGeom, innerMat);
+    coreMesh.add(innerMesh);
+    
+    // Add particle dust
+    const dustGeom = new THREE.BufferGeometry();
+    const dustCount = 150;
+    const dustPos = new Float32Array(dustCount * 3);
+    for(let i=0; i<dustCount*3; i++){
+        dustPos[i] = (Math.random() - 0.5) * 25;
+    }
+    dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({ size: 0.04, color: 0x38bdf8, transparent: true, opacity: 0.5 });
+    const dustMesh = new THREE.Points(dustGeom, dustMat);
+
+    scene.add(coreMesh);
+    scene.add(dustMesh);
+
+    camera.position.z = 7;
+    // Move slightly right and up so it balances the text
+    coreMesh.position.x = 2;
+    coreMesh.position.y = 0;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    const windowHalfX = window.innerWidth / 2;
+    const windowHalfY = window.innerHeight / 2;
+
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX - windowHalfX);
+        mouseY = (event.clientY - windowHalfY);
+    });
+
+    const clock = new THREE.Clock();
+
+    const animate = () => {
+        requestAnimationFrame(animate);
+        // Pause rendering if scrolled past hero section to save CPU/GPU
+        if (window.scrollY > window.innerHeight + 50) return;
+
+        const t = clock.getElapsedTime();
+
+        const targetX = mouseX * 0.001;
+        const targetY = mouseY * 0.001;
+
+        coreMesh.rotation.y += 0.05 * (targetX - coreMesh.rotation.y);
+        coreMesh.rotation.x += 0.05 * (targetY - coreMesh.rotation.x);
+        coreMesh.rotation.z += 0.001;
+        
+        dustMesh.rotation.y = t * 0.03;
+        dustMesh.rotation.x = t * 0.01;
+
+        renderer.render(scene, camera);
+    };
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  };
+  initThreeJS();
+}
+
+// ------- Magnetic Buttons -------
+if (useMotion) {
+  document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
+    let rect;
+    btn.addEventListener('mouseenter', () => {
+      // Cache the bounding rect once on enter to avoid heavy layout recalculations
+      rect = btn.getBoundingClientRect();
+    });
+    btn.addEventListener('mousemove', (e) => {
+      if (!rect) return;
+      const x = (e.clientX - rect.left - rect.width/2) * 0.3;
+      const y = (e.clientY - rect.top - rect.height/2) * 0.3;
+      gsap.to(btn, { x, y, duration: 0.4, ease: 'power2.out' });
+    });
+    btn.addEventListener('mouseleave', () => {
+      rect = null;
+      gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+    });
+  });
+}
+
+// ------- Project Stacking Effect -------
+window.addEventListener('load', () => {
+  if (useMotion) {
+    const cards = gsap.utils.toArray('.project-card');
+    cards.forEach((card, i) => {
+      if (i === cards.length - 1) return;
+      gsap.to(card, {
+        scale: 0.94,
+        opacity: 0.4,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: cards[i + 1],
+          start: 'top 85%',
+          end: 'top 20%',
+          scrub: true,
+        }
+      });
+    });
+  }
+});
+
+// ------- Text Scramble -------
+class TextScramble {
+  constructor(el) {
+    this.el = el;
+    this.chars = '!<>-_\\/[]{}—=+*^?#________';
+    this.update = this.update.bind(this);
+  }
+  setText(newText) {
+    const oldText = this.el.innerText;
+    const length = Math.max(oldText.length, newText.length);
+    const promise = new Promise((resolve) => this.resolve = resolve);
+    this.queue = [];
+    for (let i = 0; i < length; i++) {
+      const from = oldText[i] || '';
+      const to = newText[i] || '';
+      const start = Math.floor(Math.random() * 40);
+      const end = start + Math.floor(Math.random() * 40);
+      this.queue.push({ from, to, start, end });
+    }
+    cancelAnimationFrame(this.frameRequest);
+    this.frame = 0;
+    this.update();
+    return promise;
+  }
+  update() {
+    let output = '';
+    let complete = 0;
+    for (let i = 0, n = this.queue.length; i < n; i++) {
+      let { from, to, start, end, char } = this.queue[i];
+      if (this.frame >= end) {
+        complete++;
+        output += to;
+      } else if (this.frame >= start) {
+        if (!char || Math.random() < 0.28) {
+          char = this.randomChar();
+          this.queue[i].char = char;
+        }
+        output += `<span class="scramble-char">${char}</span>`;
+      } else {
+        output += from;
+      }
+    }
+    this.el.innerHTML = output;
+    if (complete === this.queue.length) {
+      this.resolve();
+    } else {
+      this.frameRequest = requestAnimationFrame(this.update);
+      this.frame++;
+    }
+  }
+  randomChar() {
+    return this.chars[Math.floor(Math.random() * this.chars.length)];
+  }
+}
+
+const statementEl = document.querySelector('.hero-statement');
+if (statementEl && useMotion) {
+    const originalHTML = statementEl.innerHTML;
+    const originalText = statementEl.innerText;
+    statementEl.innerHTML = '';
+    const fx = new TextScramble(statementEl);
+    
+    setTimeout(() => {
+        fx.setText(originalText).then(() => {
+            statementEl.innerHTML = originalHTML; // restore br tags
+        });
+    }, 2400);
+}

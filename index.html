@@ -3,50 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sourav Biswas | Business &amp; Data Analyst | AI-Enabled Analytics &amp; Automation</title>
-  <meta name="description" content="Sourav Biswas builds high-impact data dashboards, AI-enabled automations, and growth marketing strategies. Bridging data insights and human trust." />
-  <meta property="og:title" content="Sourav Biswas | Business &amp; Data Analyst" />
-  <meta property="og:description" content="Driving revenue growth and workflow efficiency through Python, SQL, Tableau, and AI integrations." />
+  <title>Sourav Biswas | Website Developer &amp; Tech Artist</title>
+  <meta name="description" content="Sourav Biswas builds fast, modern websites, portfolio sites, landing pages, and interactive digital experiences with data, AI, and motion." />
+  <meta property="og:title" content="Sourav Biswas | Website Developer &amp; Tech Artist" />
+  <meta property="og:description" content="Fast, polished websites and interactive digital experiences built with data, AI, and motion." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f0e0c'/><text y='.9em' font-size='80' x='10'>&#9889;</text></svg>" />
   <link rel="stylesheet" href="style.css" />
-  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <!-- GSAP & Three.js CDN libraries -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body class="loading">
 
-  <!-- Glow effects overlays -->
-  <div class="glow-overlay"></div>
-
-  <!-- Custom Cursor -->
-  <div class="custom-cursor"></div>
-  <div class="custom-cursor-glow"></div>
-
   <!-- Loader -->
   <div class="loader" id="loader">
-    <div class="loader-text">SOURAV<span class="loader-dot">.</span></div>
-    <div class="loader-progress">
-      <div class="loader-bar"></div>
-    </div>
+    <div class="loader-text">SB<span class="loader-dot">.</span></div>
+    <div class="loader-bar"><span class="loader-fill"></span></div>
   </div>
 
-  <!-- Header / Navigation -->
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-glow"></div>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress-bar" id="scroll-progress"></div>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">&#8593;</button>
+
+  <!-- Header -->
   <header class="nav-header" id="nav-header">
-    <a href="#hero" class="nav-logo">SOURAV<span class="logo-dot">.</span></a>
+    <a href="#hero" class="nav-logo">SB<span class="logo-dot">.</span></a>
     <nav class="nav-links" id="nav-links" aria-label="Main navigation">
       <a href="#about" class="nav-link">About</a>
-      <a href="#outcomes" class="nav-link">Trust &amp; Outcomes</a>
-      <a href="#human" class="nav-link">Human Story</a>
-      <a href="#toolkit" class="nav-link">Toolkit</a>
-      <a href="#credentials" class="nav-link">Credentials</a>
-      <a href="#contact" class="nav-link">Connect</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#process" class="nav-link">Process</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#contact" class="nav-link cta-nav">Let's Talk</a>
     </nav>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -54,433 +53,315 @@
   </header>
 
   <main>
-    <!-- HERO SECTION -->
+
+    <!-- 01 HERO -->
     <section id="hero" class="hero-section">
       <canvas id="hero-canvas"></canvas>
+      <div class="hero-inner">
+        <div class="hero-badge-row reveal-fade">
+          <span class="available-badge">
+            <span class="badge-dot"></span>
+            Available for work
+          </span>
+          <span class="hero-location">Pune, India</span>
+        </div>
+        <h1 class="hero-title">
+          <span class="hero-line hero-name line">Sourav</span>
+          <span class="hero-line hero-name line">Biswas<span class="title-accent">.</span></span>
+        </h1>
+        <p class="hero-roles reveal-fade">
+          <span>Website Developer</span>
+          <span class="role-sep">/</span>
+          <span>Creative Technologist</span>
+          <span class="role-sep">/</span>
+          <span>Full-Stack Builder</span>
+        </p>
+        <p class="hero-statement reveal-fade">I build beautiful, fast, full-stack websites&mdash;<br>open for freelance projects.</p>
+        <div class="hero-actions reveal-fade">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#contact" class="btn btn-ghost">Let's Collaborate</a>
+        </div>
+      </div>
+      <div class="hero-scroll reveal-fade">
+        <div class="scroll-mouse"><span></span></div>
+        <span>Scroll</span>
+      </div>
+    </section>
+
+    <!-- 02 ABOUT -->
+    <section id="about" class="section about-section">
       <div class="container">
-        <div class="hero-inner">
-          <div class="status-badge">
-            <span></span>Available for Collaboration
-          </div>
-          <h1 class="hero-title reveal-up">
-            <span>Building Systems,</span>
-            <span class="hero-accent">Earning Trust.</span>
-          </h1>
-          
-          <div class="hero-meta reveal-up">
-            <div class="meta-item">
-              <span class="meta-label">Focus</span>
-              <span class="meta-val">AI &amp; Business Analytics</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Location</span>
-              <span class="meta-val">Pune, Maharashtra</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Philosophy</span>
-              <span class="meta-val">Data + Human Connection</span>
+        <div class="section-label">02 / About</div>
+        <div class="about-grid">
+          <div class="about-left">
+            <div class="about-avatar-wrap">
+              <img src="assets/sourav-avatar.png" alt="Sourav Biswas" class="about-avatar" width="220" height="220" />
+              <div class="about-avatar-ring"></div>
             </div>
           </div>
-          
-          <div class="hero-actions reveal-up">
-            <a href="#outcomes" class="btn">View Outcomes &amp; Impact</a>
-            <a href="#contact" class="btn">Let's Build Together</a>
+          <div class="about-right">
+            <h2 class="section-title">Who I&nbsp;Am.</h2>
+            <p class="about-text">I'm Sourav, a Tech Artist building immersive digital experiences where data, AI, and motion work together. I look for the hidden pattern before I touch the pixels, then shape it into something people can feel and act on.</p>
+            <p class="about-text">My background as a national championship gold medal footballer taught me discipline, rhythm, and how to perform when it matters.</p>
+            <div class="about-tags">
+              <span>Data &amp; AI</span>
+              <span>Motion Design</span>
+              <span>Full-Stack</span>
+              <span>Football &#127942;</span>
+            </div>
+            <div class="about-links">
+              <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="about-link">GitHub &#8599;</a>
+              <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener" class="about-link">LinkedIn &#8599;</a>
+              <a href="https://x.com/Souravjr0" target="_blank" rel="noopener" class="about-link">Twitter &#8599;</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- METRICS SECTION (High Impact Trust Badges) -->
-    <section id="metrics" class="section">
+    <!-- 03 SERVICES -->
+    <section id="services" class="section services-section">
       <div class="container">
-        <div class="metrics-grid">
-          <div class="metric-card reveal-up">
-            <div class="metric-num">35%</div>
-            <div class="metric-label">Reporting Effort Reduced</div>
-            <div class="metric-desc">Automated complex, recurring business workflows with custom Python scripts.</div>
-          </div>
-          <div class="metric-card reveal-up">
-            <div class="metric-num">40%</div>
-            <div class="metric-label">Search Rankings Improved</div>
-            <div class="metric-desc">Mined product performance data across 1,000+ listings to elevate organic reach.</div>
-          </div>
-          <div class="metric-card reveal-up">
-            <div class="metric-num">22%</div>
-            <div class="metric-label">Revenue Growth Driven</div>
-            <div class="metric-desc">Translated complex operational findings into actionable growth strategies.</div>
-          </div>
+        <div class="section-label">03 / Services</div>
+        <h2 class="section-title">What I Build.</h2>
+        <p class="section-sub">Clear, conversion-focused work for people who need a site that looks good and gets the job done.</p>
+        <div class="services-grid">
+          <article class="service-card reveal-up">
+            <div class="service-icon">&#9670;</div>
+            <h3>Portfolio Websites</h3>
+            <p>Clean personal sites that turn your work into a strong first impression and help people contact you fast.</p>
+          </article>
+          <article class="service-card reveal-up">
+            <div class="service-icon">&#9650;</div>
+            <h3>Business Landing Pages</h3>
+            <p>Focused marketing pages for services, agencies, and launches with strong hierarchy and clear calls to action.</p>
+          </article>
+          <article class="service-card reveal-up">
+            <div class="service-icon">&#9632;</div>
+            <h3>SaaS &amp; Dashboard UI</h3>
+            <p>Practical product interfaces with data clarity, responsive layouts, and polished interaction details.</p>
+          </article>
+          <article class="service-card reveal-up">
+            <div class="service-icon">&#9679;</div>
+            <h3>Interactive Experiences</h3>
+            <p>Motion-led pages, AI assistants, and data-driven experiences that feel modern without becoming heavy.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ABOUT / PHILOSOPHY SECTION -->
-    <section id="about" class="section">
+    <!-- 04 SKILLS -->
+    <section id="skills" class="section skills-section">
       <div class="container">
-        <div class="section-label">01 / Introduction</div>
-        <h2 class="section-title">The Bridge Between Data and Action.</h2>
-        <div class="human-grid">
-          <div class="about-lead">
-            <p class="story-p" style="font-size: 1.2rem; color: var(--text);">
-              I translate raw operational data and search metrics into clear business decisions that teams act on the same day.
-            </p>
-            <p class="story-p">
-              Bridges the gap between complex business questions and AI/ML solutions — leveraging SQL, Python, and Tableau alongside certified cloud expertise (AWS, Azure, IBM, Google Cloud) to deliver dashboards and forecasting tools that stakeholders actually use to drive outcomes.
-            </p>
-          </div>
-          <div class="story-highlight-card" style="margin-top: 0;">
-            <span class="highlight-kicker">Core Principle</span>
-            <h4>Trust is built through transparency.</h4>
-            <p>
-              I don't just deliver charts; I deliver confidence. Whether it is minimizing cloud migration delays or executing structured A/B tests, every solution is built to keep stakeholders informed and projects on track.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRUST & OUTCOMES SHOWCASE -->
-    <section id="outcomes" class="section">
-      <div class="container">
-        <div class="section-label">02 / Trust &amp; Outcomes</div>
-        <h2 class="section-title">How I Build Trust.</h2>
-        <p class="section-sub">Instead of showing standard code repositories, here are the real-world outcomes and business values delivered during my career.</p>
-        
-        <div class="trust-container">
-          
-          <!-- Case 1: Constrotech -->
-          <article class="trust-story reveal-up">
-            <div class="story-meta">
-              <h3 class="story-company">Constrotech Associates</h3>
-              <div class="story-role">Data Analyst &amp; Cloud Specialist</div>
-              <div class="story-duration">Dec 2024 – Aug 2025</div>
-              <div class="story-kpis">
-                <div class="story-kpi">
-                  <span class="kpi-val">25%</span>
-                  <span class="kpi-txt">Migration Delays Cut</span>
-                </div>
-                <div class="story-kpi">
-                  <span class="kpi-val">35%</span>
-                  <span class="kpi-txt">Reporting Time Saved</span>
-                </div>
-              </div>
+        <div class="section-label">04 / Toolkit</div>
+        <h2 class="section-title">Skills &amp; Stack.</h2>
+        <p class="section-sub">The instruments I reach for when building with data, AI, and motion.</p>
+        <div class="skills-grid">
+          <article class="skill-card reveal-up">
+            <p class="skill-kicker">Data &amp; Insight</p>
+            <h3>Reading patterns in the noise</h3>
+            <div class="skill-list">
+              <div class="skill-row" data-level="96"><div class="skill-row-head"><span>Python</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="92"><div class="skill-row-head"><span>SQL</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="94"><div class="skill-row-head"><span>Pandas</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="90"><div class="skill-row-head"><span>NumPy</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
             </div>
-            
-            <div class="story-details">
-              <p class="story-p">
-                At Constrotech, I worked directly with operations managers and project leads to move legacy records onto modern cloud systems. By establishing clear stakeholder communication, we cut migration delays by a quarter and kept schedules completely on track.
-              </p>
-              <div class="story-highlight-card">
-                <span class="highlight-kicker">Key Accomplishment</span>
-                <h4>Engineering Speed and Automation</h4>
-                <p>
-                  Built interactive Tableau and SQL dashboards that converted raw construction data into immediate KPIs (15% faster decision speed). Additionally, mapped and automated recurring data workflows with Python, saving the team hours of manual weekly tasks.
-                </p>
-              </div>
+            <div class="skill-chips"><span>Matplotlib</span><span>Seaborn</span><span>Tableau</span><span>Plotly</span></div>
+          </article>
+          <article class="skill-card reveal-up">
+            <p class="skill-kicker">AI &amp; Automation</p>
+            <h3>Making systems that think and ship</h3>
+            <div class="skill-list">
+              <div class="skill-row" data-level="95"><div class="skill-row-head"><span>Scikit-learn</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="90"><div class="skill-row-head"><span>TensorFlow</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="88"><div class="skill-row-head"><span>PyTorch</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="86"><div class="skill-row-head"><span>FastAPI</span><span>Solid</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+            </div>
+            <div class="skill-chips"><span>Hugging Face</span><span>OpenCV</span><span>Docker</span><span>AWS</span></div>
+          </article>
+          <article class="skill-card reveal-up">
+            <p class="skill-kicker">Creative &amp; Motion</p>
+            <h3>Giving ideas a visual pulse</h3>
+            <div class="skill-list">
+              <div class="skill-row" data-level="95"><div class="skill-row-head"><span>HTML5 / CSS3</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="90"><div class="skill-row-head"><span>JavaScript</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="86"><div class="skill-row-head"><span>React</span><span>Strong</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+              <div class="skill-row" data-level="88"><div class="skill-row-head"><span>GSAP / Motion</span><span>Core</span></div><div class="skill-track"><div class="skill-fill"></div></div></div>
+            </div>
+            <div class="skill-chips"><span>Three.js</span><span>Streamlit</span><span>Responsive</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    
+    <!-- 05 PROCESS -->
+    <section id="process" class="section process-section">
+      <div class="container">
+        <div class="section-label">05 / Process</div>
+        <h2 class="section-title">How I Work.</h2>
+        <p class="section-sub">A structured approach to moving from abstract ideas to shipped products.</p>
+        <div class="process-grid">
+          <div class="process-step reveal-up">
+            <div class="step-num">01</div>
+            <h3>Discover & Architect</h3>
+            <p>Understanding the problem, mapping data flows, and defining technical architecture before writing code.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">02</div>
+            <h3>Design & Motion</h3>
+            <p>Crafting the visual language and interaction design. Using motion to guide attention and create a premium feel.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">03</div>
+            <h3>Build & Integrate</h3>
+            <p>Writing clean, scalable code. Connecting AI models, managing databases, and bringing the frontend to life.</p>
+          </div>
+          <div class="process-step reveal-up">
+            <div class="step-num">04</div>
+            <h3>Test & Ship</h3>
+            <p>Rigorous performance profiling, security checks, and responsive testing across devices before launching.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 PROJECTS -->
+
+    <section id="projects" class="section projects-section">
+      <div class="container">
+        <div class="section-label">06 / Projects</div>
+        <h2 class="section-title">Selected Works.</h2>
+        <p class="section-sub">Five builds showing how I shape data, AI, and design into usable systems.</p>
+        <div class="projects-grid">
+
+          <article class="project-card reveal-up" style="--card-hue: 1">
+            <div class="project-cover">
+              <span class="project-num">01</span>
+              <span class="project-tag">AI Safety</span>
+            </div>
+            <div class="project-body">
+              <h3>Claude Guardian</h3>
+              <p>AI safety sandbox for testing LLMs against prompt injections, jailbreaks, and hallucinations. A practical evaluation layer for safer prompt experimentation.</p>
+              <div class="project-stack"><span>Python</span><span>AI Safety</span><span>LLMs</span></div>
+              <a href="https://github.com/souravjr0/Claude-guardian" target="_blank" rel="noopener" class="project-link">View Project &#8599;</a>
             </div>
           </article>
-          
-          <!-- Case 2: Amazon -->
-          <article class="trust-story reveal-up">
-            <div class="story-meta">
-              <h3 class="story-company">Amazon</h3>
-              <div class="story-role">Digital Growth &amp; SEO Specialist</div>
-              <div class="story-duration">Sep 2021 – Nov 2024</div>
-              <div class="story-kpis">
-                <div class="story-kpi">
-                  <span class="kpi-val">40%</span>
-                  <span class="kpi-txt">Rankings Increased</span>
-                </div>
-                <div class="story-kpi">
-                  <span class="kpi-val">35%</span>
-                  <span class="kpi-txt">Conversion Rate Jump</span>
-                </div>
-              </div>
+
+          <article class="project-card reveal-up" style="--card-hue: 2">
+            <div class="project-cover">
+              <span class="project-num">02</span>
+              <span class="project-tag">Web3</span>
             </div>
-            
-            <div class="story-details">
-              <p class="story-p">
-                Working inside Amazon’s massive product ecosystem, I mined search performance data and collaborated with cross-functional marketing and content stakeholders to design growth plans.
-              </p>
-              <div class="story-highlight-card">
-                <span class="highlight-kicker">Key Accomplishment</span>
-                <h4>A/B Testing and Strategic Revenue Growth</h4>
-                <p>
-                  Ran structured, high-volume A/B tests that improved customer conversions by 35%. I translated these findings into strategic content recommendations for leadership, driving a 22% growth in revenue.
-                </p>
-              </div>
+            <div class="project-body">
+              <h3>Zunes Wallet</h3>
+              <p>Ethereum crypto wallet interface with a clean product-style layout. A Web3 UI concept focused on clarity and trust for everyday crypto users.</p>
+              <div class="project-stack"><span>Ethereum</span><span>Web3</span><span>UI</span></div>
+              <a href="https://github.com/souravjr0/Zunes-wallet" target="_blank" rel="noopener" class="project-link">View Project &#8599;</a>
             </div>
           </article>
-          
+
+          <article class="project-card reveal-up" style="--card-hue: 3">
+            <div class="project-cover">
+              <span class="project-num">03</span>
+              <span class="project-tag">AI Tool</span>
+            </div>
+            <div class="project-body">
+              <h3>Cluely</h3>
+              <p>AI-powered interview preparation tool for focused practice and confidence building. A guided prep workflow for faster interview readiness.</p>
+              <div class="project-stack"><span>AI</span><span>Python</span><span>Prep</span></div>
+              <a href="https://github.com/souravjr0/Cluely" target="_blank" rel="noopener" class="project-link">View Project &#8599;</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal-up" style="--card-hue: 4">
+            <div class="project-cover">
+              <span class="project-num">04</span>
+              <span class="project-tag">Productivity</span>
+            </div>
+            <div class="project-body">
+              <h3>Habit Tracker</h3>
+              <p>Simple daily habit tracker with local storage and zero backend dependencies. A lightweight productivity tool that works instantly in the browser.</p>
+              <div class="project-stack"><span>JavaScript</span><span>LocalStorage</span><span>UI</span></div>
+              <a href="https://github.com/souravjr0/Habit-Tracker" target="_blank" rel="noopener" class="project-link">View Project &#8599;</a>
+            </div>
+          </article>
+
+          <article class="project-card reveal-up" style="--card-hue: 5">
+            <div class="project-cover">
+              <span class="project-num">05</span>
+              <span class="project-tag">Portfolio</span>
+            </div>
+            <div class="project-body">
+              <h3>This Portfolio</h3>
+              <p>My personal portfolio site with a warm editorial aesthetic, GSAP animations, and a responsive design system built entirely from scratch.</p>
+              <div class="project-stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>GSAP</span></div>
+              <a href="https://github.com/Souravjr0/Souravjr0" target="_blank" rel="noopener" class="project-link">View Project &#8599;</a>
+            </div>
+          </article>
+
+        </div>
+        <div class="projects-footer reveal-up">
+          <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="btn btn-ghost">All Projects on GitHub &#8599;</a>
         </div>
       </div>
     </section>
 
-    <!-- THE HUMAN STORY (Heart Connection) -->
-    <section id="human" class="section">
+    <!-- 07 CONTACT -->
+    <section id="contact" class="section contact-section">
       <div class="container">
-        <div class="section-label">03 / Human Connection</div>
-        <h2 class="section-title">Connecting Through the Heart.</h2>
-        <p class="section-sub">Technical skills are only half of the story. Trust is built between people, not systems. Here is who I am when I step away from the keyboard.</p>
-        
-        <div class="human-grid">
-          <div class="human-visual-wrap reveal-up">
-            <div class="human-image-container">
-              <img src="assets/sourav-avatar.png" alt="Sourav Biswas" class="human-avatar" width="380" height="380" loading="lazy" />
+        <div class="section-label">07 / Contact</div>
+        <h2 class="section-title">Let's Build Something.</h2>
+        <p class="section-sub">Portfolio, business, SaaS, or full-stack&mdash;tell me what you need.</p>
+        <div class="contact-wrap">
+          <div class="contact-info">
+            <div class="contact-info-item">
+              <span class="contact-info-label">Email</span>
+              <a href="mailto:biswasmail631@gmail.com" class="contact-info-link">biswasmail631@gmail.com</a>
+            </div>
+            <div class="contact-info-item">
+              <span class="contact-info-label">LinkedIn</span>
+              <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener" class="contact-info-link">sourav-biswas-260b08201</a>
+            </div>
+            <div class="contact-info-item">
+              <span class="contact-info-label">Status</span>
+              <span class="contact-status"><span class="badge-dot"></span>Available for freelance</span>
             </div>
           </div>
-          
-          <div class="human-values reveal-up">
-            <div class="value-block">
-              <div class="value-num">01</div>
-              <h3 class="value-title">Discipline &amp; Team Rhythm</h3>
-              <p class="value-desc">
-                As a national championship gold-medal footballer, I learned that individual talent only goes so far. True victory comes from rhythm, supporting your team, and delivering high performance under absolute pressure. I bring this same athletic dedication to every business project.
-              </p>
+          <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST" class="contact-form">
+            <div class="form-row">
+              <div class="form-field">
+                <label for="contact-name">Name</label>
+                <input id="contact-name" type="text" name="name" required placeholder="Your name" />
+              </div>
+              <div class="form-field">
+                <label for="contact-email">Email</label>
+                <input id="contact-email" type="email" name="email" required placeholder="your@email.com" />
+              </div>
             </div>
-            <div class="value-block">
-              <div class="value-num">02</div>
-              <h3 class="value-title">Empathy in Numbers</h3>
-              <p class="value-desc">
-                Data isn't just rows in a database—it represents human choices, stakeholder goals, and user experiences. I study data to understand the people behind the numbers, ensuring my technical solutions solve real human problems.
-              </p>
+            <div class="form-field">
+              <label for="contact-message">What do you need?</label>
+              <textarea id="contact-message" name="message" rows="5" required placeholder="Portfolio website, landing page, SaaS dashboard..."></textarea>
             </div>
-            <div class="value-block">
-              <div class="value-num">03</div>
-              <h3 class="value-title">Clear, Warm Partnerships</h3>
-              <p class="value-desc">
-                I believe in building friendships, not just business contracts. I keep my communication simple, warm, and highly transparent. You will always know where a project stands, what challenges we face, and how we will overcome them together.
-              </p>
-            </div>
-          </div>
+            <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+            <div id="form-status" class="form-status hidden"></div>
+          </form>
         </div>
       </div>
     </section>
 
-    <!-- TOOLKIT SECTION -->
-    <section id="toolkit" class="section">
-      <div class="container">
-        <div class="section-label">04 / Core Competencies</div>
-        <h2 class="section-title">Skills &amp; Instruments.</h2>
-        <p class="section-sub">A balanced toolkit designed to read patterns, automate systems, and scale business growth.</p>
-        
-        <div class="skills-masonry">
-          
-          <!-- Column 1: Analytics -->
-          <div class="skills-block reveal-up">
-            <span class="skills-kicker">Data &amp; Insights</span>
-            <h3>Finding the Signal</h3>
-            <div class="skills-list">
-              <div class="skill-row" data-level="95">
-                <div class="skill-meta"><span class="skill-name">SQL (Advanced)</span><span class="skill-level">95%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="90">
-                <div class="skill-meta"><span class="skill-name">Tableau &amp; Power BI</span><span class="skill-level">90%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="92">
-                <div class="skill-meta"><span class="skill-name">Python Data Stack (Pandas/Matplotlib)</span><span class="skill-level">92%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Column 2: AI & Cloud -->
-          <div class="skills-block reveal-up">
-            <span class="skills-kicker">AI &amp; Automation</span>
-            <h3>Scale &amp; Intelligence</h3>
-            <div class="skills-list">
-              <div class="skill-row" data-level="88">
-                <div class="skill-meta"><span class="skill-name">Machine Learning (Scikit-Learn/TensorFlow)</span><span class="skill-level">88%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="85">
-                <div class="skill-meta"><span class="skill-name">Cloud Platforms (AWS &amp; Azure)</span><span class="skill-level">85%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="80">
-                <div class="skill-meta"><span class="skill-name">DevOps &amp; IaC (Terraform)</span><span class="skill-level">80%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Column 3: Growth -->
-          <div class="skills-block reveal-up">
-            <span class="skills-kicker">Growth Analytics</span>
-            <h3>Business Growth</h3>
-            <div class="skills-list">
-              <div class="skill-row" data-level="94">
-                <div class="skill-meta"><span class="skill-name">A/B Testing &amp; Experimentation</span><span class="skill-level">94%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="90">
-                <div class="skill-meta"><span class="skill-name">SEO &amp; Conversion Optimization</span><span class="skill-level">90%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-              <div class="skill-row" data-level="88">
-                <div class="skill-meta"><span class="skill-name">Content Strategy &amp; Revenue Analysis</span><span class="skill-level">88%</span></div>
-                <div class="skill-progress-wrap"><div class="skill-progress-bar"></div></div>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
-    </section>
-
-    <!-- CERTIFICATIONS & EDUCATION SECTION -->
-    <section id="credentials" class="section">
-      <div class="container">
-        <div class="section-label">05 / Credentials</div>
-        <h2 class="section-title">Validated Competence.</h2>
-        <p class="section-sub">Professional credentials and academic degrees validating my experience in Cloud operations, Data Science, and Machine Learning.</p>
-        
-        <!-- Category tabs -->
-        <div class="cert-tabs reveal-up">
-          <div class="cert-tab-btn active" data-filter="all">All Certs</div>
-          <div class="cert-tab-btn" data-filter="cloud">Cloud &amp; Infra</div>
-          <div class="cert-tab-btn" data-filter="data">Data &amp; AI</div>
-          <div class="cert-tab-btn" data-filter="foundational">Foundational ML</div>
-        </div>
-        
-        <!-- Certifications grid -->
-        <div class="cert-grid reveal-up">
-          
-          <!-- Cloud -->
-          <div class="cert-card" data-category="cloud">
-            <span class="cert-issuer">AWS</span>
-            <div class="cert-title">Certified Cloud Practitioner</div>
-          </div>
-          <div class="cert-card" data-category="cloud">
-            <span class="cert-issuer">Microsoft Azure</span>
-            <div class="cert-title">Azure AI Fundamentals</div>
-          </div>
-          <div class="cert-card" data-category="cloud">
-            <span class="cert-issuer">HashiCorp</span>
-            <div class="cert-title">Terraform Associate</div>
-          </div>
-          
-          <!-- Data & AI -->
-          <div class="cert-card" data-category="data">
-            <span class="cert-issuer">IBM</span>
-            <div class="cert-title">Data Science Professional Certificate</div>
-          </div>
-          <div class="cert-card" data-category="data">
-            <span class="cert-issuer">Google</span>
-            <div class="cert-title">Data Analytics Professional Certificate</div>
-          </div>
-          <div class="cert-card" data-category="data">
-            <span class="cert-issuer">Coursera</span>
-            <div class="cert-title">Generative AI Specialization</div>
-          </div>
-          <div class="cert-card" data-category="data">
-            <span class="cert-issuer">Oracle</span>
-            <div class="cert-title">Analytics Cloud Certified Professional</div>
-          </div>
-
-          <!-- Foundational ML -->
-          <div class="cert-card" data-category="foundational">
-            <span class="cert-issuer">DeepLearning.AI</span>
-            <div class="cert-title">Machine Learning Specialization</div>
-          </div>
-          <div class="cert-card" data-category="foundational">
-            <span class="cert-issuer">DeepLearning.AI</span>
-            <div class="cert-title">AI For Everyone</div>
-          </div>
-          
-        </div>
-
-        <!-- Academic Education row -->
-        <div class="edu-row reveal-up">
-          <div class="edu-card">
-            <span class="meta-label">2024 – Present</span>
-            <h3 class="edu-school">Jawaharlal Nehru Rajkeeya Mahavidyalaya</h3>
-            <span class="edu-degree">Bachelor of Science (Hons) in Computer Science &amp; Data Analytics</span>
-            <span class="edu-grade">CGPA: 9.3 / 10</span>
-          </div>
-          <div class="edu-card">
-            <span class="meta-label">2021 – 2024</span>
-            <h3 class="edu-school">Bharati Vidyapeeth</h3>
-            <span class="edu-degree">Bachelor of Physical Education and Sports Biomechanics (B.P.E.S)</span>
-            <span class="edu-grade">GPA: 9.5 / 10</span>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="section">
-      <div class="container">
-        <div class="section-label">06 / Connect</div>
-        <h2 class="section-title">Start a Conversation.</h2>
-        
-        <div class="contact-grid">
-          <div class="contact-lead reveal-up">
-            <p class="contact-p">
-              Whether you are looking to automate your reporting workflows, build interactive Tableau business insights, or optimize digital growth strategies—I am always open to exploring custom projects.
-            </p>
-            <p class="contact-p" style="font-size: 0.95rem; color: var(--text-dim);">
-              Let’s build something together that drives tangible outcomes and builds long-term professional trust.
-            </p>
-            
-            <div class="contact-links">
-              <div class="contact-link-item">
-                <span class="contact-link-label">Direct Email</span>
-                <a href="mailto:biswasmail631@gmail.com" class="contact-link-val">biswasmail631@gmail.com</a>
-              </div>
-              <div class="contact-link-item">
-                <span class="contact-link-label">Call / Message</span>
-                <a href="tel:+917363871408" class="contact-link-val">+91 7363871408</a>
-              </div>
-              <div class="contact-link-item">
-                <span class="contact-link-label">Socials</span>
-                <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
-                  <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="nav-link" style="padding: 0;">GitHub</a>
-                  <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener" class="nav-link" style="padding: 0;">LinkedIn</a>
-                  <a href="https://x.com/Souravjr0" target="_blank" rel="noopener" class="nav-link" style="padding: 0;">Twitter</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-form-wrap reveal-up">
-            <form id="contact-form" action="https://formspree.io/f/mgopdjol" method="POST">
-              <div class="form-group-row">
-                <div class="form-group">
-                  <label for="name">Your Name</label>
-                  <input type="text" id="name" name="name" required placeholder="John Doe" />
-                </div>
-                <div class="form-group">
-                  <label for="email">Email Address</label>
-                  <input type="email" id="email" name="email" required placeholder="john@company.com" />
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="message">Your Business Need</label>
-                <textarea id="message" name="message" required placeholder="Briefly describe what you'd like to achieve (e.g., workflow automation, SQL reports, growth strategy)..." rows="6"></textarea>
-              </div>
-              <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-              <div id="form-status" class="form-status hidden"></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-copy">&copy; 2026 Sourav Biswas. Built with trust.</div>
-        <div class="footer-links">
-          <a href="https://github.com/souravjr0" target="_blank" rel="noopener" class="footer-link">GitHub</a>
-          <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener" class="footer-link">LinkedIn</a>
-          <a href="https://x.com/Souravjr0" target="_blank" rel="noopener" class="footer-link">Twitter</a>
-        </div>
-      </div>
+    <div class="footer-inner">
+      <p class="footer-copy">&copy; 2026 Sourav Biswas</p>
+      <nav class="footer-links">
+        <a href="https://github.com/souravjr0" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/sourav-biswas-260b08201" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://x.com/Souravjr0" target="_blank" rel="noopener">Twitter</a>
+        <a href="mailto:biswasmail631@gmail.com">Email</a>
+      </nav>
+      <p class="footer-note">Made with craft &bull; Pune, India</p>
     </div>
   </footer>
 
