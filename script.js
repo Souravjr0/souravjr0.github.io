@@ -1,5 +1,5 @@
 // ============================================================
-//  SOURAV BISWAS PORTFOLIO — script.js (Redesign)
+//  SOURAV BISWAS PORTFOLIO — script.js (Awwwards Redesign)
 // ============================================================
 
 gsap.registerPlugin(ScrollTrigger);
@@ -8,61 +8,83 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
 const useMotion = isDesktop && !prefersReducedMotion;
 
-// ------- Loader -------
+// ------- Loader Control -------
 window.addEventListener('load', () => {
   const tl = gsap.timeline();
-  tl.to('.loader-fill', { width: '100%', duration: 1.2, ease: 'power3.inOut' })
+  // Simulate progress bar filling
+  tl.to('.loader-bar', { width: '100%', duration: 0.8, ease: 'power2.inOut' })
     .to('#loader', { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
     .add(() => {
       document.body.classList.remove('loading');
       document.getElementById('loader')?.remove();
     }, '-=0.3')
-    .from('.hero-line', { y: 80, opacity: 0, duration: 1, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
-    .from('.reveal-fade', { opacity: 0, y: 16, duration: 0.8, stagger: 0.12, ease: 'power2.out' }, '-=0.6');
+    // Hero entry animations
+    .from('.status-badge', { opacity: 0, y: 15, duration: 0.6 }, '-=0.2')
+    .from('.hero-title span', { y: 60, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
+    .from('.hero-meta .meta-item', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4')
+    .from('.hero-actions .btn', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4');
 });
 
-// ------- Custom Cursor (desktop only) -------
+// ------- Custom Cursor -------
 if (useMotion) {
-  const dot  = document.querySelector('.cursor-dot');
-  const glow = document.querySelector('.cursor-glow');
+  const cursor = document.querySelector('.custom-cursor');
+  const glow = document.querySelector('.custom-cursor-glow');
+
   window.addEventListener('mousemove', e => {
-    if (dot)  gsap.to(dot,  { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
-    if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.7, ease: 'power2.out' });
+    // Save cursor position variables on document root for CSS text offset
+    document.documentElement.style.setProperty('--mx', e.clientX + 'px');
+    document.documentElement.style.setProperty('--my', e.clientY + 'px');
+
+    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
+    gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.4, ease: 'power2.out' });
   });
-  document.querySelectorAll('a, button, .service-card, .skill-card, .project-card, .short-card, input, textarea').forEach(el => {
-    el.addEventListener('mouseenter', () => dot?.classList.add('hover'));
-    el.addEventListener('mouseleave', () => dot?.classList.remove('hover'));
+
+  document.querySelectorAll('a, button, .cert-tab-btn, input, textarea, [data-category]').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      document.body.classList.add('cursor-hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      document.body.classList.remove('cursor-hover');
+    });
   });
+
+  // Highlight blocks get "VIEW" tag on cursor
+  document.querySelectorAll('.metric-card, .story-highlight-card, .skills-block').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      document.body.classList.add('cursor-view');
+    });
+    el.addEventListener('mouseleave', () => {
+      document.body.classList.remove('cursor-view');
+    });
+  });
+} else {
+  // Hide custom cursor elements on mobile/non-motion
+  document.querySelector('.custom-cursor')?.remove();
+  document.querySelector('.custom-cursor-glow')?.remove();
 }
 
 // ------- Hamburger Nav -------
 (function () {
-  const btn     = document.getElementById('hamburger');
-  const links   = document.getElementById('nav-links');
+  const btn = document.getElementById('hamburger');
+  const links = document.getElementById('nav-links');
   if (!btn || !links) return;
-  const overlay = document.createElement('div');
-  overlay.className = 'nav-overlay';
-  document.body.appendChild(overlay);
 
-  const open  = () => { links.classList.add('is-open'); btn.classList.add('is-open'); overlay.classList.add('is-visible'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; };
-  const close = () => { links.classList.remove('is-open'); btn.classList.remove('is-open'); overlay.classList.remove('is-visible'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
+  const open = () => {
+    links.classList.add('is-open');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  };
+  const close = () => {
+    links.classList.remove('is-open');
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
 
   btn.addEventListener('click', () => links.classList.contains('is-open') ? close() : open());
-  overlay.addEventListener('click', close);
   links.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
   document.addEventListener('keydown', e => e.key === 'Escape' && close());
-})();
-
-// ------- Scroll Progress -------
-(function () {
-  const bar = document.getElementById('scroll-progress');
-  if (!bar) return;
-  const update = () => {
-    const d = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (d > 0 ? (window.scrollY / d) * 100 : 0) + '%';
-  };
-  window.addEventListener('scroll', update, { passive: true });
-  update();
 })();
 
 // ------- Nav scrolled state -------
@@ -77,7 +99,7 @@ if (useMotion) {
 // ------- Active Nav Link -------
 (function () {
   const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('.nav-link');
+  const links = document.querySelectorAll('.nav-link');
   if (!sections.length) return;
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
@@ -90,92 +112,75 @@ if (useMotion) {
   sections.forEach(s => obs.observe(s));
 })();
 
-// ------- Back to Top -------
+// ------- Certifications filtering -------
 (function () {
-  const btn = document.getElementById('back-to-top');
-  if (!btn) return;
-  window.addEventListener('scroll', () => btn.classList.toggle('is-visible', window.scrollY > 600), { passive: true });
-  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  const tabs = document.querySelectorAll('.cert-tab-btn');
+  const cards = document.querySelectorAll('.cert-card');
+  if (!tabs.length || !cards.length) return;
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const filter = tab.dataset.filter;
+
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.category === filter) {
+          gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, display: 'block' });
+        } else {
+          gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, display: 'none' });
+        }
+      });
+    });
+  });
 })();
 
-// ------- Scroll Reveal (IntersectionObserver — works on mobile too) -------
-(function () {
-  const els = document.querySelectorAll('.reveal-up, .reveal-fade');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        obs.unobserve(e.target);
+// ------- Skills filling animation (GSAP triggered) -------
+window.addEventListener('load', () => {
+  document.querySelectorAll('.skill-row').forEach(row => {
+    const level = row.dataset.level || '80';
+    const bar = row.querySelector('.skill-progress-bar');
+    if (!bar) return;
+
+    gsap.to(bar, {
+      width: level + '%',
+      scrollTrigger: {
+        trigger: row,
+        start: 'top 90%',
+        ease: 'power2.out',
+        toggleActions: 'play none none none'
       }
     });
-  }, { threshold: 0.1 });
-  els.forEach(el => obs.observe(el));
-})();
+  });
+});
 
-// ------- Skill Bars -------
-(function () {
-  const rows = document.querySelectorAll('.skill-row');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const fill = e.target.querySelector('.skill-fill');
-        if (fill) fill.style.width = (e.target.dataset.level || 80) + '%';
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.3 });
-  rows.forEach(r => obs.observe(r));
-})();
-
-// ------- GSAP enhanced animations (desktop) -------
+// ------- GSAP reveal animations -------
 if (useMotion) {
-  // Project cards tilt
-  document.querySelectorAll('.service-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top;
-      const rx = ((y - r.height/2) / r.height) * -6;
-      const ry = ((x - r.width/2)  / r.width)  *  6;
-      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+  document.querySelectorAll('.reveal-up').forEach((el) => {
+    gsap.from(el, {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      }
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
+  });
+} else {
+  // Mobile fallback - make all reveal elements visible instantly or basic fade
+  document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
+    el.classList.add('visible');
+    el.style.opacity = 1;
+    el.style.transform = 'none';
   });
 }
 
-// ------- Contact Form -------
-(function () {
-  const form   = document.getElementById('contact-form');
-  const status = document.getElementById('form-status');
-  if (!form || !status) return;
-
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = form.querySelector('button[type="submit"]');
-    btn.textContent = 'Sending...';
-    btn.disabled = true;
-    try {
-      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
-      if (res.ok) {
-        status.textContent = "Message sent! I'll reply within 24 hours.";
-        status.style.color = '#d4508a';
-        form.reset();
-      } else { throw new Error(); }
-    } catch {
-      status.textContent = 'Something went wrong. Email me directly at biswasmail631@gmail.com';
-      status.style.color = '#c97070';
-    }
-    status.classList.remove('hidden');
-    btn.textContent = 'Send Message';
-    btn.disabled = false;
-    setTimeout(() => status.classList.add('hidden'), 8000);
-  });
-})();
-
-
-// ------- Three.js Morphing Crystal Sphere + Orbiting Rings -------
-if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
+// ------- Three.js Organic "Neural Heartbeat" Particle Field -------
+if (useMotion && typeof THREE !== 'undefined') {
   const initThreeJS = () => {
     const canvas = document.getElementById('hero-canvas');
     if (!canvas) return;
@@ -187,304 +192,337 @@ if (isDesktop && !prefersReducedMotion && typeof THREE !== 'undefined') {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
-    // --- Main morphing crystal (Icosahedron) ---
-    const crystalGeom = new THREE.IcosahedronGeometry(2.2, 3);
-    const crystalMat = new THREE.MeshBasicMaterial({
-      color: 0x8B004A,
-      wireframe: true,
+    // Groups
+    const mainGroup = new THREE.Group();
+    scene.add(mainGroup);
+
+    // --- Dynamic Neural Hubs (300 nodes connected by dynamic lines) ---
+    const hubCount = 200;
+    const hubGeometry = new THREE.BufferGeometry();
+    const hubPositions = new Float32Array(hubCount * 3);
+    const hubOffsets = [];
+    const hubSpeeds = [];
+
+    for (let i = 0; i < hubCount; i++) {
+      // Sphere coordinate distribution
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      const r = 2.2 + Math.random() * 0.6; // Spherical band thickness
+
+      hubPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      hubPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      hubPositions[i * 3 + 2] = r * Math.cos(phi);
+
+      hubOffsets.push(Math.random() * Math.PI * 2);
+      hubSpeeds.push(0.4 + Math.random() * 0.8);
+    }
+
+    hubGeometry.setAttribute('position', new THREE.BufferAttribute(hubPositions, 3));
+    
+    // Save original position copies for math morphs
+    const origHubPositions = hubPositions.slice();
+
+    const hubMaterial = new THREE.PointsMaterial({
+      size: 0.045,
+      color: 0xff2a85, // Cyber Magenta
       transparent: true,
-      opacity: 0.22
+      opacity: 0.85
     });
-    const crystal = new THREE.Mesh(crystalGeom, crystalMat);
-    // Store original positions for morphing
-    const origPositions = crystalGeom.attributes.position.array.slice();
 
-    // Inner solid glow core
-    const coreGeom = new THREE.IcosahedronGeometry(1.6, 2);
-    const coreMat = new THREE.MeshBasicMaterial({
-      color: 0x8B004A,
+    const hubs = new THREE.Points(hubGeometry, hubMaterial);
+    mainGroup.add(hubs);
+
+    // --- Connections lines ---
+    // Dynamic lines linking nearby nodes
+    const maxConnections = 600;
+    const lineGeometry = new THREE.BufferGeometry();
+    const linePositions = new Float32Array(maxConnections * 2 * 3); // max * 2 points * 3 coordinates
+    const lineColors = new Float32Array(maxConnections * 2 * 3);
+
+    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+
+    // Semi-transparent connection material
+    const lineMaterial = new THREE.LineBasicMaterial({
+      vertexColors: true,
       transparent: true,
-      opacity: 0.06
+      opacity: 0.2,
+      blending: THREE.AdditiveBlending
     });
-    const coreMesh = new THREE.Mesh(coreGeom, coreMat);
-    crystal.add(coreMesh);
 
-    // --- Orbiting particle ring 1 ---
-    const ring1Group = new THREE.Group();
-    const ring1Count = 80;
-    const ring1Geom = new THREE.BufferGeometry();
-    const ring1Pos = new Float32Array(ring1Count * 3);
-    for (let i = 0; i < ring1Count; i++) {
-      const angle = (i / ring1Count) * Math.PI * 2;
-      ring1Pos[i * 3] = Math.cos(angle) * 3.8;
-      ring1Pos[i * 3 + 1] = (Math.random() - 0.5) * 0.3;
-      ring1Pos[i * 3 + 2] = Math.sin(angle) * 3.8;
-    }
-    ring1Geom.setAttribute('position', new THREE.BufferAttribute(ring1Pos, 3));
-    const ring1Mat = new THREE.PointsMaterial({ size: 0.04, color: 0xd4508a, transparent: true, opacity: 0.7 });
-    const ring1 = new THREE.Points(ring1Geom, ring1Mat);
-    ring1Group.add(ring1);
+    const networkLines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    mainGroup.add(networkLines);
 
-    // --- Orbiting particle ring 2 (tilted) ---
-    const ring2Group = new THREE.Group();
-    const ring2Count = 60;
-    const ring2Geom = new THREE.BufferGeometry();
-    const ring2Pos = new Float32Array(ring2Count * 3);
-    for (let i = 0; i < ring2Count; i++) {
-      const angle = (i / ring2Count) * Math.PI * 2;
-      ring2Pos[i * 3] = Math.cos(angle) * 4.5;
-      ring2Pos[i * 3 + 1] = (Math.random() - 0.5) * 0.2;
-      ring2Pos[i * 3 + 2] = Math.sin(angle) * 4.5;
-    }
-    ring2Geom.setAttribute('position', new THREE.BufferAttribute(ring2Pos, 3));
-    const ring2Mat = new THREE.PointsMaterial({ size: 0.03, color: 0xF2EFE7, transparent: true, opacity: 0.35 });
-    const ring2 = new THREE.Points(ring2Geom, ring2Mat);
-    ring2Group.add(ring2);
-    ring2Group.rotation.x = Math.PI * 0.35;
-    ring2Group.rotation.z = Math.PI * 0.15;
+    // --- Ambient Halo Dust (1,500 drifting stars) ---
+    const dustCount = 1000;
+    const dustGeometry = new THREE.BufferGeometry();
+    const dustPositions = new Float32Array(dustCount * 3);
 
-    // --- Floating diamond shards ---
-    const shardGroup = new THREE.Group();
-    const shardCount = 12;
-    for (let i = 0; i < shardCount; i++) {
-      const shardGeom = new THREE.OctahedronGeometry(0.12 + Math.random() * 0.15, 0);
-      const shardMat = new THREE.MeshBasicMaterial({
-        color: i % 2 === 0 ? 0x8B004A : 0xd4508a,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.4 + Math.random() * 0.3
-      });
-      const shard = new THREE.Mesh(shardGeom, shardMat);
-      const r = 4.5 + Math.random() * 3;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
-      shard.position.set(
-        r * Math.sin(phi) * Math.cos(theta),
-        r * Math.sin(phi) * Math.sin(theta),
-        r * Math.cos(phi)
-      );
-      shard.userData = { speed: 0.3 + Math.random() * 0.8, offset: Math.random() * Math.PI * 2 };
-      shardGroup.add(shard);
+    for (let i = 0; i < dustCount; i++) {
+      // Wider distribution
+      const u = Math.random();
+      const v = Math.random();
+      const theta = u * 2.0 * Math.PI;
+      const phi = Math.acos(2.0 * v - 1.0);
+      const r = 3.5 + Math.random() * 4.5;
+
+      dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      dustPositions[i * 3 + 2] = r * Math.cos(phi);
     }
 
-    // --- Background dust ---
-    const dustGeom = new THREE.BufferGeometry();
-    const dustCount = 200;
-    const dustPos = new Float32Array(dustCount * 3);
-    for (let i = 0; i < dustCount * 3; i++) {
-      dustPos[i] = (Math.random() - 0.5) * 30;
-    }
-    dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-    const dustMat = new THREE.PointsMaterial({ size: 0.025, color: 0xF2EFE7, transparent: true, opacity: 0.25 });
-    const dustMesh = new THREE.Points(dustGeom, dustMat);
+    dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+    const dustMaterial = new THREE.PointsMaterial({
+      size: 0.02,
+      color: 0x00f0ff, // Electric Cyan
+      transparent: true,
+      opacity: 0.45
+    });
 
-    scene.add(crystal);
-    scene.add(ring1Group);
-    scene.add(ring2Group);
-    scene.add(shardGroup);
-    scene.add(dustMesh);
+    const dustParticles = new THREE.Points(dustGeometry, dustMaterial);
+    mainGroup.add(dustParticles);
 
-    camera.position.z = 8;
-    crystal.position.x = 2.5;
-    crystal.position.y = 0.3;
-    ring1Group.position.copy(crystal.position);
-    ring2Group.position.copy(crystal.position);
-    shardGroup.position.copy(crystal.position);
+    // Position camera
+    camera.position.z = 7.5;
 
+    // Reposition scene elements depending on viewport width
+    const handleResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+
+      // Desktop: Shift WebGL right to fit next to Hero text. Mobile: Centered
+      if (w >= 1024) {
+        mainGroup.position.set(2.4, 0.2, 0);
+      } else {
+        mainGroup.position.set(0, 0, -1);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    // Mouse interactive tracking
+    let targetMouseX = 0, targetMouseY = 0;
     let mouseX = 0, mouseY = 0;
-    const halfW = window.innerWidth / 2;
-    const halfH = window.innerHeight / 2;
 
     document.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX - halfW);
-      mouseY = (e.clientY - halfH);
+      targetMouseX = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
+      targetMouseY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+    });
+
+    // Scroll trigger interaction
+    // Link rotation speed, positions, and opacity directly to scroll progression
+    gsap.to(mainGroup.rotation, {
+      y: Math.PI * 1.5,
+      scrollTrigger: {
+        trigger: 'body',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1
+      }
+    });
+
+    gsap.to(camera.position, {
+      z: 5.5,
+      scrollTrigger: {
+        trigger: '#about',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1
+      }
     });
 
     const clock = new THREE.Clock();
 
     const animate = () => {
       requestAnimationFrame(animate);
-      if (window.scrollY > window.innerHeight + 50) return;
+
+      // Don't render WebGL if scrolled far out of view for performance
+      if (window.scrollY > window.innerHeight * 1.5) return;
 
       const t = clock.getElapsedTime();
-      const tx = mouseX * 0.0008;
-      const ty = mouseY * 0.0008;
 
-      // Morph crystal vertices
-      const pos = crystalGeom.attributes.position.array;
-      for (let i = 0; i < pos.length; i += 3) {
-        const ox = origPositions[i], oy = origPositions[i + 1], oz = origPositions[i + 2];
-        const noise = Math.sin(ox * 2.5 + t * 1.2) * Math.cos(oy * 2.5 + t * 0.8) * Math.sin(oz * 2.5 + t) * 0.15;
-        pos[i] = ox + ox * noise;
-        pos[i + 1] = oy + oy * noise;
-        pos[i + 2] = oz + oz * noise;
+      // Lerp mouse coordinates to smooth out lags
+      mouseX += (targetMouseX - mouseX) * 0.08;
+      mouseY += (targetMouseY - mouseY) * 0.08;
+
+      // Pulse rhythm factor (Calm, organic heartbeat simulation)
+      const heartbeat = 1.0 + Math.sin(t * 1.8) * Math.cos(t * 0.6) * 0.08;
+
+      // Animate core hub nodes
+      const pos = hubGeometry.attributes.position.array;
+      for (let i = 0; i < hubCount; i++) {
+        const idx = i * 3;
+        const ox = origHubPositions[idx];
+        const oy = origHubPositions[idx + 1];
+        const oz = origHubPositions[idx + 2];
+
+        // Complex noise-like ripple math morphing
+        const offset = hubOffsets[i];
+        const speed = hubSpeeds[i];
+        const ripple = Math.sin(t * speed + offset) * 0.06;
+
+        // Apply heartbeat pulse + noise ripple
+        pos[idx] = ox * heartbeat + ox * ripple;
+        pos[idx + 1] = oy * heartbeat + oy * ripple;
+        pos[idx + 2] = oz * heartbeat + oz * ripple;
+
+        // Mouse magnetic attraction effect
+        // Project mouse coordinate shifts to 3D positions
+        const dx = pos[idx] + mainGroup.position.x - (mouseX * 4);
+        const dy = pos[idx + 1] + mainGroup.position.y - (-mouseY * 3);
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 1.4) {
+          const force = (1.4 - dist) * 0.15;
+          pos[idx] -= dx * force;
+          pos[idx + 1] -= dy * force;
+        }
       }
-      crystalGeom.attributes.position.needsUpdate = true;
+      hubGeometry.attributes.position.needsUpdate = true;
 
-      crystal.rotation.y += 0.04 * (tx - crystal.rotation.y * 0.5) + 0.002;
-      crystal.rotation.x += 0.04 * (ty - crystal.rotation.x * 0.5);
+      // --- Dynamic connection line drawing ---
+      let lineIndex = 0;
+      const positions = networkLines.geometry.attributes.position.array;
+      const colors = networkLines.geometry.attributes.color.array;
 
-      ring1Group.rotation.y = t * 0.25;
-      ring2Group.rotation.y = -t * 0.18;
+      for (let i = 0; i < hubCount; i++) {
+        for (let j = i + 1; j < hubCount; j++) {
+          if (lineIndex >= maxConnections) break;
 
-      // Animate diamond shards
-      shardGroup.children.forEach(s => {
-        s.rotation.x += 0.01 * s.userData.speed;
-        s.rotation.y += 0.015 * s.userData.speed;
-        s.position.y += Math.sin(t * s.userData.speed + s.userData.offset) * 0.003;
-      });
+          const idxA = i * 3;
+          const idxB = j * 3;
 
-      dustMesh.rotation.y = t * 0.02;
+          const dx = pos[idxA] - pos[idxB];
+          const dy = pos[idxA + 1] - pos[idxB + 1];
+          const dz = pos[idxA + 2] - pos[idxB + 2];
+          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-      // Pulse core opacity
-      coreMat.opacity = 0.04 + Math.sin(t * 1.5) * 0.03;
+          // Connect if particles are close
+          if (dist < 1.35) {
+            const linePosIndex = lineIndex * 6;
+            
+            // Point A
+            positions[linePosIndex] = pos[idxA];
+            positions[linePosIndex + 1] = pos[idxA + 1];
+            positions[linePosIndex + 2] = pos[idxA + 2];
+
+            // Point B
+            positions[linePosIndex + 3] = pos[idxB];
+            positions[linePosIndex + 4] = pos[idxB + 1];
+            positions[linePosIndex + 5] = pos[idxB + 2];
+
+            // Calculate colors (Gradient shift between Magenta & Cyan depending on distance)
+            const lineColorIndex = lineIndex * 6;
+            const alpha = 1.0 - (dist / 1.35); // closer -> brighter
+
+            // Point A color (Magenta bias)
+            colors[lineColorIndex] = 1.0 * alpha; // R
+            colors[lineColorIndex + 1] = 0.16 * alpha; // G
+            colors[lineColorIndex + 2] = 0.52 * alpha; // B
+
+            // Point B color (Cyan bias)
+            colors[lineColorIndex + 3] = 0.0 * alpha;
+            colors[lineColorIndex + 4] = 0.94 * alpha;
+            colors[lineColorIndex + 5] = 1.0 * alpha;
+
+            lineIndex++;
+          }
+        }
+      }
+
+      // Reset rest of the unused line values to 0 to prevent trail artifacts
+      for (let i = lineIndex; i < maxConnections; i++) {
+        const linePosIndex = i * 6;
+        positions[linePosIndex] = 0;
+        positions[linePosIndex + 1] = 0;
+        positions[linePosIndex + 2] = 0;
+        positions[linePosIndex + 3] = 0;
+        positions[linePosIndex + 4] = 0;
+        positions[linePosIndex + 5] = 0;
+      }
+
+      networkLines.geometry.attributes.position.needsUpdate = true;
+      networkLines.geometry.attributes.color.needsUpdate = true;
+
+      // Gentle continuous spin of the outer dust cloud
+      dustParticles.rotation.y = t * 0.02;
+      dustParticles.rotation.x = t * 0.01;
+
+      // Mouse-influence tilt
+      mainGroup.rotation.x = mouseY * 0.12;
+      mainGroup.rotation.y += 0.003;
 
       renderer.render(scene, camera);
     };
     animate();
-
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   };
+
   initThreeJS();
 }
 
-// ------- Magnetic Buttons -------
+// ------- Interactive Magnet Hover Effects -------
 if (useMotion) {
   document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
     let rect;
     btn.addEventListener('mouseenter', () => {
-      // Cache the bounding rect once on enter to avoid heavy layout recalculations
       rect = btn.getBoundingClientRect();
     });
     btn.addEventListener('mousemove', (e) => {
       if (!rect) return;
-      const x = (e.clientX - rect.left - rect.width/2) * 0.3;
-      const y = (e.clientY - rect.top - rect.height/2) * 0.3;
-      gsap.to(btn, { x, y, duration: 0.4, ease: 'power2.out' });
+      const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
+      const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
+      gsap.to(btn, { x, y, duration: 0.3, ease: 'power2.out' });
     });
     btn.addEventListener('mouseleave', () => {
       rect = null;
-      gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.3)' });
+      gsap.to(btn, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1.1, 0.4)' });
     });
   });
 }
 
-// ------- Project Stacking Effect -------
-window.addEventListener('load', () => {
-  if (useMotion) {
-    const cards = gsap.utils.toArray('.project-card');
-    cards.forEach((card, i) => {
-      if (i === cards.length - 1) return;
-      gsap.to(card, {
-        scale: 0.94,
-        opacity: 0.4,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: cards[i + 1],
-          start: 'top 85%',
-          end: 'top 20%',
-          scrub: true,
-        }
-      });
-    });
-  }
-});
-
-// ------- Text Scramble -------
-class TextScramble {
-  constructor(el) {
-    this.el = el;
-    this.chars = '!<>-_\\/[]{}—=+*^?#________';
-    this.update = this.update.bind(this);
-  }
-  setText(newText) {
-    const oldText = this.el.innerText;
-    const length = Math.max(oldText.length, newText.length);
-    const promise = new Promise((resolve) => this.resolve = resolve);
-    this.queue = [];
-    for (let i = 0; i < length; i++) {
-      const from = oldText[i] || '';
-      const to = newText[i] || '';
-      const start = Math.floor(Math.random() * 40);
-      const end = start + Math.floor(Math.random() * 40);
-      this.queue.push({ from, to, start, end });
-    }
-    cancelAnimationFrame(this.frameRequest);
-    this.frame = 0;
-    this.update();
-    return promise;
-  }
-  update() {
-    let output = '';
-    let complete = 0;
-    for (let i = 0, n = this.queue.length; i < n; i++) {
-      let { from, to, start, end, char } = this.queue[i];
-      if (this.frame >= end) {
-        complete++;
-        output += to;
-      } else if (this.frame >= start) {
-        if (!char || Math.random() < 0.28) {
-          char = this.randomChar();
-          this.queue[i].char = char;
-        }
-        output += `<span class="scramble-char">${char}</span>`;
-      } else {
-        output += from;
-      }
-    }
-    this.el.innerHTML = output;
-    if (complete === this.queue.length) {
-      this.resolve();
-    } else {
-      this.frameRequest = requestAnimationFrame(this.update);
-      this.frame++;
-    }
-  }
-  randomChar() {
-    return this.chars[Math.floor(Math.random() * this.chars.length)];
-  }
-}
-
-const statementEl = document.querySelector('.hero-statement');
-if (statementEl && useMotion) {
-    const originalHTML = statementEl.innerHTML;
-    const originalText = statementEl.innerText;
-    statementEl.innerHTML = '';
-    const fx = new TextScramble(statementEl);
-    
-    setTimeout(() => {
-        fx.setText(originalText).then(() => {
-            statementEl.innerHTML = originalHTML; // restore br tags
-        });
-    }, 2400);
-}
-
-// ------- Shorts Video Playback -------
+// ------- Contact Form Submission Handler -------
 (function () {
-  const cards = document.querySelectorAll('.short-card');
-  cards.forEach(card => {
-    const video = card.querySelector('video');
-    if (!video) return;
-    card.addEventListener('click', () => {
-      if (video.paused) {
-        // Pause all other videos first
-        cards.forEach(c => {
-          const v = c.querySelector('video');
-          if (v && v !== video && !v.paused) {
-            v.pause();
-            c.classList.remove('playing');
-          }
-        });
-        video.play();
-        card.classList.add('playing');
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  if (!form || !status) return;
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Sending Message...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+
+      if (res.ok) {
+        status.textContent = "Thank you! Your message has been sent. I'll get back to you shortly.";
+        status.style.color = 'var(--secondary)';
+        status.style.borderColor = 'rgba(0, 240, 255, 0.2)';
+        form.reset();
       } else {
-        video.pause();
-        card.classList.remove('playing');
+        throw new Error();
       }
-    });
+    } catch {
+      status.textContent = 'Oops! Something went wrong. Please email directly at biswasmail631@gmail.com';
+      status.style.color = 'var(--primary)';
+      status.style.borderColor = 'rgba(255, 42, 133, 0.2)';
+    }
+
+    status.classList.remove('hidden');
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+
+    setTimeout(() => status.classList.add('hidden'), 7000);
   });
 })();

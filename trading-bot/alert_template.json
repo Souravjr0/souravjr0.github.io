@@ -1,7 +1,0 @@
-{
-  "secret": "YOUR_WEBHOOK_SECRET",
-  "symbol": "{{ticker}}",
-  "side": "{{strategy.order.action}}",
-  "type": "MARKET",
-  "quoteQty": 20
-}
