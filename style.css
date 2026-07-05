@@ -123,7 +123,8 @@ h1, h2, h3, h4 {
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  opacity: 0;
+  transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.3s ease;
 }
 
 .custom-cursor-glow {
@@ -135,7 +136,8 @@ h1, h2, h3, h4 {
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s;
+  opacity: 0;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, background-color 0.3s, opacity 0.3s ease;
 }
 
 /* Hover States for Cursor */
@@ -384,7 +386,7 @@ body.cursor-view::after {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   cursor: pointer;
   border: 1px solid var(--border);
   background: transparent;

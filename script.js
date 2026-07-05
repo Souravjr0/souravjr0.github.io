@@ -2,41 +2,87 @@
 //  SOURAV BISWAS PORTFOLIO — script.js (Awwwards Redesign)
 // ============================================================
 
-gsap.registerPlugin(ScrollTrigger);
+const hasGSAP = typeof gsap !== 'undefined';
+
+if (hasGSAP) {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024;
 const useMotion = isDesktop && !prefersReducedMotion;
 
 // ------- Loader Control -------
-window.addEventListener('load', () => {
-  const tl = gsap.timeline();
-  // Simulate progress bar filling
-  tl.to('.loader-bar', { width: '100%', duration: 0.8, ease: 'power2.inOut' })
-    .to('#loader', { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
-    .add(() => {
-      document.body.classList.remove('loading');
-      document.getElementById('loader')?.remove();
-    }, '-=0.3')
-    // Hero entry animations
-    .from('.status-badge', { opacity: 0, y: 15, duration: 0.6 }, '-=0.2')
-    .from('.hero-title span', { y: 60, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
-    .from('.hero-meta .meta-item', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4')
-    .from('.hero-actions .btn', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4');
-});
+const startLoaderAnimation = () => {
+  const loader = document.getElementById('loader');
+  if (!loader) return;
+
+  if (hasGSAP) {
+    const tl = gsap.timeline();
+    tl.to('.loader-bar', { width: '100%', duration: 0.8, ease: 'power2.inOut' })
+      .to(loader, { yPercent: -100, duration: 0.8, ease: 'power4.inOut' })
+      .add(() => {
+        document.body.classList.remove('loading');
+        loader.remove();
+      }, '-=0.3')
+      // Hero entry animations
+      .from('.status-badge', { opacity: 0, y: 15, duration: 0.6 }, '-=0.2')
+      .from('.hero-title span', { y: 60, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power4.out' }, '-=0.4')
+      .from('.hero-meta .meta-item', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4')
+      .from('.hero-actions .btn', { opacity: 0, y: 15, duration: 0.6, stagger: 0.1 }, '-=0.4');
+  } else {
+    // Fallback if GSAP is not loaded
+    document.body.classList.remove('loading');
+    loader.remove();
+    document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
+      el.classList.add('visible');
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+  }
+};
+
+// Check if document is already loaded to prevent loader lockup
+if (document.readyState === 'complete') {
+  startLoaderAnimation();
+} else {
+  window.addEventListener('load', startLoaderAnimation);
+}
 
 // ------- Custom Cursor -------
 if (useMotion) {
   const cursor = document.querySelector('.custom-cursor');
   const glow = document.querySelector('.custom-cursor-glow');
+  let cursorInitialized = false;
 
   window.addEventListener('mousemove', e => {
     // Save cursor position variables on document root for CSS text offset
     document.documentElement.style.setProperty('--mx', e.clientX + 'px');
     document.documentElement.style.setProperty('--my', e.clientY + 'px');
 
-    gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: 'power2.out' });
-    gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.4, ease: 'power2.out' });
+    if (!cursorInitialized) {
+      if (hasGSAP) {
+        gsap.set([cursor, glow], { opacity: 1 });
+      } else {
+        if (cursor) cursor.style.opacity = '1';
+        if (glow) glow.style.opacity = '1';
+      }
+      cursorInitialized = true;
+    }
+
+    if (hasGSAP) {
+      if (cursor) gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.08, ease: 'power2.out' });
+      if (glow) gsap.to(glow, { x: e.clientX, y: e.clientY, duration: 0.35, ease: 'power2.out' });
+    } else {
+      if (cursor) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+      }
+      if (glow) {
+        glow.style.left = e.clientX + 'px';
+        glow.style.top = e.clientY + 'px';
+      }
+    }
   });
 
   document.querySelectorAll('a, button, .cert-tab-btn, input, textarea, [data-category]').forEach(el => {
@@ -127,9 +173,21 @@ if (useMotion) {
 
       cards.forEach(card => {
         if (filter === 'all' || card.dataset.category === filter) {
-          gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, display: 'block' });
+          if (hasGSAP) {
+            gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, display: 'block' });
+          } else {
+            card.style.opacity = '1';
+            card.style.transform = 'scale(1)';
+            card.style.display = 'block';
+          }
         } else {
-          gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, display: 'none' });
+          if (hasGSAP) {
+            gsap.to(card, { opacity: 0, scale: 0.9, duration: 0.3, display: 'none' });
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.9)';
+            card.style.display = 'none';
+          }
         }
       });
     });
@@ -138,6 +196,7 @@ if (useMotion) {
 
 // ------- Skills filling animation (GSAP triggered) -------
 window.addEventListener('load', () => {
+  if (!hasGSAP) return;
   document.querySelectorAll('.skill-row').forEach(row => {
     const level = row.dataset.level || '80';
     const bar = row.querySelector('.skill-progress-bar');
@@ -147,7 +206,7 @@ window.addEventListener('load', () => {
       width: level + '%',
       scrollTrigger: {
         trigger: row,
-        start: 'top 90%',
+        start: 'top 92%',
         ease: 'power2.out',
         toggleActions: 'play none none none'
       }
@@ -156,27 +215,28 @@ window.addEventListener('load', () => {
 });
 
 // ------- GSAP reveal animations -------
-if (useMotion) {
-  document.querySelectorAll('.reveal-up').forEach((el) => {
-    gsap.from(el, {
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        toggleActions: 'play none none none'
-      }
+if (hasGSAP) {
+  if (useMotion) {
+    document.querySelectorAll('.reveal-up').forEach((el) => {
+      gsap.from(el, {
+        y: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 88%',
+          toggleActions: 'play none none none'
+        }
+      });
     });
-  });
-} else {
-  // Mobile fallback - make all reveal elements visible instantly or basic fade
-  document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
-    el.classList.add('visible');
-    el.style.opacity = 1;
-    el.style.transform = 'none';
-  });
+  } else {
+    document.querySelectorAll('.reveal-up, .reveal-fade').forEach(el => {
+      el.classList.add('visible');
+      el.style.opacity = 1;
+      el.style.transform = 'none';
+    });
+  }
 }
 
 // ------- Three.js Organic "Neural Heartbeat" Particle Field -------
@@ -196,7 +256,7 @@ if (useMotion && typeof THREE !== 'undefined') {
     const mainGroup = new THREE.Group();
     scene.add(mainGroup);
 
-    // --- Dynamic Neural Hubs (300 nodes connected by dynamic lines) ---
+    // --- Dynamic Neural Hubs (200 nodes connected by dynamic lines) ---
     const hubCount = 200;
     const hubGeometry = new THREE.BufferGeometry();
     const hubPositions = new Float32Array(hubCount * 3);
@@ -225,7 +285,7 @@ if (useMotion && typeof THREE !== 'undefined') {
     const origHubPositions = hubPositions.slice();
 
     const hubMaterial = new THREE.PointsMaterial({
-      size: 0.045,
+      size: 0.04,
       color: 0xff2a85, // Cyber Magenta
       transparent: true,
       opacity: 0.85
@@ -235,8 +295,7 @@ if (useMotion && typeof THREE !== 'undefined') {
     mainGroup.add(hubs);
 
     // --- Connections lines ---
-    // Dynamic lines linking nearby nodes
-    const maxConnections = 600;
+    const maxConnections = 500;
     const lineGeometry = new THREE.BufferGeometry();
     const linePositions = new Float32Array(maxConnections * 2 * 3); // max * 2 points * 3 coordinates
     const lineColors = new Float32Array(maxConnections * 2 * 3);
@@ -248,15 +307,15 @@ if (useMotion && typeof THREE !== 'undefined') {
     const lineMaterial = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: 0.2,
+      opacity: 0.22,
       blending: THREE.AdditiveBlending
     });
 
     const networkLines = new THREE.LineSegments(lineGeometry, lineMaterial);
     mainGroup.add(networkLines);
 
-    // --- Ambient Halo Dust (1,500 drifting stars) ---
-    const dustCount = 1000;
+    // --- Ambient Halo Dust (1,000 drifting stars) ---
+    const dustCount = 800;
     const dustGeometry = new THREE.BufferGeometry();
     const dustPositions = new Float32Array(dustCount * 3);
 
@@ -266,7 +325,7 @@ if (useMotion && typeof THREE !== 'undefined') {
       const v = Math.random();
       const theta = u * 2.0 * Math.PI;
       const phi = Math.acos(2.0 * v - 1.0);
-      const r = 3.5 + Math.random() * 4.5;
+      const r = 3.2 + Math.random() * 4.8;
 
       dustPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
       dustPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
@@ -275,7 +334,7 @@ if (useMotion && typeof THREE !== 'undefined') {
 
     dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
     const dustMaterial = new THREE.PointsMaterial({
-      size: 0.02,
+      size: 0.018,
       color: 0x00f0ff, // Electric Cyan
       transparent: true,
       opacity: 0.45
@@ -298,7 +357,7 @@ if (useMotion && typeof THREE !== 'undefined') {
 
       // Desktop: Shift WebGL right to fit next to Hero text. Mobile: Centered
       if (w >= 1024) {
-        mainGroup.position.set(2.4, 0.2, 0);
+        mainGroup.position.set(2.4, 0.15, 0);
       } else {
         mainGroup.position.set(0, 0, -1);
       }
@@ -316,26 +375,27 @@ if (useMotion && typeof THREE !== 'undefined') {
     });
 
     // Scroll trigger interaction
-    // Link rotation speed, positions, and opacity directly to scroll progression
-    gsap.to(mainGroup.rotation, {
-      y: Math.PI * 1.5,
-      scrollTrigger: {
-        trigger: 'body',
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1
-      }
-    });
+    if (hasGSAP) {
+      gsap.to(mainGroup.rotation, {
+        y: Math.PI * 1.5,
+        scrollTrigger: {
+          trigger: 'body',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1
+        }
+      });
 
-    gsap.to(camera.position, {
-      z: 5.5,
-      scrollTrigger: {
-        trigger: '#about',
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1
-      }
-    });
+      gsap.to(camera.position, {
+        z: 5.5,
+        scrollTrigger: {
+          trigger: '#about',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1
+        }
+      });
+    }
 
     const clock = new THREE.Clock();
 
@@ -391,6 +451,10 @@ if (useMotion && typeof THREE !== 'undefined') {
       const positions = networkLines.geometry.attributes.position.array;
       const colors = networkLines.geometry.attributes.color.array;
 
+      // Optimize by comparing squared distance first to avoid heavy Math.sqrt calls
+      const limit = 1.35;
+      const limitSq = limit * limit;
+
       for (let i = 0; i < hubCount; i++) {
         for (let j = i + 1; j < hubCount; j++) {
           if (lineIndex >= maxConnections) break;
@@ -401,10 +465,12 @@ if (useMotion && typeof THREE !== 'undefined') {
           const dx = pos[idxA] - pos[idxB];
           const dy = pos[idxA + 1] - pos[idxB + 1];
           const dz = pos[idxA + 2] - pos[idxB + 2];
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          
+          const distSq = dx * dx + dy * dy + dz * dz;
 
           // Connect if particles are close
-          if (dist < 1.35) {
+          if (distSq < limitSq) {
+            const dist = Math.sqrt(distSq);
             const linePosIndex = lineIndex * 6;
             
             // Point A
@@ -419,7 +485,7 @@ if (useMotion && typeof THREE !== 'undefined') {
 
             // Calculate colors (Gradient shift between Magenta & Cyan depending on distance)
             const lineColorIndex = lineIndex * 6;
-            const alpha = 1.0 - (dist / 1.35); // closer -> brighter
+            const alpha = 1.0 - (dist / limit); // closer -> brighter
 
             // Point A color (Magenta bias)
             colors[lineColorIndex] = 1.0 * alpha; // R
@@ -451,12 +517,12 @@ if (useMotion && typeof THREE !== 'undefined') {
       networkLines.geometry.attributes.color.needsUpdate = true;
 
       // Gentle continuous spin of the outer dust cloud
-      dustParticles.rotation.y = t * 0.02;
-      dustParticles.rotation.x = t * 0.01;
+      dustParticles.rotation.y = t * 0.015;
+      dustParticles.rotation.x = t * 0.008;
 
       // Mouse-influence tilt
       mainGroup.rotation.x = mouseY * 0.12;
-      mainGroup.rotation.y += 0.003;
+      mainGroup.rotation.y += 0.0025;
 
       renderer.render(scene, camera);
     };
@@ -467,7 +533,7 @@ if (useMotion && typeof THREE !== 'undefined') {
 }
 
 // ------- Interactive Magnet Hover Effects -------
-if (useMotion) {
+if (useMotion && hasGSAP) {
   document.querySelectorAll('.btn, .nav-logo').forEach(btn => {
     let rect;
     btn.addEventListener('mouseenter', () => {
