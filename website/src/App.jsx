@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
+import IntroAnimation from './components/IntroAnimation'
 import Navbar from './components/Navbar'
-import Loader from './components/Loader'
 import Cursor from './components/Cursor'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
@@ -19,19 +19,19 @@ import { useScrollAnimations } from './hooks/useScrollAnimations'
 import { useLenisScroll } from './hooks/useLenisScroll'
 
 export default function App() {
-  const [loading, setLoading] = useState(true)
+  const [showIntro, setShowIntro] = useState(true)
   const { scrollTo } = useLenisScroll()
 
   useScrollAnimations()
 
   useEffect(() => {
     const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (isReduced) setLoading(false)
+    if (isReduced) setShowIntro(false)
   }, [])
 
   return (
     <>
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
       <ScrollProgress />
       <Cursor />
       <Navbar scrollTo={scrollTo} />

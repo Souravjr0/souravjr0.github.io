@@ -2,8 +2,8 @@ import { useRef, useMemo, useEffect, useCallback } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-/* ---- Fibonacci sphere with mouse interactivity & Cyber Neon gradient ---- */
-function FibonacciSphere({ count = 500, radius = 2.8 }) {
+/* ---- Fibonacci sphere with mouse interactivity & Anime.js signature palette ---- */
+function FibonacciSphere({ count = 550, radius = 2.8 }) {
   const meshRef = useRef()
   const mouseTarget = useRef({ x: 0, y: 0 })
   const currentMouse = useRef({ x: 0, y: 0 })
@@ -24,10 +24,18 @@ function FibonacciSphere({ count = 500, radius = 2.8 }) {
       pos[i * 3 + 2] = Math.sin(th) * rY * r
 
       const t = (y + 1) / 2
-      // Cyber Cyan (0, 240, 255) -> Electric Violet (112, 0, 255) -> Emerald (0, 255, 157)
-      colors[i * 3] = 0.0 + t * 0.44
-      colors[i * 3 + 1] = 0.94 - t * 0.5
-      colors[i * 3 + 2] = 1.0 - t * 0.2
+      // Neon Coral (#ff2a5f) -> Electric Cyan (#00f0ff) -> Solar Gold (#ffd166)
+      if (t < 0.5) {
+        const factor = t * 2
+        colors[i * 3] = 1.0 - factor * 1.0 // 1.0 -> 0.0
+        colors[i * 3 + 1] = 0.16 + factor * 0.78 // 0.16 -> 0.94
+        colors[i * 3 + 2] = 0.37 + factor * 0.63 // 0.37 -> 1.0
+      } else {
+        const factor = (t - 0.5) * 2
+        colors[i * 3] = factor * 1.0 // 0.0 -> 1.0
+        colors[i * 3 + 1] = 0.94 - factor * 0.12 // 0.94 -> 0.82
+        colors[i * 3 + 2] = 1.0 - factor * 0.6 // 1.0 -> 0.4
+      }
     }
 
     const geo = new THREE.BufferGeometry()
@@ -35,7 +43,7 @@ function FibonacciSphere({ count = 500, radius = 2.8 }) {
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
 
     const mat = new THREE.PointsMaterial({
-      size: 0.048,
+      size: 0.05,
       vertexColors: true,
       transparent: true,
       opacity: 0.95,
@@ -85,7 +93,7 @@ function FibonacciSphere({ count = 500, radius = 2.8 }) {
   return <points ref={meshRef} geometry={positions} material={material} />
 }
 
-/* ---- Dust particles with parallax ---- */
+/* ---- Dust particles ---- */
 function DustParticles() {
   const ref = useRef()
   const count = 1200
@@ -103,7 +111,7 @@ function DustParticles() {
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
     const mat = new THREE.PointsMaterial({
       size: 0.016,
-      color: 0x00f0ff,
+      color: 0xff2a5f,
       transparent: true,
       opacity: 0.35,
       blending: THREE.AdditiveBlending,
@@ -127,7 +135,7 @@ function DustParticles() {
 function GlowMesh() {
   const meshRef = useRef()
   const mat = useMemo(() => new THREE.MeshBasicMaterial({
-    color: 0x00f0ff,
+    color: 0xff2a5f,
     transparent: true,
     opacity: 0.025,
     blending: THREE.AdditiveBlending,
@@ -163,9 +171,9 @@ function OrbitalRings() {
   }, [])
 
   const ringMat = useMemo(() => new THREE.LineBasicMaterial({
-    color: 0x7000ff,
+    color: 0x00f0ff,
     transparent: true,
-    opacity: 0.2,
+    opacity: 0.22,
     depthWrite: false,
   }), [])
 
