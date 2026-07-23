@@ -1,10 +1,46 @@
+import { useEffect, useRef } from 'react'
 import { SKILL_CATEGORIES } from '../data/portfolio'
+import { animate } from 'animejs'
+
+function SkillItem({ sk }) {
+  const fillRef = useRef(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && fillRef.current) {
+          animate(fillRef.current, {
+            width: [`0%`, `${sk.level}%`],
+            duration: 1200,
+            ease: 'outExpo',
+          })
+          observer.disconnect()
+        }
+      },
+      { threshold: 0.4 }
+    )
+    if (fillRef.current) observer.observe(fillRef.current)
+    return () => observer.disconnect()
+  }, [sk.level])
+
+  return (
+    <div className="skill-item">
+      <div className="skill-item-header">
+        <span className="skill-name">{sk.name}</span>
+        <span className="skill-level-badge">{sk.label} ({sk.level}%)</span>
+      </div>
+      <div className="skill-progress-bar">
+        <div ref={fillRef} className="skill-progress-fill" style={{ width: '0%' }} />
+      </div>
+    </div>
+  )
+}
 
 export default function Skills() {
   return (
     <section id="skills" className="section-container">
       <div className="section-header">
-        <div className="section-kicker">🧠 Technical Ecosystem</div>
+        <div className="section-kicker">🧠 Living Technical Ecosystem</div>
         <h2 className="section-title">Tools, Frameworks &amp; Languages</h2>
         <p className="section-subtitle">
           Core technical competencies across Data Engineering, Machine Learning, and Web Technologies.
@@ -19,15 +55,7 @@ export default function Skills() {
 
             <div className="skill-list">
               {cat.skills.map((sk) => (
-                <div key={sk.name} className="skill-item">
-                  <div className="skill-item-header">
-                    <span className="skill-name">{sk.name}</span>
-                    <span className="skill-level-badge">{sk.label} ({sk.level}%)</span>
-                  </div>
-                  <div className="skill-progress-bar">
-                    <div className="skill-progress-fill" style={{ width: `${sk.level}%` }} />
-                  </div>
-                </div>
+                <SkillItem key={sk.name} sk={sk} />
               ))}
             </div>
 

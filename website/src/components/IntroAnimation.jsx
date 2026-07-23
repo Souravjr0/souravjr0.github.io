@@ -1,13 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate, stagger } from 'animejs'
+import { usePrefersReducedMotion } from '../hooks/useAnimev4'
 
 export default function IntroAnimation({ onComplete }) {
   const [percent, setPercent] = useState(0)
-  const containerRef = useRef(null)
+  const [statusText, setStatusText] = useState('INITIALIZING NEURAL PIPELINE...')
+  const reducedMotion = usePrefersReducedMotion()
   const svgRef = useRef(null)
 
   useEffect(() => {
-    // 1. Percentage counter animation
+    if (reducedMotion) {
+      if (onComplete) onComplete()
+      return
+    }
+
+    // 1. Asset & Module verification simulation
+    const statusLogs = [
+      'INITIALIZING NEURAL PIPELINE...',
+      'LOADING THREE.JS SHADERS...',
+      'INGESTING DATA MODELS...',
+      'VERIFYING MLOPS TELEMETRY...',
+      'SYSTEM ONLINE // SIGNAL STABLE',
+    ]
+
     const counter = { val: 0 }
     animate(counter, {
       val: 100,
@@ -15,7 +30,10 @@ export default function IntroAnimation({ onComplete }) {
       duration: 1800,
       ease: 'inOutQuad',
       onUpdate: () => {
-        setPercent(Math.round(counter.val))
+        const val = Math.round(counter.val)
+        setPercent(val)
+        const idx = Math.min(Math.floor((val / 100) * statusLogs.length), statusLogs.length - 1)
+        setStatusText(statusLogs[idx])
       },
     })
 
@@ -32,29 +50,29 @@ export default function IntroAnimation({ onComplete }) {
         const len = path.getTotalLength()
         animate(path, {
           strokeDashoffset: [len, 0],
-          duration: 1600,
+          duration: 1500,
           ease: 'inOutSine',
-          delay: i * 200,
+          delay: i * 180,
         })
       })
     }
 
-    // 3. Kinetic text reveal
+    // 3. Kinetic blur-to-sharp text reveal
     animate('.intro-char', {
-      translateY: [60, 0],
+      translateY: [40, 0],
       opacity: [0, 1],
-      rotateZ: [10, 0],
-      duration: 1000,
-      delay: stagger(35, { start: 200 }),
-      ease: 'outElastic(1, .6)',
+      filter: ['blur(12px)', 'blur(0px)'],
+      duration: 900,
+      delay: stagger(40, { start: 150 }),
+      ease: 'outExpo',
     })
 
-    // 4. Curtain exit animation
+    // 4. Curtain exit transition
     const timer = setTimeout(() => {
       animate('.intro-curtain', {
         translateY: ['0%', '-100%'],
-        duration: 900,
-        delay: stagger(80),
+        duration: 800,
+        delay: stagger(70),
         ease: 'inOutExpo',
         onComplete: () => {
           if (onComplete) onComplete()
@@ -63,12 +81,14 @@ export default function IntroAnimation({ onComplete }) {
     }, 2200)
 
     return () => clearTimeout(timer)
-  }, [onComplete])
+  }, [onComplete, reducedMotion])
+
+  if (reducedMotion) return null
 
   const titleText = 'SOURAV BISWAS'
 
   return (
-    <div ref={containerRef} className="intro-overlay">
+    <div className="intro-overlay">
       <div className="intro-curtain-container">
         <div className="intro-curtain" />
         <div className="intro-curtain" />
@@ -78,8 +98,8 @@ export default function IntroAnimation({ onComplete }) {
       <div className="intro-content">
         <svg
           ref={svgRef}
-          width="120"
-          height="120"
+          width="110"
+          height="110"
           viewBox="0 0 100 100"
           className="intro-svg"
         >
@@ -111,7 +131,7 @@ export default function IntroAnimation({ onComplete }) {
           ))}
         </div>
 
-        <div className="intro-subtitle">DATA ANALYST // FULL-STACK // AI ARCHITECT</div>
+        <div className="intro-subtitle">{statusText}</div>
 
         <div className="intro-progress-bar">
           <div className="intro-progress-fill" style={{ width: `${percent}%` }} />

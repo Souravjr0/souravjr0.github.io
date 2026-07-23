@@ -3,6 +3,7 @@ import { CONTACT_INFO, SOCIAL_LINKS } from '../data/portfolio'
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const copyEmail = () => {
     navigator.clipboard.writeText(CONTACT_INFO.email)
@@ -10,10 +11,15 @@ export default function Contact() {
     setTimeout(() => setCopied(false), 2500)
   }
 
+  const handleSubmit = (e) => {
+    // Formspree native submission allows standard submit; if handling via state:
+    setSubmitted(true)
+  }
+
   return (
     <section id="contact" className="section-container">
       <div className="section-header" style={{ textAlign: 'center' }}>
-        <div className="section-kicker">📬 Let's Connect</div>
+        <div className="section-kicker">📬 Transmission Zone</div>
         <h2 className="section-title">Start a Conversation</h2>
         <p className="section-subtitle" style={{ margin: '12px auto 0' }}>
           Have a project in mind, an analytics challenge, or an opportunity to explore? Get in touch!
@@ -38,9 +44,9 @@ export default function Contact() {
                 <button
                   onClick={copyEmail}
                   className="pipeline-tag"
-                  style={{ marginLeft: 'auto', cursor: 'pointer', color: 'var(--cyan)' }}
+                  style={{ marginLeft: 'auto', cursor: 'pointer', color: 'var(--coral)' }}
                 >
-                  {copied ? '✓ Copied' : 'Copy'}
+                  {copied ? '✓ Copied to Clipboard' : 'Copy'}
                 </button>
               </div>
 
@@ -69,7 +75,12 @@ export default function Contact() {
             </div>
           </div>
 
-          <form action={CONTACT_INFO.formspree} method="POST">
+          <form action={CONTACT_INFO.formspree} method="POST" onSubmit={handleSubmit}>
+            {submitted && (
+              <div className="transmission-success-banner">
+                ⚡ SIGNAL TRANSMITTED // MESSAGE LOCKED
+              </div>
+            )}
             <div className="form-group">
               <label className="form-label">Your Name</label>
               <input type="text" name="name" className="form-input" placeholder="e.g. Sarah Jenkins" required />
@@ -86,7 +97,7 @@ export default function Contact() {
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
-              Send Message ✨
+              Send Transmission ✨
             </button>
           </form>
         </div>

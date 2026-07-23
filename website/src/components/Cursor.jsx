@@ -1,65 +1,58 @@
 import { useEffect, useRef, useState } from 'react'
+import { useIsTouchDevice } from '../hooks/useAnimev4'
 
 export default function Cursor() {
   const dotRef = useRef(null)
   const ringRef = useRef(null)
-  const [visible, setVisible] = useState(false)
-  const targetRef = useRef({ x: 0, y: 0 })
-  const dotPos = useRef({ x: 0, y: 0 })
-  const ringPos = useRef({ x: 0, y: 0 })
+  const [hovered, setHovered] = useState(false)
+  const isTouch = useIsTouchDevice()
 
   useEffect(() => {
-    const isDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 1024
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!isDesktop || prefersReducedMotion) return
+    if (isTouch) return
 
-    const dot = dotRef.current
-    const ring = ringRef.current
-    if (!dot || !ring) return
+    let animationId
+    let mouseX = -100
+    let mouseY = -100
+    let ringX = -100
+    let ringY = -100
 
     const onMouseMove = (e) => {
-      if (!visible) setVisible(true)
-      targetRef.current = { x: e.clientX, y: e.clientY }
+      mouseX = e.clientX
+      mouseY = e.clientY
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
+      }
+
+      const target = e.target
+      const isInteractive = target.closest('a, button, input, textarea, .terminal-chip, .metric-card, .project-card, .pipeline-card')
+      setHovered(!!isInteractive)
     }
-    window.addEventListener('mousemove', onMouseMove)
 
-    const lerp = (a, b, t) => a + (b - a) * t
+    const animateRing = () => {
+      ringX += (mouseX - ringX) * 0.15
+      ringY += (mouseY - ringY) * 0.15
 
-    const animate = () => {
-      const target = targetRef.current
-      dotPos.current.x = lerp(dotPos.current.x, target.x, 0.5)
-      dotPos.current.y = lerp(dotPos.current.y, target.y, 0.5)
-      ringPos.current.x = lerp(ringPos.current.x, target.x, 0.12)
-      ringPos.current.y = lerp(ringPos.current.y, target.y, 0.12)
-
-      dot.style.transform = `translate(${dotPos.current.x}px, ${dotPos.current.y}px) translate(-50%, -50%)`
-      ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`
-      requestAnimationFrame(animate)
+      if (ringRef.current) {
+        ringRef.current.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`
+      }
+      animationId = requestAnimationFrame(animateRing)
     }
-    requestAnimationFrame(animate)
 
-    // Hover effect on interactive elements
-    const hoverable = document.querySelectorAll('a, button, .service-item, .skill-card, .project-card, input, textarea')
-    const addHover = () => ring.classList.add('hovering')
-    const removeHover = () => ring.classList.remove('hovering')
-    hoverable.forEach((el) => {
-      el.addEventListener('mouseenter', addHover)
-      el.addEventListener('mouseleave', removeHover)
-    })
+    window.addEventListener('mousemove', onMouseMove, { passive: true })
+    animationId = requestAnimationFrame(animateRing)
 
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
-      hoverable.forEach((el) => {
-        el.removeEventListener('mouseenter', addHover)
-        el.removeEventListener('mouseleave', removeHover)
-      })
+      cancelAnimationFrame(animationId)
     }
-  }, [visible])
+  }, [isTouch])
+
+  if (isTouch) return null
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" style={{ opacity: visible ? 1 : 0 }} />
-      <div ref={ringRef} className="cursor-ring" style={{ opacity: visible ? 1 : 0 }} />
+      <div ref={dotRef} className="cursor-dot" />
+      <div ref={ringRef} className={`cursor-ring ${hovered ? 'hovered' : ''}`} />
     </>
   )
 }
