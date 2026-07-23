@@ -2,29 +2,47 @@ import { PROJECTS } from '../data/portfolio'
 
 export default function Projects() {
   return (
-    <section id="projects" className="section projects-section">
-      <div className="container projects-header">
-        <span className="label">Selected Work</span>
-        <h2 className="heading-lg">Projects.</h2>
+    <section id="projects" className="section-container">
+      <div className="section-header">
+        <div className="section-kicker">📁 Featured Engineering</div>
+        <h2 className="section-title">Selected Projects &amp; Repositories</h2>
+        <p className="section-subtitle">
+          Open-source AI guardrails, Web3 crypto interfaces, and production analytics tools.
+        </p>
       </div>
-      <div className="projects-track">
-        {PROJECTS.map((project, i) => (
-          <article key={i} className="project-card">
-            <div className="pc-cover" style={{ background: project.gradient }} />
-            <div className="pc-body">
-              <span className="pc-tag">{project.tag}</span>
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <div className="pc-stack">
-                {project.stack.map((tech) => (
-                  <span key={tech}>{tech}</span>
+
+      <div className="projects-grid">
+        {PROJECTS.map((proj) => (
+          <div key={proj.id} className="project-card" style={{ background: proj.gradient }}>
+            <span className="project-tag">{proj.tag}</span>
+            <h3 className="project-title">{proj.title}</h3>
+            <div className="project-subtitle">{proj.subtitle}</div>
+            <p className="project-desc">{proj.description}</p>
+
+            <ul className="project-highlights">
+              {proj.highlights.map((h) => (
+                <li key={h}>{h}</li>
+              ))}
+            </ul>
+
+            <div className="project-footer">
+              <div className="project-stack">
+                {proj.stack.map((st) => (
+                  <span key={st} className="pipeline-tag" style={{ color: proj.accentColor }}>
+                    {st}
+                  </span>
                 ))}
               </div>
-              <a href={project.url} target="_blank" rel="noopener" className="pc-link">
-                View ↗
+              <a
+                href={proj.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link"
+              >
+                View Repository ↗
               </a>
             </div>
-          </article>
+          </div>
         ))}
       </div>
     </section>

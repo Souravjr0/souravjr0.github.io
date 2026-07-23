@@ -1,86 +1,94 @@
 import { useState } from 'react'
-import { CONTACT_INFO } from '../data/portfolio'
+import { CONTACT_INFO, SOCIAL_LINKS } from '../data/portfolio'
 
 export default function Contact() {
-  const [status, setStatus] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [copied, setCopied] = useState(false)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setSubmitting(true)
-    const form = e.target
-    try {
-      const res = await fetch(CONTACT_INFO.formspree, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' },
-      })
-      if (res.ok) {
-        setStatus("Sent. I'll reply within 24 hours.")
-        form.reset()
-      } else throw new Error()
-    } catch {
-      setStatus('Error. Email me directly at biswasmail631@gmail.com')
-    }
-    setSubmitting(false)
-    setTimeout(() => setStatus(''), 8000)
+  const copyEmail = () => {
+    navigator.clipboard.writeText(CONTACT_INFO.email)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2500)
   }
 
   return (
-    <section id="contact" className="section">
-      <div className="container">
-        <div className="split-grid">
-          <div className="split-left">
-            <span className="label">Contact</span>
-            <h2 className="heading-lg">Let's work<br />together.</h2>
-            <div className="contact-meta">
-              <div className="cm-item">
-                <span className="cm-label">Email</span>
-                <a href={`mailto:${CONTACT_INFO.email}`} className="cm-value">
-                  {CONTACT_INFO.email}
-                </a>
+    <section id="contact" className="section-container">
+      <div className="section-header" style={{ textAlign: 'center' }}>
+        <div className="section-kicker">📬 Let's Connect</div>
+        <h2 className="section-title">Start a Conversation</h2>
+        <p className="section-subtitle" style={{ margin: '12px auto 0' }}>
+          Have a project in mind, an analytics challenge, or an opportunity to explore? Get in touch!
+        </p>
+      </div>
+
+      <div className="contact-card">
+        <div className="contact-grid">
+          <div>
+            <h3 className="contact-info-title">Contact Channels</h3>
+            <p className="contact-info-desc">
+              {CONTACT_INFO.availability}
+            </p>
+
+            <div className="contact-details-list">
+              <div className="contact-detail-item">
+                <span className="contact-icon">📧</span>
+                <div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Direct Email</div>
+                  <div style={{ fontWeight: 600 }}>{CONTACT_INFO.email}</div>
+                </div>
+                <button
+                  onClick={copyEmail}
+                  className="pipeline-tag"
+                  style={{ marginLeft: 'auto', cursor: 'pointer', color: 'var(--cyan)' }}
+                >
+                  {copied ? '✓ Copied' : 'Copy'}
+                </button>
               </div>
-              <div className="cm-item">
-                <span className="cm-label">LinkedIn</span>
-                <a href={CONTACT_INFO.linkedin} target="_blank" rel="noopener" className="cm-value">
-                  sourav-biswas ↗
-                </a>
+
+              <div className="contact-detail-item">
+                <span className="contact-icon">📍</span>
+                <div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Base Location</div>
+                  <div style={{ fontWeight: 600 }}>{CONTACT_INFO.location}</div>
+                </div>
               </div>
-              <div className="cm-item">
-                <span className="cm-label">Status</span>
-                <span className="cm-status">
-                  <span className="status-dot" />
-                  Available
-                </span>
+
+              <div style={{ marginTop: '20px', display: 'flex', gap: '12px' }}>
+                {SOCIAL_LINKS.map((soc) => (
+                  <a
+                    key={soc.label}
+                    href={soc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline"
+                    style={{ padding: '10px 18px', fontSize: '0.85rem' }}
+                  >
+                    {soc.label} ↗
+                  </a>
+                ))}
               </div>
             </div>
           </div>
-          <div className="split-right">
-            <form onSubmit={handleSubmit} className="contact-form">
-              <div className="form-row">
-                <div className="form-field">
-                  <label htmlFor="c-name">Name</label>
-                  <input id="c-name" type="text" name="name" required placeholder="Your name" />
-                </div>
-                <div className="form-field">
-                  <label htmlFor="c-email">Email</label>
-                  <input id="c-email" type="email" name="email" required placeholder="your@email.com" />
-                </div>
-              </div>
-              <div className="form-field">
-                <label htmlFor="c-msg">Message</label>
-                <textarea id="c-msg" name="message" rows="5" required placeholder="Tell me about your project..." />
-              </div>
-              <button type="submit" className="btn btn-primary btn-full" disabled={submitting}>
-                {submitting ? 'Sending...' : 'Send Message'}
-              </button>
-              {status && (
-                <div className="form-status visible" style={{ color: status.includes('Error') ? '#c97070' : 'var(--gold)' }}>
-                  {status}
-                </div>
-              )}
-            </form>
-          </div>
+
+          <form action={CONTACT_INFO.formspree} method="POST">
+            <div className="form-group">
+              <label className="form-label">Your Name</label>
+              <input type="text" name="name" className="form-input" placeholder="e.g. Sarah Jenkins" required />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Your Email</label>
+              <input type="email" name="email" className="form-input" placeholder="sarah@company.com" required />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Message</label>
+              <textarea name="message" className="form-textarea" placeholder="Tell me about your project or goal..." required />
+            </div>
+
+            <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
+              Send Message ✨
+            </button>
+          </form>
         </div>
       </div>
     </section>

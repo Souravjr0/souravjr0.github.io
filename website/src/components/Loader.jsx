@@ -36,6 +36,7 @@ export default function Loader({ onComplete }) {
       <div className="loader-bar">
         <span className="loader-fill" style={{ width: `${count}%` }} />
       </div>
+      <span className="loader-label">Loading experience</span>
     </div>
   )
 }

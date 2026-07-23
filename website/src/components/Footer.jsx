@@ -1,18 +1,15 @@
-import { SOCIAL_LINKS } from '../data/portfolio'
-
 export default function Footer() {
   return (
-    <footer className="site-footer">
+    <footer className="footer">
       <div className="footer-inner">
-        <span className="footer-copy">&copy; {new Date().getFullYear()} Sourav Biswas</span>
-        <nav className="footer-links">
-          {SOCIAL_LINKS.map((link) => (
-            <a key={link.label} href={link.url} target="_blank" rel="noopener">
-              {link.label}
-            </a>
-          ))}
-          <a href="mailto:biswasmail631@gmail.com">Email</a>
-        </nav>
+        <div>
+          © {new Date().getFullYear()} Sourav Biswas. Built with React, Three.js &amp; Anime.js.
+        </div>
+        <div>
+          <a href="#hero" style={{ color: 'var(--cyan)' }}>
+            Back to Top ↑
+          </a>
+        </div>
       </div>
     </footer>
   )

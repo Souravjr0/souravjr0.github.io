@@ -1,17 +1,22 @@
 export default function Marquee() {
   const items = [
-    'Python', 'TensorFlow', 'SQL', 'PyTorch', 'AWS', 'React',
-    'Three.js', 'GSAP', 'Docker', 'Pandas', 'Scikit-learn', 'FastAPI',
+    'PYTHON DATA PIPELINES',
+    'MACHINE LEARNING MODELS',
+    '3D WEBGL VISUALS',
+    'FASTAPI & BACKEND',
+    'REACT & ANIME.JS',
+    'TABLEAU BI DASHBOARDS',
+    'DOCKER & MLOPS',
   ]
 
   return (
-    <div className="marquee" aria-hidden="true">
-      <div className="marquee-inner">
-        {[...items, ...items].map((item, i) => (
-          <span key={i}>
-            {item}
-            {i < items.length * 2 - 1 && <span className="mq-sep"> ✦ </span>}
-          </span>
+    <div className="marquee-container">
+      <div className="marquee-content">
+        {[...items, ...items, ...items].map((item, idx) => (
+          <div key={idx} className="marquee-item">
+            <span className="highlight">✦</span>
+            <span>{item}</span>
+          </div>
         ))}
       </div>
     </div>

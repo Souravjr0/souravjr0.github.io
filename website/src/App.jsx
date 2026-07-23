@@ -5,6 +5,8 @@ import Cursor from './components/Cursor'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
 import About from './components/About'
+import WorkflowPipeline from './components/WorkflowPipeline'
+import InteractiveTerminal from './components/InteractiveTerminal'
 import Services from './components/Services'
 import Projects from './components/Projects'
 import Skills from './components/Skills'
@@ -14,9 +16,11 @@ import ScrollProgress from './components/ScrollProgress'
 import BackToTop from './components/BackToTop'
 import BackgroundShapes from './components/three/BackgroundShapes'
 import { useScrollAnimations } from './hooks/useScrollAnimations'
+import { useLenisScroll } from './hooks/useLenisScroll'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
+  const { scrollTo } = useLenisScroll()
 
   useScrollAnimations()
 
@@ -30,12 +34,14 @@ export default function App() {
       {loading && <Loader onComplete={() => setLoading(false)} />}
       <ScrollProgress />
       <Cursor />
-      <Navbar />
+      <Navbar scrollTo={scrollTo} />
       <BackgroundShapes />
       <main>
         <Hero />
         <Marquee />
         <About />
+        <WorkflowPipeline />
+        <InteractiveTerminal />
         <Services />
         <Projects />
         <Skills />
