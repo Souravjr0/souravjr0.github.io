@@ -6,6 +6,7 @@ import Hero from './components/Hero'
 import Marquee from './components/Marquee'
 import About from './components/About'
 import WorkflowPipeline from './components/WorkflowPipeline'
+import CosmicMatrixStudio from './components/CosmicMatrixStudio'
 import AnimationViewfinder from './components/AnimationViewfinder'
 import InteractiveTerminal from './components/InteractiveTerminal'
 import Services from './components/Services'
@@ -81,6 +82,7 @@ export default function App() {
         <Marquee />
         <About />
         <WorkflowPipeline />
+        <CosmicMatrixStudio />
         <AnimationViewfinder />
         <InteractiveTerminal onOpenNeuralMap={() => setNeuralMapOpen(true)} />
         <Services />

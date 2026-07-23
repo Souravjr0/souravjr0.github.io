@@ -1,6 +1,7 @@
 export const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Workflow', href: '#workflow' },
+  { label: 'Multiverse Studio', href: '#multiverse' },
   { label: 'Telescope', href: '#viewfinder' },
   { label: 'Interactive Lab', href: '#lab' },
   { label: 'Services', href: '#services' },
@@ -60,6 +61,7 @@ export const METHODOLOGY = [
 export const TERMINAL_COMMANDS = {
   help: `Available commands:
   - about          : View summary bio & background
+  - multiverse     : Jump to Cosmic Multiverse Fusion Studio
   - viewfinder     : Jump to Signal Telescope Animation Inspector
   - skills         : Display core tech stack & proficiency
   - projects       : List featured open-source repositories & apps
@@ -72,6 +74,8 @@ export const TERMINAL_COMMANDS = {
   Location : Pune, Maharashtra, India
   Focus    : Data Engineering, ML Pipelines, High-Impact Web Apps
   Status   : Available for freelance, remote contracts & strategic roles.`,
+
+  multiverse: `[SYSTEM] Routing quantum signal to #multiverse Cosmic Fusion Studio...`,
 
   viewfinder: `[SYSTEM] Routing telephoto signal focus to #viewfinder section...`,
 

@@ -7,6 +7,8 @@ export default function CommandPalette({ isOpen, onClose, onSelectSection, onOpe
     { id: 'hero', label: 'Go to Hero Section', icon: '⚡', category: 'Navigation' },
     { id: 'about', label: 'Go to About & Impact', icon: '💡', category: 'Navigation' },
     { id: 'workflow', label: 'Go to Methodology & Pipeline', icon: '🔄', category: 'Navigation' },
+    { id: 'multiverse', label: 'Launch Cosmic Multiverse Studio', icon: '🔮', category: 'Navigation' },
+    { id: 'viewfinder', label: 'Go to Signal Telescope Viewfinder', icon: '🔭', category: 'Navigation' },
     { id: 'lab', label: 'Go to Interactive Terminal', icon: '💻', category: 'Navigation' },
     { id: 'services', label: 'Go to Specialized Services', icon: '🛠️', category: 'Navigation' },
     { id: 'projects', label: 'Go to Selected Projects', icon: '📁', category: 'Navigation' },
@@ -57,7 +59,7 @@ export default function CommandPalette({ isOpen, onClose, onSelectSection, onOpe
           <input
             type="text"
             className="cmd-input"
-            placeholder="Type a command or jump to section (e.g. 'lab', 'projects')..."
+            placeholder="Type a command or jump to section (e.g. 'multiverse', 'projects')..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
