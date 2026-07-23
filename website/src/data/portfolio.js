@@ -1,6 +1,7 @@
 export const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Workflow', href: '#workflow' },
+  { label: 'Telescope', href: '#viewfinder' },
   { label: 'Interactive Lab', href: '#lab' },
   { label: 'Services', href: '#services' },
   { label: 'Work', href: '#projects' },
@@ -59,9 +60,11 @@ export const METHODOLOGY = [
 export const TERMINAL_COMMANDS = {
   help: `Available commands:
   - about          : View summary bio & background
+  - viewfinder     : Jump to Signal Telescope Animation Inspector
   - skills         : Display core tech stack & proficiency
   - projects       : List featured open-source repositories & apps
   - run-ml-demo    : Simulate real-time predictive model inference
+  - neural-map     : Open interactive system node graph
   - contact        : Fetch direct communication channels
   - clear          : Clear terminal screen`,
 
@@ -69,6 +72,8 @@ export const TERMINAL_COMMANDS = {
   Location : Pune, Maharashtra, India
   Focus    : Data Engineering, ML Pipelines, High-Impact Web Apps
   Status   : Available for freelance, remote contracts & strategic roles.`,
+
+  viewfinder: `[SYSTEM] Routing telephoto signal focus to #viewfinder section...`,
 
   skills: `=== TECHNICAL ECOSYSTEM ===
   • Data & Analytics  : Python (96%), SQL (92%), Pandas/NumPy (94%), Tableau
@@ -102,8 +107,8 @@ export const SERVICES = [
       'End-to-end analytics pipelines, real-time dashboards, and reporting automation that surface actionable insights for executive decisions.',
     checklist: ['Automated BI Dashboards', 'Statistical EDA & Cohort Analysis', 'Custom SQL ETL Pipelines'],
     tags: ['Python', 'SQL', 'Tableau', 'Pandas'],
-    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(112, 0, 255, 0.05))',
-    accentColor: '#00f0ff',
+    gradient: 'linear-gradient(135deg, rgba(255, 42, 95, 0.12), rgba(0, 240, 255, 0.05))',
+    accentColor: '#ff2a5f',
   },
   {
     id: '02',
@@ -112,18 +117,18 @@ export const SERVICES = [
       'Predictive analytics, NLP agents, and computer vision algorithms trained, evaluated, and deployed with robust monitoring pipelines.',
     checklist: ['Predictive Classification & Regression', 'LLM Guardrails & Prompt Safety', 'Model Evaluation & Optimization'],
     tags: ['PyTorch', 'TensorFlow', 'Scikit-Learn', 'MLOps'],
-    gradient: 'linear-gradient(135deg, rgba(112, 0, 255, 0.12), rgba(0, 255, 157, 0.05))',
-    accentColor: '#7000ff',
+    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.12), rgba(255, 209, 102, 0.05))',
+    accentColor: '#00f0ff',
   },
   {
     id: '03',
     title: 'Interactive Web Apps',
     description:
-      'Full-stack React applications, portfolio experiences, and product landing pages powered by Three.js WebGL, Anime.js, and smooth scroll.',
+      'Full-stack React applications, portfolio experiences, and product landing pages powered by Three.js WebGL, Anime.js v4, and smooth scroll.',
     checklist: ['High-Performance React Frameworks', '3D WebGL Canvas & Particle FX', 'Kinetic Typography & Smooth Scroll'],
     tags: ['React', 'Three.js', 'Anime.js', 'GSAP'],
-    gradient: 'linear-gradient(135deg, rgba(0, 255, 157, 0.12), rgba(0, 240, 255, 0.05))',
-    accentColor: '#00ff9d',
+    gradient: 'linear-gradient(135deg, rgba(255, 209, 102, 0.12), rgba(255, 42, 95, 0.05))',
+    accentColor: '#ffd166',
   },
   {
     id: '04',
@@ -132,8 +137,8 @@ export const SERVICES = [
       'High-throughput REST/GraphQL APIs, microservice containers, and cloud deployments built for reliability and zero-downtime scaling.',
     checklist: ['FastAPI & Node.js Backend', 'Docker Containerization', 'AWS Cloud Infrastructure'],
     tags: ['FastAPI', 'Docker', 'AWS', 'REST APIs'],
-    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.10), rgba(112, 0, 255, 0.10))',
-    accentColor: '#00f0ff',
+    gradient: 'linear-gradient(135deg, rgba(255, 42, 95, 0.10), rgba(0, 240, 255, 0.10))',
+    accentColor: '#ff2a5f',
   },
 ]
 
@@ -149,8 +154,8 @@ export const PROJECTS = [
     stack: ['Python', 'AI Safety', 'LLM Benchmarks', 'FastAPI'],
     url: 'https://github.com/souravjr0/Claude-guardian',
     demoUrl: 'https://github.com/souravjr0/Claude-guardian',
-    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(112, 0, 255, 0.08))',
-    accentColor: '#00f0ff',
+    gradient: 'linear-gradient(135deg, rgba(255, 42, 95, 0.15), rgba(0, 240, 255, 0.08))',
+    accentColor: '#ff2a5f',
   },
   {
     id: 'zunes-wallet',
@@ -163,8 +168,8 @@ export const PROJECTS = [
     stack: ['Ethereum', 'Web3.js', 'React', 'UI Design'],
     url: 'https://github.com/souravjr0/Zunes-wallet',
     demoUrl: 'https://github.com/souravjr0/Zunes-wallet',
-    gradient: 'linear-gradient(135deg, rgba(112, 0, 255, 0.15), rgba(0, 255, 157, 0.08))',
-    accentColor: '#7000ff',
+    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 209, 102, 0.08))',
+    accentColor: '#00f0ff',
   },
   {
     id: 'cluely',
@@ -177,8 +182,8 @@ export const PROJECTS = [
     stack: ['Python', 'NLP', 'React', 'Tailwind'],
     url: 'https://github.com/souravjr0/Cluely',
     demoUrl: 'https://github.com/souravjr0/Cluely',
-    gradient: 'linear-gradient(135deg, rgba(0, 255, 157, 0.15), rgba(0, 240, 255, 0.08))',
-    accentColor: '#00ff9d',
+    gradient: 'linear-gradient(135deg, rgba(255, 209, 102, 0.15), rgba(255, 42, 95, 0.08))',
+    accentColor: '#ffd166',
   },
   {
     id: 'habit-tracker',
@@ -191,8 +196,8 @@ export const PROJECTS = [
     stack: ['JavaScript', 'LocalStorage', 'CSS Grid', 'PWA'],
     url: 'https://github.com/souravjr0/Habit-Tracker',
     demoUrl: 'https://github.com/souravjr0/Habit-Tracker',
-    gradient: 'linear-gradient(135deg, rgba(0, 240, 255, 0.10), rgba(0, 255, 157, 0.10))',
-    accentColor: '#00f0ff',
+    gradient: 'linear-gradient(135deg, rgba(255, 42, 95, 0.10), rgba(0, 240, 255, 0.10))',
+    accentColor: '#ff2a5f',
   },
 ]
 

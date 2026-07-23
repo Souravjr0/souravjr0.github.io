@@ -6,6 +6,7 @@ import Hero from './components/Hero'
 import Marquee from './components/Marquee'
 import About from './components/About'
 import WorkflowPipeline from './components/WorkflowPipeline'
+import AnimationViewfinder from './components/AnimationViewfinder'
 import InteractiveTerminal from './components/InteractiveTerminal'
 import Services from './components/Services'
 import Projects from './components/Projects'
@@ -80,6 +81,7 @@ export default function App() {
         <Marquee />
         <About />
         <WorkflowPipeline />
+        <AnimationViewfinder />
         <InteractiveTerminal onOpenNeuralMap={() => setNeuralMapOpen(true)} />
         <Services />
         <Projects />
