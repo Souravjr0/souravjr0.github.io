@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { SKILL_CATEGORIES } from '../data/portfolio'
 import { animate } from 'animejs'
+import { EASE, DUR } from '../motion'
 
 function SkillItem({ sk }) {
   const fillRef = useRef(null)
@@ -11,8 +12,8 @@ function SkillItem({ sk }) {
         if (entry.isIntersecting && fillRef.current) {
           animate(fillRef.current, {
             width: [`0%`, `${sk.level}%`],
-            duration: 1200,
-            ease: 'outExpo',
+            duration: DUR.slow,
+            ease: EASE.out,
           })
           observer.disconnect()
         }

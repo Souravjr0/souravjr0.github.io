@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { STATS } from '../data/portfolio'
 import { animate } from 'animejs'
+import { EASE, DUR } from '../motion'
 
 function SparklineSVG({ color = '#ff2a5f' }) {
   return (
@@ -27,8 +28,8 @@ function MetricModule({ stat }) {
           animate(counter, {
             val: stat.value,
             round: 1,
-            duration: 1500,
-            ease: 'outExpo',
+            duration: DUR.slow,
+            ease: EASE.out,
             onUpdate: () => {
               if (numRef.current) numRef.current.textContent = Math.round(counter.val)
             },

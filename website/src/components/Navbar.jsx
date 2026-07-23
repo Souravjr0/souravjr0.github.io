@@ -8,7 +8,12 @@ export default function Navbar({ scrollTo, onOpenCmdPalette }) {
   const [scrollPercent, setScrollPercent] = useState(0)
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false
+
+    // rAF-batched: layout reads (scrollHeight, getBoundingClientRect) and the
+    // state updates run once per frame, not once per scroll event.
+    const update = () => {
+      ticking = false
       const scrollY = window.scrollY
       setScrolled(scrollY > 40)
 
@@ -31,7 +36,15 @@ export default function Navbar({ scrollTo, onOpenCmdPalette }) {
       }
     }
 
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
+      }
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
+    update()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 

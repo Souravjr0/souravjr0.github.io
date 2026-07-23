@@ -9,6 +9,20 @@ export default function CosmicMatrixStudio() {
   const [speed, setSpeed] = useState(1)
   const [telemetry, setTelemetry] = useState('MULTIVERSE FUSION // SYSTEM ACTIVE')
   const stageRef = useRef(null)
+  const sectionRef = useRef(null)
+  const [visible, setVisible] = useState(false)
+
+  // Only run the continuous physics loops while the section is on-screen.
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.05 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
 
   const planets = [
     { id: 'mercury', name: 'Mercury', size: 14, distance: 75, speed: 2.2, color: '#ffd166' },
@@ -68,17 +82,20 @@ export default function CosmicMatrixStudio() {
     setTimeout(() => setTelemetry('MULTIVERSE FUSION // SYSTEM ACTIVE'), 2500)
   }
 
-  // Animate planetary orbits continuously
+  // Animate planetary orbits continuously (only while visible; revert old
+  // instances on re-run so slider drags don't stack infinite loops).
   useEffect(() => {
-    planets.forEach((p) => {
+    if (!visible) return
+    const anims = planets.map((p) =>
       animate(`.planet-${p.id}`, {
         rotateZ: [0, 360],
         duration: (10000 / p.speed) / (speed * gravity),
         ease: 'linear',
         loop: true,
       })
-    })
-  }, [speed, gravity])
+    )
+    return () => anims.forEach((a) => a.revert())
+  }, [speed, gravity, visible])
 
   // Animate organic lava metablobs morphing continuously
   useEffect(() => {
@@ -88,9 +105,12 @@ export default function CosmicMatrixStudio() {
       'M 55,10 Q 75,45 85,75 Q 40,85 20,60 Q 15,30 55,10 Z',
     ]
 
+    if (!visible) return
     const blobs = stageRef.current?.querySelectorAll('.lava-blob-path')
-    if (blobs) {
-      blobs.forEach((b, idx) => {
+    if (!blobs) return
+    const anims = []
+    blobs.forEach((b, idx) => {
+      anims.push(
         animate(b, {
           d: [
             { value: blobPaths[0] },
@@ -103,12 +123,13 @@ export default function CosmicMatrixStudio() {
           ease: 'inOutSine',
           loop: true,
         })
-      })
-    }
-  }, [heat, speed])
+      )
+    })
+    return () => anims.forEach((a) => a.revert())
+  }, [heat, speed, visible])
 
   return (
-    <section id="multiverse" className="section-container">
+    <section id="multiverse" ref={sectionRef} className="section-container">
       <div className="section-header" style={{ textAlign: 'center' }}>
         <div className="section-kicker">🔮 Multiverse Physics Engine</div>
         <h2 className="section-title">Cosmic Neural Matrix &amp; Fusion Studio</h2>

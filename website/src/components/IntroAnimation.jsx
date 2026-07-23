@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate, stagger } from 'animejs'
 import { usePrefersReducedMotion } from '../hooks/useAnimev4'
+import { EASE, DUR } from '../motion'
 
 export default function IntroAnimation({ onComplete }) {
   const [percent, setPercent] = useState(0)
@@ -28,7 +29,7 @@ export default function IntroAnimation({ onComplete }) {
       val: 100,
       round: 1,
       duration: 1800,
-      ease: 'inOutQuad',
+      ease: EASE.inOut,
       onUpdate: () => {
         const val = Math.round(counter.val)
         setPercent(val)
@@ -50,8 +51,8 @@ export default function IntroAnimation({ onComplete }) {
         const len = path.getTotalLength()
         animate(path, {
           strokeDashoffset: [len, 0],
-          duration: 1500,
-          ease: 'inOutSine',
+          duration: DUR.slow,
+          ease: EASE.inOut,
           delay: i * 180,
         })
       })
@@ -62,18 +63,18 @@ export default function IntroAnimation({ onComplete }) {
       translateY: [40, 0],
       opacity: [0, 1],
       filter: ['blur(12px)', 'blur(0px)'],
-      duration: 900,
+      duration: DUR.base,
       delay: stagger(40, { start: 150 }),
-      ease: 'outExpo',
+      ease: EASE.out,
     })
 
     // 4. Curtain exit transition
     const timer = setTimeout(() => {
       animate('.intro-curtain', {
         translateY: ['0%', '-100%'],
-        duration: 800,
+        duration: DUR.base,
         delay: stagger(70),
-        ease: 'inOutExpo',
+        ease: EASE.inOut,
         onComplete: () => {
           if (onComplete) onComplete()
         },

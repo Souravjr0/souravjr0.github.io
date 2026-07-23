@@ -14,12 +14,12 @@ import Projects from './components/Projects'
 import Skills from './components/Skills'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
-import ScrollProgress from './components/ScrollProgress'
 import BackToTop from './components/BackToTop'
 import BackgroundShapes from './components/three/BackgroundShapes'
+// scroll progress lives in the Navbar beam — no separate top bar needed
 import CommandPalette from './components/CommandPalette'
 import NeuralMapModal from './components/NeuralMapModal'
-import { useScrollAnimations } from './hooks/useScrollAnimations'
+import { useSectionReveal } from './hooks/useSectionReveal'
 import { useLenisScroll } from './hooks/useLenisScroll'
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
   const [surgeMode, setSurgeMode] = useState(false)
   const { scrollTo } = useLenisScroll()
 
-  useScrollAnimations()
+  useSectionReveal()
 
   // Konami Code Easter Egg (↑ ↑ ↓ ↓ ← → ← → b a)
   useEffect(() => {
@@ -70,7 +70,6 @@ export default function App() {
   return (
     <div className={`app-root ${surgeMode ? 'surge-active' : ''}`}>
       {showIntro && <IntroAnimation onComplete={() => setShowIntro(false)} />}
-      <ScrollProgress />
       <Cursor />
       <Navbar
         scrollTo={scrollTo}

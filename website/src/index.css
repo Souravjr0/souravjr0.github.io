@@ -40,6 +40,13 @@
   --sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --heading: 'Outfit', var(--sans);
   --mono: 'JetBrains Mono', monospace;
+
+  /* Motion tokens — mirror of src/motion.js. One easing family + duration scale. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.4s;
+  --dur-base: 0.7s;
+  --dur-slow: 1.1s;
 }
 
 *, *::before, *::after {
@@ -229,6 +236,26 @@ body::before {
   padding: 100px 24px;
   position: relative;
   z-index: 1;
+}
+
+/* Unified scroll entrance for every section. Hidden state is gated behind
+   html.has-js so the page stays fully visible if JS never runs. */
+.section-container {
+  transition: opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+html.has-js .section-container:not(.in-view) {
+  opacity: 0;
+  transform: translateY(42px);
+}
+@media (prefers-reduced-motion: reduce) {
+  html.has-js .section-container:not(.in-view) {
+    opacity: 1;
+    transform: none;
+  }
+  .section-container {
+    transition: none;
+  }
 }
 
 .section-header {
