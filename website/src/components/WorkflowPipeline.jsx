@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { METHODOLOGY } from '../data/portfolio'
 import { animate } from 'animejs'
+import { EASE, DUR } from '../motion'
 
 export default function WorkflowPipeline() {
   const [activeStep, setActiveStep] = useState(0)
@@ -14,9 +15,9 @@ export default function WorkflowPipeline() {
           animate('.pipeline-card', {
             opacity: [0.3, 1],
             translateY: [20, 0],
-            duration: 800,
+            duration: DUR.base,
             delay: (el, i) => i * 200,
-            ease: 'outExpo',
+            ease: EASE.out,
           })
           observer.disconnect()
         }

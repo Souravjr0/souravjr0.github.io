@@ -1,13 +1,17 @@
-import { useRef, useMemo, useEffect, useCallback } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { prefersReducedMotion } from '../../motion'
 
 /* ---- Neural Constellation with linking lines & cursor signal displacement ---- */
-function NeuralConstellation({ count = 350, maxDist = 1.4 }) {
+function NeuralConstellation({ count = 160, maxDist = 1.4, visibleRef }) {
   const meshRef = useRef()
   const linesRef = useRef()
   const mouseTarget = useRef({ x: 0, y: 0 })
   const currentMouse = useRef({ x: 0, y: 0 })
+  const frame = useRef(0)
+  const reduced = prefersReducedMotion()
+  const maxDistSq = maxDist * maxDist
 
   const { positions, velocities, origPos, material } = useMemo(() => {
     const pos = new Float32Array(count * 3)
@@ -72,6 +76,9 @@ function NeuralConstellation({ count = 350, maxDist = 1.4 }) {
   }), [])
 
   useFrame(({ clock, pointer }) => {
+    // Skip all work when the hero is off-screen or motion is reduced.
+    if (reduced || (visibleRef && !visibleRef.current)) return
+
     const t = clock.getElapsedTime()
     const pos = positions.attributes.position.array
 
@@ -108,8 +115,10 @@ function NeuralConstellation({ count = 350, maxDist = 1.4 }) {
     }
     positions.attributes.position.needsUpdate = true
 
-    // Compute dynamic line links between close nodes
-    if (linesRef.current) {
+    // Compute dynamic line links between close nodes — every other frame
+    // (imperceptible for faint links, halves the O(n^2) cost) and using
+    // squared distance to avoid a sqrt per pair.
+    if (linesRef.current && frame.current++ % 2 === 0) {
       const lineArray = lineGeo.attributes.position.array
       let lineIdx = 0
 
@@ -120,9 +129,9 @@ function NeuralConstellation({ count = 350, maxDist = 1.4 }) {
           const dx = pos[i1] - pos[i2]
           const dy = pos[i1 + 1] - pos[i2 + 1]
           const dz = pos[i1 + 2] - pos[i2 + 2]
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+          const distSq = dx * dx + dy * dy + dz * dz
 
-          if (dist < maxDist && lineIdx < lineArray.length - 6) {
+          if (distSq < maxDistSq && lineIdx < lineArray.length - 6) {
             lineArray[lineIdx++] = pos[i1]
             lineArray[lineIdx++] = pos[i1 + 1]
             lineArray[lineIdx++] = pos[i1 + 2]
@@ -150,7 +159,7 @@ function NeuralConstellation({ count = 350, maxDist = 1.4 }) {
   )
 }
 
-function SceneGroup() {
+function SceneGroup({ visibleRef }) {
   const groupRef = useRef()
 
   useEffect(() => {
@@ -167,12 +176,27 @@ function SceneGroup() {
 
   return (
     <group ref={groupRef}>
-      <NeuralConstellation />
+      <NeuralConstellation visibleRef={visibleRef} />
     </group>
   )
 }
 
 export default function HeroScene() {
+  const visibleRef = useRef(true)
+
+  useEffect(() => {
+    const el = document.querySelector('.hero-section')
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visibleRef.current = entry.isIntersecting
+      },
+      { threshold: 0 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 50 }}
@@ -185,7 +209,7 @@ export default function HeroScene() {
       dpr={[1, 1.5]}
       style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
     >
-      <SceneGroup />
+      <SceneGroup visibleRef={visibleRef} />
     </Canvas>
   )
 }

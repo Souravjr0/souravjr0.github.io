@@ -86,7 +86,11 @@ export default function InteractiveTerminal({ onOpenNeuralMap }) {
   }
 
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    // Scroll only the terminal's own container to its bottom — NOT
+    // scrollIntoView, which also scrolls the window and yanks the whole
+    // page down to the terminal on initial load.
+    const body = terminalEndRef.current?.parentElement
+    if (body) body.scrollTop = body.scrollHeight
   }, [history, isDemoRunning])
 
   return (
