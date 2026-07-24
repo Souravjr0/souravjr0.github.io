@@ -1,9 +1,10 @@
 export const NAV_LINKS = [
   { label: 'About', href: '#about' },
   { label: 'Workflow', href: '#workflow' },
+  { label: 'Data Pulse', href: '#data-pulse' },
   { label: 'Multiverse Studio', href: '#multiverse' },
   { label: 'Telescope', href: '#viewfinder' },
-  { label: 'Interactive Lab', href: '#lab' },
+  { label: 'Terminal', href: '#lab' },
   { label: 'Services', href: '#services' },
   { label: 'Work', href: '#projects' },
   { label: 'Stack', href: '#skills' },
